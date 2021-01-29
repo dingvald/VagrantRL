@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Precompiled Header">
+      <UniqueIdentifier>{1222b7f1-b6ce-4d4a-aea8-746f6cdee959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{c08e65b7-7da7-4e41-8534-4297728db1dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{d45649c9-e6aa-484c-878c-6c0798fb7185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\GameState">
+      <UniqueIdentifier>{56c003e8-50b1-46e9-90d2-68d6face2d27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{37707f5f-49b7-4274-bcbd-ef3ccaf09d58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS">
+      <UniqueIdentifier>{c3418c49-cce3-47b4-b77e-746cefa5b52c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Hub">
+      <UniqueIdentifier>{306d2f64-966c-4688-a05b-e5f589b36075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity">
+      <UniqueIdentifier>{d1f4e36b-d943-42d1-b34f-460e8f99fd25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Component">
+      <UniqueIdentifier>{21372d84-3263-4f16-93c7-adca72eb77e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System">
+      <UniqueIdentifier>{69496209-81cc-43ec-90b5-c1e91f6e3fb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity\Entity Manager">
+      <UniqueIdentifier>{60d54006-9f11-46f3-9b9c-04dd31ea354e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Component\Components">
+      <UniqueIdentifier>{95d9797a-295f-40dd-a90c-995c453cd17a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Component\Component Manager">
+      <UniqueIdentifier>{97082df4-6260-496c-bed1-5244c4477401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity\Entity Map">
+      <UniqueIdentifier>{2102f778-3040-46ec-bb2b-6e7d43dd6151}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Component\Component Handle">
+      <UniqueIdentifier>{8b4d9e4b-7bfe-4d9e-af3f-d476d14bdbd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Component\Component Mask">
+      <UniqueIdentifier>{b66789c0-a806-45c3-99ff-bbc8bf78095d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity\Entity Handle">
+      <UniqueIdentifier>{8ee13321-b2c5-417e-94f3-b77bfe521d99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems">
+      <UniqueIdentifier>{ad87c748-4362-4b34-8ad4-7db71a6c2b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tile Map">
+      <UniqueIdentifier>{74692a7a-9cc2-41ab-b371-1d9709c943ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Globals Header">
+      <UniqueIdentifier>{d423a5fc-8c34-474f-bd25-51267837bf2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\Player Input">
+      <UniqueIdentifier>{e8145d7b-7a30-4741-849f-d1c04892c6e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\Movement">
+      <UniqueIdentifier>{35440d4f-da26-440f-86c7-a7198e38e03f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\Render">
+      <UniqueIdentifier>{1456c5bb-e0c3-441f-adc6-37d1128c27b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input Handler">
+      <UniqueIdentifier>{21b2f50e-c4f6-4f67-b5ca-7dc56d49f7b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{5fe08280-99b6-47d3-b8e7-fe41c72fa415}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{9e98bfe6-a528-45bc-9988-6af19c31e9ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Message Log">
+      <UniqueIdentifier>{1540549e-593e-4eda-8496-199f3848a5f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\Interaction">
+      <UniqueIdentifier>{8d0ced44-22c0-4284-824e-062487b85660}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Precompiled Header</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>State</Filter>
+    </ClCompile>
+    <ClCompile Include="VagrantRL.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>State\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>ECS\Entity\Entity Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>ECS\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Hub.cpp">
+      <Filter>ECS\Hub</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMask.cpp">
+      <Filter>ECS\Component\Component Mask</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>ECS\Component\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInputSystem.cpp">
+      <Filter>ECS\System\Systems\Player Input</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementSystem.cpp">
+      <Filter>ECS\System\Systems\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>ECS\System\Systems\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Input Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageLog.cpp">
+      <Filter>GUI\Message Log</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractionSystem.cpp">
+      <Filter>ECS\System\Systems\Interaction</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Precompiled Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>State\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>ECS\Entity\Entity Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentManager.h">
+      <Filter>ECS\Component\Component Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Hub.h">
+      <Filter>ECS\Hub</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityMap.h">
+      <Filter>ECS\Entity\Entity Map</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentHandle.h">
+      <Filter>ECS\Component\Component Handle</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMask.h">
+      <Filter>ECS\Component\Component Mask</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS.h">
+      <Filter>ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityHandle.h">
+      <Filter>ECS\Entity\Entity Handle</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>ECS\Component\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Tile Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Globals Header</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInputSystem.h">
+      <Filter>ECS\System\Systems\Player Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementSystem.h">
+      <Filter>ECS\System\Systems\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>ECS\System\Systems\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>Input Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="MemberFunctionHandler.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventBus.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageLog.h">
+      <Filter>GUI\Message Log</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionSystem.h">
+      <Filter>ECS\System\Systems\Interaction</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
