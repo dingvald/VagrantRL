@@ -1,5 +1,5 @@
 #pragma once
-#include "System.h"
+#include "ECS.h"
 
 
 namespace ecs
@@ -23,6 +23,10 @@ public:
 	void onInteractionEvent(InteractionEvent* interactionEvent)
 	{
 		// Depending on relationship between the two entities, route interaction to another system
+		std::stringstream stream;
+
+		stream << "There is a " << parentHub->getEntityName(interactionEvent->destinationEntity) << " there!";
+		eventBus->publish(new LogEvent(stream.str(), sf::Color::Red));
 		
 	}
 

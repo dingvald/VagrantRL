@@ -29,7 +29,7 @@ void GameState::init()
 	buildTileLayer();
 
 	// add player entity
-	player = ecsHub->createEntity();
+	player = ecsHub->createEntity("Player");
 	player.addComponent(ecs::Player());
 	player.addComponent(ecs::Position(20,20, gl::Layer::BODIES));
 	player.addComponent(ecs::Sprite(0, sf::Color::White));
@@ -37,14 +37,14 @@ void GameState::init()
 
 	// add test entity
 	ecs::EntityHandle test;
-	test = ecsHub->createEntity();
+	test = ecsHub->createEntity("Testman");
 	test.addComponent(ecs::Position(45,20, gl::Layer::BODIES));
 	test.addComponent(ecs::Sprite(0, sf::Color::Red));
 	test.addComponent(ecs::Motion(0,0,1));
 
 	// add test entity
 	ecs::EntityHandle tree;
-	tree = ecsHub->createEntity();
+	tree = ecsHub->createEntity("Tree");
 	tree.addComponent(ecs::Position(30, 30, gl::Layer::BODIES));
 	tree.addComponent(ecs::Sprite(5, sf::Color::Green));
 	tree.addComponent(ecs::Motion(0, 0, 1));
@@ -78,7 +78,7 @@ void GameState::buildTileLayer()
 		for (int j = 0; j < gl::SCENE_HEIGHT; ++j)
 		{
 			ecs::EntityHandle tile;
-			tile = ecsHub->createEntity();
+			tile = ecsHub->createEntity("Tile");
 			tile.addComponent(ecs::Position(i, j, gl::Layer::TILES));
 			tile.addComponent(ecs::Sprite(2, sf::Color(25, 25, 25)));
 		}

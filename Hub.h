@@ -48,7 +48,7 @@ public:
 	void update(const float dt);
 
 	void render(sf::RenderTarget* target);
-	EntityHandle createEntity();
+	EntityHandle createEntity(std::string name);
 	void addSystem(std::unique_ptr<System> system);
 	void destroyEntity(Entity entity);
 
@@ -96,6 +96,16 @@ public:
 		typedef ComponentManager<ComponentType> ComponentManagerType;
 		auto mgr = getComponentManager<ComponentType>();
 		handle = ComponentHandle<ComponentType>(e, mgr->lookup(e), mgr);
+	}
+
+	std::string getEntityName(Entity entity)
+	{
+		return entityManager->getName(entity);
+	}
+
+	void setEntityName(Entity entity, std::string name)
+	{
+		entityManager->setName(entity, name);
 	}
 };
 

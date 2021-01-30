@@ -55,9 +55,9 @@ void Hub::render(sf::RenderTarget* target)
 	}
 }
 
-EntityHandle Hub::createEntity()
+EntityHandle Hub::createEntity(std::string name)
 {
-	return { entityManager->createEntity(), this };
+	return { entityManager->createEntity(name), this };
 }
 
 void Hub::addSystem(std::unique_ptr<System> system)

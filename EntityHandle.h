@@ -11,11 +11,14 @@ struct EntityHandle
 	Entity entity;
 	Hub* hub;
 
-	std::string getName();
+	std::string getName()
+	{
+		return hub->getEntityName(entity);
+	}
 
 	void setName(std::string name)
 	{
-		
+		hub->setEntityName(entity, name);
 	}
 
 	void destroy()
