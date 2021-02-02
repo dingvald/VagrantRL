@@ -83,14 +83,37 @@ struct Health : Component<Health>
 // Player
 struct Player : Component<Player>
 {
-
+	// Empty for now
 };
 
 // AI
 struct AI : Component<AI>
 {
+	// Empty for now
+};
 
+// Attack
+struct Attack : Component<Attack>
+{
+	Attack(int attackPower) : attackPower(attackPower) {};
+	int attackPower;
+};
+
+// Faction
+struct Faction : Component<Faction>
+{
+	Faction(unsigned int faction) : faction(faction) {};
+
+	unsigned int faction;
+
+	enum Relationship
+	{
+		FRIENDLY,
+		NEUTRAL,
+		ENEMY	
+	};
 };
 
 
 } // namespace ecs
+

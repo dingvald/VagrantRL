@@ -97,6 +97,12 @@
     <Filter Include="ECS\System\Systems\Interaction">
       <UniqueIdentifier>{8d0ced44-22c0-4284-824e-062487b85660}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ECS\System\Systems\Combat">
+      <UniqueIdentifier>{05bfa3ae-edb1-4c56-a14f-bdab62ff3062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\Health">
+      <UniqueIdentifier>{17e06fb9-11b8-4fd2-b907-a2146deaf62b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -149,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="InteractionSystem.cpp">
       <Filter>ECS\System\Systems\Interaction</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatSystem.cpp">
+      <Filter>ECS\System\Systems\Combat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="InteractionSystem.h">
       <Filter>ECS\System\Systems\Interaction</Filter>
+    </ClInclude>
+    <ClInclude Include="CombatSystem.h">
+      <Filter>ECS\System\Systems\Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthSystem.h">
+      <Filter>ECS\System\Systems\Health</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -65,6 +65,18 @@ public:
 		ComponentInstance instance = entityMap.getInstance(entity);
 		return &componentData.data.at(instance);
 	}
+
+	bool hasComponent(Entity entity)
+	{
+		if (entityMap.entityToInstance.count(entity))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 };
 
 } // namespace ecs

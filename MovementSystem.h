@@ -50,7 +50,7 @@ public:
 					motion->dx = 0;
 					motion->dy = 0;
 
-					// and trigger and interaction between the two entities.
+					// and trigger an interaction between the two entities.
 					eventBus->publish(new InteractionEvent(entity, obstruction));
 				}
 			}	

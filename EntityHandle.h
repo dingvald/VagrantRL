@@ -11,6 +11,9 @@ struct EntityHandle
 	Entity entity;
 	Hub* hub;
 
+	EntityHandle() {};
+	EntityHandle(Entity entity, Hub * hub) : entity(entity), hub(hub) {};
+
 	std::string getName()
 	{
 		return hub->getEntityName(entity);
@@ -46,6 +49,12 @@ struct EntityHandle
 		hub->unpack(entity, handle);
 
 		return handle;
+	}
+
+	template<typename ComponentType>
+	bool has()
+	{
+		return hub->entityHasComponent<ComponentType>(entity);
 	}
 };
 

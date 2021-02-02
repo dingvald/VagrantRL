@@ -107,6 +107,14 @@ public:
 	{
 		entityManager->setName(entity, name);
 	}
+
+	template <typename ComponentType>
+	bool entityHasComponent(Entity entity)
+	{
+		auto mgr = getComponentManager<ComponentType>();
+
+		return mgr->hasComponent(entity);
+	}
 };
 
 } // namespace ecs

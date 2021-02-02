@@ -31,3 +31,20 @@ struct InteractionEvent : public Event
 	ecs::Entity actingEntity, destinationEntity;
 };
 
+struct AttackEvent : public Event
+{
+	AttackEvent(ecs::Entity attacker, ecs::Entity defender)
+		: attacker(attacker), defender(defender) {};
+
+	ecs::Entity attacker, defender;
+};
+
+struct HealthEvent : public Event
+{
+	HealthEvent(ecs::Entity entity, int changeInHealth)
+		: entity(entity), changeInHealth(changeInHealth) {};
+
+	ecs::Entity entity;
+	int changeInHealth;
+};
+

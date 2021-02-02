@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CombatSystem.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentMask.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="VagrantRL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentHandle.h" />
     <ClInclude Include="ComponentManager.h" />
@@ -190,6 +192,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="Hub.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="InteractionSystem.h" />
