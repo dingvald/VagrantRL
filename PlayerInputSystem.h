@@ -1,6 +1,8 @@
 #pragma once
+#include "pch.h"
 #include "ECS.h"
 #include "InputHandler.h"
+
 
 namespace ecs
 {
@@ -8,80 +10,64 @@ namespace ecs
 class PlayerInputSystem : public System
 {
 private:
-	InputHandler input;
+	InputHandler inputHandler;
+
 public:
 	PlayerInputSystem()
 	{
-		signature.addComponent<Player>();
-		signature.addComponent<Motion>();
+
 	}
 
 	void init()
 	{
+		eventBus->subscribe(this, &PlayerInputSystem::onGetPlayerInputEvent);
 	}
 
-	void update(const float dt)
+	void onGetPlayerInputEvent(GetPlayerInputEvent * player)
 	{
-		for (auto& entity : registeredEntities)
+		inputHandler.update();
+
+		// Movement
+
+		if (inputHandler.checkPressed(sf::Keyboard::Numpad6))
 		{
-			ComponentHandle<Motion> motion;
-			
-			parentHub->unpack(entity, motion);
-
-			input.update();
-			// Movement
-#pragma region Movement Inputs
-			if (input.checkPressed(sf::Keyboard::Key::Numpad6))
-			{
-				motion->dx = 1;
-				motion->dy = 0;
-			}
-			else if (input.checkPressed(sf::Keyboard::Key::Numpad9))
-			{
-				motion->dx = 1;
-				motion->dy = -1;
-			}
-			else if (input.checkPressed(sf::Keyboard::Key::Numpad8))
-			{
-				motion->dx = 0;
-				motion->dy = -1;
-			}
-			else if (input.checkPressed(sf::Keyboard::Key::Numpad7))
-			{
-				motion->dx = -1;
-				motion->dy = -1;
-			}
-			else if (input.checkPressed(sf::Keyboard::Key::Numpad4))
-			{
-				motion->dx = -1;
-				motion->dy = 0;
-			}
-			else if (input.checkPressed(sf::Keyboard::Key::Numpad1))
-			{
-				motion->dx = -1;
-				motion->dy = 1;
-			}
-			else if (input.checkPressed(sf::Keyboard::Key::Numpad2))
-			{
-				motion->dx = 0;
-				motion->dy = 1;
-			}
-			else if (input.checkPressed(sf::Keyboard::Key::Numpad3))
-			{
-				motion->dx = 1;
-				motion->dy = 1;
-			}
-			else
-			{
-				motion->dx = 0;
-				motion->dy = 0;
-			}
-#pragma endregion
-
-
+			eventBus->publish(new MovementEvent(player->entity, 1, 0));
 		}
+		else if (inputHandler.checkPressed(sf::Keyboard::Numpad9))
+		{
+			eventBus->publish(new MovementEvent(player->entity, 1, -1));
+		}
+		else if (inputHandler.checkPressed(sf::Keyboard::Numpad8))
+		{
+			eventBus->publish(new MovementEvent(player->entity, 0, -1));
+		}
+		else if (inputHandler.checkPressed(sf::Keyboard::Numpad7))
+		{
+			eventBus->publish(new MovementEvent(player->entity, -1, -1));
+		}
+		else if (inputHandler.checkPressed(sf::Keyboard::Numpad4))
+		{
+			eventBus->publish(new MovementEvent(player->entity, -1, 0));
+		}
+		else if (inputHandler.checkPressed(sf::Keyboard::Numpad1))
+		{
+			eventBus->publish(new MovementEvent(player->entity, -1, 1));
+		}
+		else if (inputHandler.checkPressed(sf::Keyboard::Numpad2))
+		{
+			eventBus->publish(new MovementEvent(player->entity, 0, 1));
+		}
+		else if (inputHandler.checkPressed(sf::Keyboard::Numpad3))
+		{
+			eventBus->publish(new MovementEvent(player->entity, 1, 1));
+		}
+		else if (inputHandler.checkPressed(sf::Keyboard::Numpad5))
+		{
+			eventBus->publish(new ActionEvent(100));
+		}
+		// end movement
 	}
+
 };
 
-} // namespace ecs
-
+}// namespace ecs

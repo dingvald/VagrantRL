@@ -169,13 +169,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PlayerInputSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="TimeSystem.cpp" />
     <ClCompile Include="VagrantRL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BotInputSystem.h" />
     <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentHandle.h" />
@@ -195,16 +196,18 @@
     <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="Hub.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="PlayerInputSystem.h" />
+    <ClInclude Include="TurnMultiplexer.h" />
     <ClInclude Include="InteractionSystem.h" />
     <ClInclude Include="MemberFunctionHandler.h" />
     <ClInclude Include="MessageLog.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PlayerInputSystem.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="TimeSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -80,16 +80,18 @@ struct Health : Component<Health>
 	int maxHealth;
 };
 
-// Player
-struct Player : Component<Player>
-{
-	// Empty for now
-};
-
 // AI
 struct AI : Component<AI>
 {
-	// Empty for now
+	AI(unsigned int ai_type) : ai_type(ai_type) {};
+
+	unsigned int ai_type;
+
+	enum Ai_type
+	{
+		PLAYER,
+		BOT
+	};
 };
 
 // Attack
@@ -114,6 +116,15 @@ struct Faction : Component<Faction>
 	};
 };
 
+// Time
+struct Time : Component<Time>
+{
+	Time(unsigned int speed) : speed(speed) {};
+
+	unsigned int speed;
+	int actionPoints = 0;
+	bool myTurn = false;
+}; 
 
 } // namespace ecs
 

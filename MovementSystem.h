@@ -12,49 +12,38 @@ public:
 	MovementSystem()
 	{
 		signature.addComponent<Position>();
-		signature.addComponent<Motion>();
 	}
 
 	void init()
 	{
+		eventBus->subscribe(this, &MovementSystem::onMovementEvent);
 	}
 
-	void update(const float dt)
+	void onMovementEvent(MovementEvent * dir)
 	{
-		for (auto& entity : registeredEntities)
+		ComponentHandle<Position> position;
+
+		parentHub->unpack(dir->entity, position);
+
+
+		// Check if a blocking entity is already on the intended tile,
+		Entity obstruction = checkForObstruction(position->x + dir->dx, position->y + dir->dy);
+
+		// if nothing there,
+		if (obstruction.id == 0)
 		{
-			ComponentHandle<Position> position;
-			ComponentHandle<Motion> motion;
+			// move,
+			position->x += dir->dx;
+			position->y += dir->dy;
 
-			parentHub->unpack(entity, position, motion);
-
-			if (motion->dx != 0 || motion->dy != 0)
-			{
-
-				int spd = motion->speed;
-
-				// Check if a blocking entity is already on the intended tile,
-				Entity obstruction = checkForObstruction(position->x + motion->dx * spd, position->y + motion->dy * spd);
-
-				// if nothing there,
-				if (obstruction.id == 0)
-				{
-					// move,
-					position->x += motion->dx * spd;
-					position->y += motion->dy * spd;
-				}
-				// if something is there,
-				else
-				{
-					// stop moving,
-					motion->dx = 0;
-					motion->dy = 0;
-
-					// and trigger an interaction between the two entities.
-					eventBus->publish(new InteractionEvent(entity, obstruction));
-				}
-			}	
+			eventBus->publish(new ActionEvent(100));
 		}
+		// if something is there,
+		else
+		{
+			// and trigger an interaction between the two entities.
+			eventBus->publish(new InteractionEvent(dir->entity, obstruction));
+		}	
 	}
 
 	Entity checkForObstruction(int x, int y);

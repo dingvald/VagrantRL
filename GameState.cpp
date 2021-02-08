@@ -2,10 +2,13 @@
 
 #include "RenderSystem.h"
 #include "MovementSystem.h"
-#include "PlayerInputSystem.h"
 #include "InteractionSystem.h"
 #include "CombatSystem.h"
 #include "HealthSystem.h"
+#include "TimeSystem.h"
+#include "TurnMultiplexer.h"
+#include "PlayerInputSystem.h"
+#include "BotInputSystem.h"
 #include "GameState.h"
 
 void GameState::init()
@@ -32,20 +35,24 @@ void GameState::init()
 
 	// add player entity
 	player = ecsHub->createEntity("Player");
-	player.addComponent(ecs::Player());
+	player.addComponent(ecs::AI(ecs::AI::PLAYER));
+	player.addComponent(ecs::Faction(ecs::Faction::FRIENDLY));
 	player.addComponent(ecs::Position(20,20, gl::Layer::BODIES));
 	player.addComponent(ecs::Sprite(0, sf::Color::White));
 	player.addComponent(ecs::Motion(0,0,1));
+	player.addComponent(ecs::Time(100));
 	player.addComponent(ecs::Health(10));
 	player.addComponent(ecs::Attack(3));
 
 	// add test entity
 	ecs::EntityHandle test;
 	test = ecsHub->createEntity("Testman");
+	test.addComponent(ecs::AI(ecs::AI::BOT));
 	test.addComponent(ecs::Faction(ecs::Faction::ENEMY));
 	test.addComponent(ecs::Position(24,20, gl::Layer::BODIES));
 	test.addComponent(ecs::Sprite(0, sf::Color::Red));
 	test.addComponent(ecs::Motion(0,0,1));
+	test.addComponent(ecs::Time(70));
 	test.addComponent(ecs::Health(10));
 	test.addComponent(ecs::Attack(1));
 
@@ -61,10 +68,6 @@ void GameState::init()
 
 void GameState::addSystems()
 {
-	// add player input
-	auto sys_player_input = std::make_unique<ecs::PlayerInputSystem>();
-	ecsHub->addSystem(std::move(sys_player_input));
-
 	// add renderer
 	auto sys_renderer = std::make_unique<ecs::RenderSystem>();
 	ecsHub->addSystem(std::move(sys_renderer));
@@ -84,6 +87,22 @@ void GameState::addSystems()
 	// add health system
 	auto sys_health = std::make_unique<ecs::HealthSystem>();
 	ecsHub->addSystem(std::move(sys_health));
+
+	// add time system
+	auto sys_time = std::make_unique<ecs::TimeSystem>();
+	ecsHub->addSystem(std::move(sys_time));
+
+	// add the turn multiplexer
+	auto sys_turnMult = std::make_unique<ecs::TurnMultiplexer>();
+	ecsHub->addSystem(std::move(sys_turnMult));
+
+	// add the player input system
+	auto sys_player_turn = std::make_unique<ecs::PlayerInputSystem>();
+	ecsHub->addSystem(std::move(sys_player_turn));
+
+	// add the bot input system
+	auto sys_bot_turn = std::make_unique<ecs::BotInputSystem>();
+	ecsHub->addSystem(std::move(sys_bot_turn));
 }
 
 void GameState::buildTileLayer()

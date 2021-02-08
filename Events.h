@@ -23,6 +23,14 @@ struct LogEvent : public Event
 	sf::Color color;
 };
 
+struct MovementEvent : public Event
+{
+	MovementEvent(ecs::Entity entity, int dx, int dy) : entity(entity), dx(dx), dy(dy) {};
+
+	ecs::Entity entity;
+	int dx, dy;
+};
+
 struct InteractionEvent : public Event
 {
 	InteractionEvent(ecs::Entity actingEntity, ecs::Entity destinationEntity)
@@ -48,3 +56,44 @@ struct HealthEvent : public Event
 	int changeInHealth;
 };
 
+struct ActionEvent : public Event
+{
+	ActionEvent(int cost) : cost(cost) {};
+
+	int cost;
+};
+
+struct StartTurnEvent : public Event
+{
+	StartTurnEvent(ecs::Entity entity) : entity(entity) {};
+
+	ecs::Entity entity;
+};
+
+struct PlayerStartTurnEvent : public Event
+{
+	PlayerStartTurnEvent(ecs::Entity entity) : entity(entity) {};
+
+	ecs::Entity entity;
+};
+
+struct BotStartTurnEvent : public Event
+{
+	BotStartTurnEvent(ecs::Entity entity) : entity(entity) {};
+
+	ecs::Entity entity;
+};
+
+struct GetPlayerInputEvent : public Event
+{
+	GetPlayerInputEvent(ecs::Entity entity) : entity(entity) {}
+
+	ecs::Entity entity;
+};
+
+struct GetBotInputEvent : public Event
+{
+	GetBotInputEvent(ecs::Entity entity) : entity(entity) {}
+
+	ecs::Entity entity;
+};

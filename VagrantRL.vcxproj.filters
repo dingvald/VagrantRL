@@ -103,6 +103,15 @@
     <Filter Include="ECS\System\Systems\Health">
       <UniqueIdentifier>{17e06fb9-11b8-4fd2-b907-a2146deaf62b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ECS\System\Systems\Time">
+      <UniqueIdentifier>{68b18e4b-4149-453d-b074-f66fa609f90c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\Bot Input">
+      <UniqueIdentifier>{ffcae6ab-9da7-44c4-b759-8dc56ff356ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\Turn Multiplexer">
+      <UniqueIdentifier>{de3c060a-52ac-44e7-a16b-41f7cb128862}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -135,9 +144,6 @@
     <ClCompile Include="Component.cpp">
       <Filter>ECS\Component\Components</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerInputSystem.cpp">
-      <Filter>ECS\System\Systems\Player Input</Filter>
-    </ClCompile>
     <ClCompile Include="MovementSystem.cpp">
       <Filter>ECS\System\Systems\Movement</Filter>
     </ClCompile>
@@ -158,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="CombatSystem.cpp">
       <Filter>ECS\System\Systems\Combat</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeSystem.cpp">
+      <Filter>ECS\System\Systems\Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,9 +221,6 @@
     <ClInclude Include="Globals.h">
       <Filter>Globals Header</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerInputSystem.h">
-      <Filter>ECS\System\Systems\Player Input</Filter>
-    </ClInclude>
     <ClInclude Include="MovementSystem.h">
       <Filter>ECS\System\Systems\Movement</Filter>
     </ClInclude>
@@ -247,6 +253,18 @@
     </ClInclude>
     <ClInclude Include="HealthSystem.h">
       <Filter>ECS\System\Systems\Health</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeSystem.h">
+      <Filter>ECS\System\Systems\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="TurnMultiplexer.h">
+      <Filter>ECS\System\Systems\Turn Multiplexer</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInputSystem.h">
+      <Filter>ECS\System\Systems\Player Input</Filter>
+    </ClInclude>
+    <ClInclude Include="BotInputSystem.h">
+      <Filter>ECS\System\Systems\Bot Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

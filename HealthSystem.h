@@ -45,36 +45,28 @@ public:
 	{
 		EntityHandle deadEntity(entity, parentHub);
 
-		deadEntity.setName(deadEntity.getName() + " corpse");
-		if (deadEntity.has<Player>())
+		EntityHandle corpse = parentHub->createEntity(deadEntity.getName() + " corpse");
+		if (deadEntity.has<Position>())
 		{
-			//deadEntity.removeComponent<Player>();
+			ComponentHandle<Position> position;
+			parentHub->unpack(entity, position);
+			position->layer = gl::ITEMS;
+
+			corpse.addComponent(Position(position->x, position->y, position->layer));
 		}
-		if (deadEntity.has<AI>())
-		{
-			//deadEntity.removeComponent<AI>();
-		}
-		if (deadEntity.has<Motion>())
-		{
-			ComponentHandle<Motion> motion;
-			parentHub->unpack(entity, motion);
-			motion->dx = 0;
-			motion->dy = 0;
-			motion->speed = 0;
-		}
+
 		if (deadEntity.has<Sprite>())
 		{
 			ComponentHandle<Sprite> sprite;
 			parentHub->unpack(entity, sprite);
 			sprite->baseColor = sf::Color::Red;
 			sprite->spriteNum = 6;
+
+			corpse.addComponent(Sprite(sprite->spriteNum, sprite->baseColor));
 		}
-		if (deadEntity.has<Position>())
-		{
-			ComponentHandle<Position> position;
-			parentHub->unpack(entity, position);
-			position->layer = gl::ITEMS;
-		}
+
+		parentHub->destroyEntity(entity);
+		
 	}
 };
 
