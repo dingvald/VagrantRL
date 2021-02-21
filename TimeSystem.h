@@ -44,8 +44,6 @@ public:
 				if (!found)
 				{
 					turn_queue.push_back(entity.id);
-
-					std::cout << parentHub->getEntityName(entity) << " added to turn queue" << "\n";
 				}
 			}
 		}
@@ -88,8 +86,6 @@ public:
 		{
 			// Once the queue has cycled once, refresh the action points
 
-			std::cout << "Turn queue cycled!" << "\n";
-
 			for (int i = 1; i < turn_queue.size(); ++i)
 			{
 				ComponentHandle<Time> time_handle;
@@ -99,8 +95,6 @@ public:
 				parentHub->unpack(temp, time_handle);
 
 				time_handle->actionPoints += time_handle->speed;
-
-				std::cout << parentHub->getEntityName(temp) << " has " << time_handle->actionPoints << " action points available." << "\n";
 			}
 
 			turn_queue.pop_front();
@@ -143,7 +137,6 @@ public:
 		}
 		else
 		{
-			std::cout << "End of " << parentHub->getEntityName(temp) << "'s turn." << "\n";
 			turn_queue.pop_front();
 			turn_queue.push_back(temp.id);
 		}

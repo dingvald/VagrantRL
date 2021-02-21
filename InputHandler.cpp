@@ -1,16 +1,26 @@
 #include "pch.h"
 #include "InputHandler.h"
 
+
+
 bool InputHandler::checkKey(sf::Keyboard::Key key)
 {
 	return sf::Keyboard::isKeyPressed(key);
 }
 
+bool InputHandler::checkKeyHeld(sf::Keyboard::Key key)
+{
+	if (keyStates[key].time_held > 10)
+		return true;
+	else
+		return false;
+}
+
 bool InputHandler::checkPressed(sf::Keyboard::Key key)
 {
-	if (checkKey(key) && !hasBeenPressed[key])
+	if (checkKey(key) && !keyStates[key].pressed)
 	{
-		hasBeenPressed[key] = true;
+		keyStates[key].pressed = true;
 		return true;
 	}
 	return false;
@@ -18,13 +28,16 @@ bool InputHandler::checkPressed(sf::Keyboard::Key key)
 
 bool InputHandler::checkReleased(sf::Keyboard::Key key)
 {
-	if (hasBeenPressed[key])
+	if (keyStates[key].pressed)
 	{
 		if (!checkKey(key))
 		{
-			hasBeenPressed[key] = false;
+			keyStates[key].time_held = 0;
+			keyStates[key].pressed = false;
 			return true;
 		}
+
+		keyStates[key].time_held++;
 		return false;
 	}
 	else
