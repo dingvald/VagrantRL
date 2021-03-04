@@ -36,6 +36,8 @@ public:
 			if (obstruction.id == 0)
 			{
 				// move,
+				parentHub->moveEntityOnMap(dir->entity, position->x + dir->dx, position->y + dir->dy);
+				
 				position->x += dir->dx;
 				position->y += dir->dy;
 

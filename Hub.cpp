@@ -36,6 +36,9 @@ void Hub::init(EventBus* eventBus)
 		system->eventBus = eventBus;
 		system->init();
 	}
+
+	map = std::make_unique<Map>(eventBus);
+	map->init();
 }
 
 void Hub::update(const float dt)
@@ -74,6 +77,60 @@ void Hub::destroyEntity(Entity entity)
 	}
 
 	entityManager->destroy(entity);
+}
+
+// functions for operating on the physical map
+
+Entity Hub::checkForEntityAt(int layer, int x, int y)
+{
+	gl::MapObject* mapObj = map->checkForObject(layer, x, y);
+
+	if (!mapObj)
+	{
+		return { 0 };
+	}
+	else
+	{
+		return { (int)mapObj->id };
+	}
+}
+
+void Hub::addEntityToMap(EntityHandle entity)
+{
+	ComponentHandle<Position> pos;
+	ComponentHandle<Sprite> spr;
+	bool block;
+
+	unpack(entity.entity, pos, spr);
+
+	if (pos->layer == gl::BODIES && !entity.has<Faction>())
+	{
+		block = true;
+	}
+	else
+	{
+		block = false;
+	}
+
+	map->addObjectToMap(pos->layer, pos->x, pos->y, entity.entity.id, spr->spriteNum, spr->moddedColor, block);
+}
+
+void Hub::removeEntityFromMap(Entity entity)
+{
+	ComponentHandle<Position> pos;
+
+	unpack(entity, pos);
+
+	map->removeObjectFromMap(pos->layer, pos->x, pos->y, entity.id);
+}
+
+void Hub::moveEntityOnMap(Entity entity, int x, int y)
+{
+	ComponentHandle<Position> pos;
+
+	unpack(entity, pos);
+
+	map->moveMapObject(pos->layer, pos->x, pos->y, x, y);
 }
 
 } // namespace ecs

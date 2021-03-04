@@ -9,6 +9,8 @@
 #include "TurnMultiplexer.h"
 #include "PlayerInputSystem.h"
 #include "BotInputSystem.h"
+#include "FOVSystem.h"
+#include "ForestBuilder.h"
 #include "GameState.h"
 
 void GameState::init()
@@ -33,16 +35,32 @@ void GameState::init()
 	// build starting map ** TEMPORARY **
 	buildTileLayer();
 
+	
+
 	// add player entity
 	player = ecsHub->createEntity("Player");
 	player.addComponent(ecs::AI(ecs::AI::PLAYER));
 	player.addComponent(ecs::Faction(ecs::Faction::FRIENDLY));
 	player.addComponent(ecs::Position(20,20, gl::Layer::BODIES));
 	player.addComponent(ecs::Sprite(0, sf::Color::White));
-	player.addComponent(ecs::Motion(0,0,1));
 	player.addComponent(ecs::Time(100));
+	player.addComponent(ecs::Vision(20));
 	player.addComponent(ecs::Health(10));
 	player.addComponent(ecs::Attack(3));
+	ecsHub->addEntityToMap(player);
+
+	
+
+	ecs::EntityHandle test1;
+	test1 = ecsHub->createEntity("Testfriend");
+	test1.addComponent(ecs::AI(ecs::AI::BOT));
+	test1.addComponent(ecs::Faction(ecs::Faction::FRIENDLY));
+	test1.addComponent(ecs::Position(40, 5, gl::Layer::BODIES));
+	test1.addComponent(ecs::Sprite(0, sf::Color::Blue));
+	test1.addComponent(ecs::Time(100));
+	test1.addComponent(ecs::Health(10));
+	test1.addComponent(ecs::Attack(1));
+	ecsHub->addEntityToMap(test1);
 
 	// add test entity
 	ecs::EntityHandle test;
@@ -51,17 +69,15 @@ void GameState::init()
 	test.addComponent(ecs::Faction(ecs::Faction::ENEMY));
 	test.addComponent(ecs::Position(24,20, gl::Layer::BODIES));
 	test.addComponent(ecs::Sprite(0, sf::Color::Red));
-	test.addComponent(ecs::Motion(0,0,1));
 	test.addComponent(ecs::Time(70));
 	test.addComponent(ecs::Health(10));
 	test.addComponent(ecs::Attack(1));
+	ecsHub->addEntityToMap(test);
 
-	// add test tree entity
-	ecs::EntityHandle tree;
-	tree = ecsHub->createEntity("Tree");
-	tree.addComponent(ecs::Position(30, 30, gl::Layer::BODIES));
-	tree.addComponent(ecs::Sprite(5, sf::Color::Green));
-	tree.addComponent(ecs::Motion(0, 0, 0));
+	// build forest ** TEMPORARY **
+	ForestBuilder forestBuilder(ecsHub.get());
+	forestBuilder.setSparcity(5);
+	forestBuilder.build();
 
 	eventBus->publish(new LogEvent("Welcome to Vagrant", sf::Color::White));
 }
@@ -103,6 +119,10 @@ void GameState::addSystems()
 	// add the bot input system
 	auto sys_bot_turn = std::make_unique<ecs::BotInputSystem>();
 	ecsHub->addSystem(std::move(sys_bot_turn));
+
+	// add the field of view system
+	auto sys_fov = std::make_unique<ecs::FOVSystem>();
+	ecsHub->addSystem(std::move(sys_fov));
 }
 
 void GameState::buildTileLayer()
@@ -115,6 +135,8 @@ void GameState::buildTileLayer()
 			tile = ecsHub->createEntity("Tile");
 			tile.addComponent(ecs::Position(i, j, gl::Layer::TILES));
 			tile.addComponent(ecs::Sprite(2, sf::Color(25, 25, 25)));
+
+			ecsHub->addEntityToMap(tile);
 		}
 	}
 }

@@ -49,14 +49,11 @@ struct Position : Component<Position>
 	unsigned int layer;
 };
 
-// Motion
-struct Motion : Component<Motion>
+struct Vision : Component<Vision>
 {
-	Motion(int dx, int dy, int spd) : dx(dx), dy(dy), speed(spd) {};
+	Vision(int radius) : radius(radius) {};
 
-	int dx;
-	int dy;
-	int speed;
+	int radius;
 };
 
 // Sprite

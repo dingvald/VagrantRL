@@ -50,9 +50,12 @@ public:
 		{
 			ComponentHandle<Position> position;
 			parentHub->unpack(entity, position);
-			position->layer = gl::ITEMS;
 
-			corpse.addComponent(Position(position->x, position->y, position->layer));
+			// Change the layer of the corpse, but keep the same position
+			corpse.addComponent(Position(position->x, position->y, gl::ITEMS));
+
+			// Remove the dead object from the map
+			parentHub->removeEntityFromMap(entity);
 		}
 
 		if (deadEntity.has<Sprite>())
@@ -66,7 +69,7 @@ public:
 		}
 
 		parentHub->destroyEntity(entity);
-		
+		parentHub->addEntityToMap(corpse);
 	}
 };
 

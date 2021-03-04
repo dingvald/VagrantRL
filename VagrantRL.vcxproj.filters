@@ -112,6 +112,18 @@
     <Filter Include="ECS\System\Systems\Turn Multiplexer">
       <UniqueIdentifier>{de3c060a-52ac-44e7-a16b-41f7cb128862}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{b5d505bd-1d14-4d9a-8c19-8b28e1ee367b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FOV">
+      <UniqueIdentifier>{982fe05f-8eeb-4d6c-bb58-9279b2b973a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\FOV">
+      <UniqueIdentifier>{388e0251-4083-4dc0-94a5-667852aa8040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Forest Builder">
+      <UniqueIdentifier>{efc8b9ed-4d5b-48bd-99b5-e219694c9846}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -146,9 +158,6 @@
     </ClCompile>
     <ClCompile Include="MovementSystem.cpp">
       <Filter>ECS\System\Systems\Movement</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderSystem.cpp">
-      <Filter>ECS\System\Systems\Render</Filter>
     </ClCompile>
     <ClCompile Include="InputHandler.cpp">
       <Filter>Input Handler</Filter>
@@ -265,6 +274,18 @@
     </ClInclude>
     <ClInclude Include="BotInputSystem.h">
       <Filter>ECS\System\Systems\Bot Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="FOV.h">
+      <Filter>FOV</Filter>
+    </ClInclude>
+    <ClInclude Include="FOVSystem.h">
+      <Filter>ECS\System\Systems\FOV</Filter>
+    </ClInclude>
+    <ClInclude Include="ForestBuilder.h">
+      <Filter>Forest Builder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

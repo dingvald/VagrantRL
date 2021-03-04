@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "System.h"
+#include "Map.h"
 
 namespace ecs {
 
@@ -18,7 +19,8 @@ private:
 	std::vector<std::unique_ptr<System>> systems;
 	std::vector<std::unique_ptr<BaseComponentManager>> componentManagers;
 	std::map<Entity, ComponentMask> entityMasks;
-
+	std::unique_ptr<Map> map;
+	
 	void updateEntityMask(Entity const& entity, ComponentMask oldMask);
 
 	template <typename ComponentType>
@@ -40,6 +42,8 @@ private:
 	}
 
 public:
+	
+
 	explicit Hub(std::unique_ptr<EntityManager> entityManager);
 
 	// called before first update, after instantiation
@@ -51,6 +55,19 @@ public:
 	EntityHandle createEntity(std::string name);
 	void addSystem(std::unique_ptr<System> system);
 	void destroyEntity(Entity entity);
+
+	// Functions for working with the physical map
+
+	// Returns the map pointer
+	Map* getMap()
+	{
+		return map.get();
+	}
+
+	Entity checkForEntityAt(int layer, int x, int y);
+	void addEntityToMap(EntityHandle entity);
+	void removeEntityFromMap(Entity entity);
+	void moveEntityOnMap(Entity entity, int x, int y);
 
 	/*
 	Missing a section on "bridge component managers" refer to nomad ecs for implementation

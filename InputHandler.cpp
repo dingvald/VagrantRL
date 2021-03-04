@@ -10,7 +10,7 @@ bool InputHandler::checkKey(sf::Keyboard::Key key)
 
 bool InputHandler::checkKeyHeld(sf::Keyboard::Key key)
 {
-	if (keyStates[key].time_held > 10)
+	if (keyStates[key].time_held > 30)
 		return true;
 	else
 		return false;

@@ -169,7 +169,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="TimeSystem.cpp" />
@@ -190,12 +189,16 @@
     <ClInclude Include="EntityMap.h" />
     <ClInclude Include="EventBus.h" />
     <ClInclude Include="Events.h" />
+    <ClInclude Include="ForestBuilder.h" />
+    <ClInclude Include="FOV.h" />
+    <ClInclude Include="FOVSystem.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="HealthSystem.h" />
     <ClInclude Include="Hub.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerInputSystem.h" />
     <ClInclude Include="TurnMultiplexer.h" />
     <ClInclude Include="InteractionSystem.h" />
