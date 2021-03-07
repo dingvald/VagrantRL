@@ -78,6 +78,7 @@ public:
 				{
 					//remove the entity from the turn queue
 					it = turn_queue.erase(it);
+					
 				}
 			}
 		}
@@ -111,10 +112,12 @@ public:
 
 			if (time_handle->actionPoints > 0)
 			{
+				time_handle->myTurn = true;
 				eventBus->publish(new StartTurnEvent(temp));
 			}
 			else
 			{
+				time_handle->myTurn = false;
 				turn_queue.pop_front();
 				turn_queue.push_back(temp.id);
 			}
@@ -133,10 +136,12 @@ public:
 
 		if (time_handle->actionPoints > 0)
 		{
+			time_handle->myTurn = true;
 			eventBus->publish(new StartTurnEvent(temp));
 		}
 		else
 		{
+			time_handle->myTurn = false;
 			turn_queue.pop_front();
 			turn_queue.push_back(temp.id);
 		}

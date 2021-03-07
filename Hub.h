@@ -55,6 +55,10 @@ public:
 	EntityHandle createEntity(std::string name);
 	void addSystem(std::unique_ptr<System> system);
 	void destroyEntity(Entity entity);
+	Entity int2ent(int id)
+	{
+		return { id };
+	}
 
 	// Functions for working with the physical map
 

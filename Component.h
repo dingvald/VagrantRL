@@ -1,6 +1,8 @@
 #pragma once
 #include "ComponentManager.h"
 #include "Entity.h"
+#include "Globals.h"
+
 
 namespace ecs {
 
@@ -77,6 +79,11 @@ struct Health : Component<Health>
 	int maxHealth;
 };
 
+struct Player : Component<Player>
+{
+
+};
+
 // AI
 struct AI : Component<AI>
 {
@@ -86,8 +93,9 @@ struct AI : Component<AI>
 
 	enum Ai_type
 	{
-		PLAYER,
-		BOT
+		MINDLESS,
+		INSTINCT,
+		MINDFUL
 	};
 };
 

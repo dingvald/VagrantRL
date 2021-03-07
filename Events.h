@@ -77,9 +77,9 @@ struct PlayerStartTurnEvent : public Event
 	ecs::Entity entity;
 };
 
-struct BotStartTurnEvent : public Event
+struct AIStartTurnEvent : public Event
 {
-	BotStartTurnEvent(ecs::Entity entity) : entity(entity) {};
+	AIStartTurnEvent(ecs::Entity entity) : entity(entity) {};
 
 	ecs::Entity entity;
 };
@@ -91,9 +91,9 @@ struct GetPlayerInputEvent : public Event
 	ecs::Entity entity;
 };
 
-struct GetBotInputEvent : public Event
+struct GetAIInputEvent : public Event
 {
-	GetBotInputEvent(ecs::Entity entity) : entity(entity) {}
+	GetAIInputEvent(ecs::Entity entity) : entity(entity) {}
 
 	ecs::Entity entity;
 };

@@ -106,9 +106,6 @@
     <Filter Include="ECS\System\Systems\Time">
       <UniqueIdentifier>{68b18e4b-4149-453d-b074-f66fa609f90c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ECS\System\Systems\Bot Input">
-      <UniqueIdentifier>{ffcae6ab-9da7-44c4-b759-8dc56ff356ba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\System\Systems\Turn Multiplexer">
       <UniqueIdentifier>{de3c060a-52ac-44e7-a16b-41f7cb128862}</UniqueIdentifier>
     </Filter>
@@ -123,6 +120,12 @@
     </Filter>
     <Filter Include="Forest Builder">
       <UniqueIdentifier>{efc8b9ed-4d5b-48bd-99b5-e219694c9846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Systems\AI Input">
+      <UniqueIdentifier>{ffcae6ab-9da7-44c4-b759-8dc56ff356ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI Controller">
+      <UniqueIdentifier>{50652652-9d1e-412c-a3fb-af65597200ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -272,9 +275,6 @@
     <ClInclude Include="PlayerInputSystem.h">
       <Filter>ECS\System\Systems\Player Input</Filter>
     </ClInclude>
-    <ClInclude Include="BotInputSystem.h">
-      <Filter>ECS\System\Systems\Bot Input</Filter>
-    </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>Map</Filter>
     </ClInclude>
@@ -286,6 +286,12 @@
     </ClInclude>
     <ClInclude Include="ForestBuilder.h">
       <Filter>Forest Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="AIInputSystem.h">
+      <Filter>ECS\System\Systems\AI Input</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>AI Controller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

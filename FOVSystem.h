@@ -16,7 +16,6 @@ private:
 public:
 	FOVSystem()
 	{
-		signature.addComponent<AI>();
 		signature.addComponent<Vision>();
 	}
 
@@ -29,13 +28,13 @@ public:
 	{
 		for (auto& entity : registeredEntities)
 		{
-			ComponentHandle<AI> ai;
 			ComponentHandle<Vision> vision;
 			ComponentHandle<Position> pos;
+			EntityHandle ent(entity, parentHub);
 
-			parentHub->unpack(entity, ai, vision, pos);
+			parentHub->unpack(entity, vision, pos);
 
-			if (ai->ai_type == AI::PLAYER)
+			if (ent.has<Player>())
 			{
 				FOV fieldOfView(parentHub->getMap(), vision->radius);
 				fieldOfView.update(pos->x, pos->y);

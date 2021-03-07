@@ -175,7 +175,8 @@
     <ClCompile Include="VagrantRL.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BotInputSystem.h" />
+    <ClInclude Include="AIController.h" />
+    <ClInclude Include="AIInputSystem.h" />
     <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentHandle.h" />

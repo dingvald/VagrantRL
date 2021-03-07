@@ -62,7 +62,7 @@ public:
 		{
 			ComponentHandle<Sprite> sprite;
 			parentHub->unpack(entity, sprite);
-			sprite->baseColor = sf::Color::Red;
+			sprite->baseColor = sf::Color(100,12,12);
 			sprite->spriteNum = 6;
 
 			corpse.addComponent(Sprite(sprite->spriteNum, sprite->baseColor));

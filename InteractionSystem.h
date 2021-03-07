@@ -59,13 +59,19 @@ public:
 		else
 		{
 			// Inanimate? Do nothing
-			std::stringstream stream; // stream to create log messages
-			stream << "There is a " << parentHub->getEntityName(interactionEvent->destinationEntity) << " in the way!";
-			eventBus->publish(new LogEvent(stream.str(), sf::Color::White));
+
+			// Send message to log that something is in the way if entity is player
+			if (acting.has<Player>())
+			{
+				std::stringstream stream; // stream to create log messages
+				stream << "There is a " << parentHub->getEntityName(interactionEvent->destinationEntity) << " in the way!";
+				eventBus->publish(new LogEvent(stream.str(), sf::Color::White));
+			}
+			
 		}
 	}
 
-	int calculateFaction(int faction1, int faction2)
+	static int calculateFaction(int faction1, int faction2)
 	{
 		if (faction1 == faction2) 
 			return Faction::FRIENDLY;

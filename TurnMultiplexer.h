@@ -18,22 +18,15 @@ public:
 
 	void onStartTurnEvent(StartTurnEvent* turn)
 	{
-		ComponentHandle<AI> ai;
+		EntityHandle ent(turn->entity, parentHub);
 
-		parentHub->unpack(turn->entity, ai);
-
-		switch (ai->ai_type)
-		{
-		case AI::PLAYER:
+		if (ent.has<Player>())
 		{
 			eventBus->publish(new GetPlayerInputEvent(turn->entity));
 		}
-		break;
-		case AI::BOT:
+		else
 		{
-			eventBus->publish(new GetBotInputEvent(turn->entity));
-		}
-		break;
+			eventBus->publish(new GetAIInputEvent(turn->entity));
 		}
 	}
 };
