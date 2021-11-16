@@ -33,8 +33,6 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-	if (window) delete window;
-
 	while (!states.empty())
 	{
 		delete this->states.top();

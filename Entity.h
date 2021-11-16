@@ -1,12 +1,56 @@
 #pragma once
+#include "Component.h"
+#include "Event.h"
 
-namespace ecs {
-
-struct Entity
+class Entity
 {
-	int id;
+private:
+	// Data
+	std::string name;
+	std::map<std::type_index, std::unique_ptr<Component> > components;
+	
 
-	friend bool operator<(const Entity& l, const Entity& r) { return l.id < r.id; }
+public:
+	// Data
+	EventBus eventBus;
+
+	// Functions
+	Entity(std::string);
+	
+	std::string getName();
+	
+	void addComponent(Component * component);
+
+	template<class T>
+	bool removeComponent()
+	{
+		auto index = std::type_index(typeid(T));
+
+		if (components.count(index))
+		{
+			auto c = components.at(index).get();
+
+			eventBus.unsubscribe(c);
+
+			components.erase(index);
+			return true;
+		}
+
+		return false;
+	}
+
+	template<class T>
+	Component* getComponent()
+	{
+		auto index = std::type_index(typeid(T));
+
+		if (components.count(index))
+		{
+			return components.at(index).get();
+		}
+
+		return nullptr;
+	}
+
+	void fireEvent(Event& ev);
 };
-
-} // namespace ecs

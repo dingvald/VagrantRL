@@ -9,7 +9,9 @@
 #include <deque>
 #include <list>
 #include <map>
+#include <unordered_map>
 #include <stack>
+#include <functional>
 #include <queue>
 #include <iterator>
 #include <algorithm>
@@ -21,6 +23,8 @@
 #include <memory>
 #include <type_traits>
 #include <typeindex>
+#include <string>
+#include <typeinfo>
 
 // SFML
 #include <SFML/Audio.hpp>

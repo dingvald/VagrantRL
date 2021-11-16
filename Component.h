@@ -1,135 +1,58 @@
 #pragma once
-#include "ComponentManager.h"
-#include "Entity.h"
-#include "Globals.h"
 
 
-namespace ecs {
 
-#pragma region Component Template
-struct ComponentCounter
+// Forward declarations
+class Entity;
+class Event;
+
+//
+
+// Component Base Class //////////////////////////////////////////////////////////////////////////////////////
+
+class Component
 {
-	static int familyCounter;
+public:
+	virtual ~Component() {};
+	virtual void init() = 0;
+	void remove();
+	void setOwnerTo(Entity* entity);
+
+protected:
+	Entity* owner;
 };
 
-template <typename ComponentType>
-struct Component
+
+// Actual Component Classes //////////////////////////////////////////////////////////////////////////////////
+
+class TestComponent : public Component
 {
-	static inline int family()
-	{
-		static int family = ComponentCounter::familyCounter++;
-		return family;
-	}
+private:
+	// Data
+	std::string message;
+	//
+	void init();
+public:
+	TestComponent(std::string message);
+
+	// Event handlers
+	void onTestEvent(Event& ev);
+
 };
 
-template <typename C>
-static int GetComponentFamily()
+class PositionComponent : public Component
 {
-	return Component<typename std::remove_const<C>::type>::family();
-}
-#pragma endregion 
-
-/********************************************************
-	COMPONENTS
-*********************************************************/
-
-// Information
-struct Information : Component<Information>
-{
-	Information(std::string name) : name(name) {};
-
-	std::string name;
-};
-
-// Position
-struct Position : Component<Position>
-{
-	Position(int x, int y, unsigned int layer) : x(x), y(y), layer(layer) {};
-
+private:
+	// Data
 	int x;
 	int y;
-	unsigned int layer;
+	//
+	void init();
+
+public:
+	PositionComponent(int, int);
+
+	// Event Handlers
+
+	void onTestEvent(Event& ev);
 };
-
-struct Vision : Component<Vision>
-{
-	Vision(int radius) : radius(radius) {};
-
-	int radius;
-};
-
-// Sprite
-struct Sprite : Component<Sprite>
-{
-	Sprite(unsigned int spriteNum, sf::Color col) : spriteNum(spriteNum),
-		baseColor(col), moddedColor(col){};
-
-	unsigned int spriteNum;
-	sf::Color baseColor;
-	sf::Color moddedColor;
-};
-
-// Health
-struct Health : Component<Health>
-{
-	Health(int health, int maxHealth) : health(health), maxHealth(maxHealth) {};
-	Health(int health) : health(health), maxHealth(health) {};
-
-	int health;
-	int maxHealth;
-};
-
-struct Player : Component<Player>
-{
-
-};
-
-// AI
-struct AI : Component<AI>
-{
-	AI(unsigned int ai_type) : ai_type(ai_type) {};
-
-	unsigned int ai_type;
-
-	enum Ai_type
-	{
-		MINDLESS,
-		INSTINCT,
-		MINDFUL
-	};
-};
-
-// Attack
-struct Attack : Component<Attack>
-{
-	Attack(int attackPower) : attackPower(attackPower) {};
-	int attackPower;
-};
-
-// Faction
-struct Faction : Component<Faction>
-{
-	Faction(unsigned int faction) : faction(faction) {};
-
-	unsigned int faction;
-
-	enum Relationship
-	{
-		FRIENDLY,
-		NEUTRAL,
-		ENEMY	
-	};
-};
-
-// Time
-struct Time : Component<Time>
-{
-	Time(unsigned int speed) : speed(speed) {};
-
-	unsigned int speed;
-	int actionPoints = 0;
-	bool myTurn = false;
-}; 
-
-} // namespace ecs
-
