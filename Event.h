@@ -4,6 +4,7 @@ enum class EventType {
 	nullEvent,
 	testEvent,
 	moveEvent,
+	startTurnEvent,
 	numOfEvents
 };
 

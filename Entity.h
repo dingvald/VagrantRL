@@ -1,18 +1,24 @@
 #pragma once
-#include "Component.h"
+#include "World.h"
 #include "Event.h"
+#include "ComponentMask.h"
 
 class Entity
 {
 private:
+	friend World;
+	friend Component;
+
 	// Data
 	std::string name;
-	std::map<std::type_index, std::unique_ptr<Component> > components;
+	std::map<unsigned int, std::unique_ptr<Component> > components;
+	EventBus eventBus;
+	World* world;
+	ComponentMask signature;
 	
-
 public:
 	// Data
-	EventBus eventBus;
+	
 
 	// Functions
 	Entity(std::string);
@@ -21,32 +27,26 @@ public:
 	
 	void addComponent(Component * component);
 
-	template<class T>
-	bool removeComponent()
+	template <class C>
+	void removeComponent()
 	{
-		auto index = std::type_index(typeid(T));
-
-		if (components.count(index))
+		auto id = ::getComponentID<C>();
+		if (components.count(id))
 		{
-			auto c = components.at(index).get();
-
-			eventBus.unsubscribe(c);
-
-			components.erase(index);
-			return true;
+			world->removeComponent(this, id);
+			components.erase(id);
 		}
-
-		return false;
 	}
 
-	template<class T>
-	Component* getComponent()
+	template <class C>
+	C* getComponent()
 	{
-		auto index = std::type_index(typeid(T));
-
-		if (components.count(index))
+		unsigned int id = ::getComponentID<C>();
+		if (components.count(id))
 		{
-			return components.at(index).get();
+			auto ptr = components.at(id).get();
+
+			return static_cast<C*>(ptr);
 		}
 
 		return nullptr;

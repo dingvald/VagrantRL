@@ -5,54 +5,46 @@
 // Forward declarations
 class Entity;
 class Event;
+class EventBus;
 
 //
 
 // Component Base Class //////////////////////////////////////////////////////////////////////////////////////
+
+inline unsigned int counter()
+{
+	static unsigned int count = 0;
+	return ++count;
+}
 
 class Component
 {
 public:
 	virtual ~Component() {};
 	virtual void init() = 0;
-	void remove();
+	virtual unsigned int getID() = 0;
 	void setOwnerTo(Entity* entity);
 
 protected:
 	Entity* owner;
+	EventBus* eventBus;
 };
 
-
-// Actual Component Classes //////////////////////////////////////////////////////////////////////////////////
-
-class TestComponent : public Component
+template<class C>
+struct ComponentID : public Component
 {
-private:
-	// Data
-	std::string message;
-	//
-	void init();
-public:
-	TestComponent(std::string message);
+	virtual void init() {};
 
-	// Event handlers
-	void onTestEvent(Event& ev);
-
+	virtual unsigned int getID()
+	{
+		static unsigned int thisid = counter();
+		return thisid;
+	}
 };
 
-class PositionComponent : public Component
+template <class C>
+static unsigned int getComponentID()
 {
-private:
-	// Data
-	int x;
-	int y;
-	//
-	void init();
-
-public:
-	PositionComponent(int, int);
-
-	// Event Handlers
-
-	void onTestEvent(Event& ev);
-};
+	ComponentID<C> temp;
+	return temp.getID();
+}

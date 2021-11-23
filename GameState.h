@@ -1,7 +1,6 @@
 #pragma once
 #include "State.h"
-#include "Renderer.h"
-#include "World.h"
+#include "ECS.h"
 
 
 
@@ -13,7 +12,6 @@
 class GameState : public State
 {
 private:
-	Renderer renderer;
 	World world;
 
 	void init();

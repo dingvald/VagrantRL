@@ -1,33 +1,40 @@
 #pragma once
-#include "Entity.h"
+#include "Event.h"
+#include "Component.h"
 
 // Forward declarations
-
+class System;
 //
 
 class World
 {
 public:
+	// Data
+	EventBus eventBus;
+	std::list< std::unique_ptr<Entity> > entities;
+
+	void init();
+
+	// Dealing with entities
+
 	Entity* addEntity(std::string name);
 
 	void removeEntity(Entity* entity);
 
-	template<class C>
-	std::list<Entity*> getEntitiesWith()
-	{
-		std::list<Entity*> list;
-		for (auto& e : entities)
-		{
-			if (e->getComponent<C>() != nullptr)
-			{
-				list.push_back(e.get());
-			}
-		}
+	// Dealing with Components
 
-		return list;
-	}
+	void addComponent(Entity* entity, unsigned int id);
+	void removeComponent(Entity* entity, unsigned int id);
+
+	// Dealing with systems
+
+	void addSystem(System* system);
+
+	void update(const float dt);
+	void render(sf::RenderTarget* target);
 
 private:
-	std::list< std::unique_ptr<Entity> > entities;
+	std::vector< std::unique_ptr<System> > systems;
+	
 };
 

@@ -25,6 +25,7 @@
 #include <typeindex>
 #include <string>
 #include <typeinfo>
+#include <bitset>
 
 // SFML
 #include <SFML/Audio.hpp>

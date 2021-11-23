@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "Event.h"
+#include "World.h"
 #include "Entity.h"
 
 Entity::Entity(std::string name)
-	: name(name)
+	: name(name), world(nullptr)
 {
 }
 
@@ -14,17 +15,24 @@ std::string Entity::getName()
 
 void Entity::addComponent(Component * component)
 {
+	auto c = std::unique_ptr<Component>(component);
+	auto id = c->getID();
+
 	component->setOwnerTo(this);
 	component->init();
 
-	auto index = std::type_index(typeid(*component));
-
-	if (components.count(index))
+	if (components.count(id))
 	{
-		std::cout << this->getName() << " already has " << index.name() << "!\n";
+		std::cout << this->getName() << " already has Component" << id << "!\n";
+		delete component;
+	}
+	else
+	{
+		world->addComponent(this, id);
+		components.insert(std::make_pair(id, std::move(c)));
 	}
 
-	components.insert(std::make_pair(index, std::unique_ptr<Component>(component)));
+	
 }
 
 void Entity::fireEvent(Event& ev)
