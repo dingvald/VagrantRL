@@ -19,6 +19,8 @@ public:
 	virtual void registerSystem(World* newWorld);
 	void registerEntity(Entity* entity);
 	void unregisterEntity(Entity* entity);
+	virtual void addedEntity(Entity* entity);
+	virtual void removeEntity(Entity* entity);
 
 protected:
 	EventBus* eventBus;

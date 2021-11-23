@@ -21,7 +21,7 @@ void TestComponent::onTestEvent(Event& ev)
 
 // Position Component
 
-PositionComponent::PositionComponent(unsigned int x, unsigned int y)
+PositionComponent::PositionComponent(unsigned int x, unsigned int y, Layer layer) : layer(layer)
 {
 	position.x = x;
 	position.y = y;

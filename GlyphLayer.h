@@ -11,7 +11,8 @@ private:
 	sf::Texture m_tileset;
 
 public:
-	bool load(const std::string& spriteSheet, sf::Vector2u tileSize, std::vector<std::unique_ptr<Glyph> > *glyphs);
+	bool load(sf::Vector2u tileSize, std::vector<std::unique_ptr<Glyph> > *glyphs);
+	bool loadTexture(const std::string& spriteSheet);
 
 };
 

@@ -25,9 +25,19 @@ void System::registerSystem(World* newWorld)
 void System::registerEntity(Entity* entity)
 {
 	registeredEntities.push_back(entity);
+	this->addedEntity(entity);
 }
 
 void System::unregisterEntity(Entity* entity)
 {
 	registeredEntities.remove(entity);
+	this->removeEntity(entity);
+}
+
+void System::addedEntity(Entity* entity)
+{
+}
+
+void System::removeEntity(Entity* entity)
+{
 }

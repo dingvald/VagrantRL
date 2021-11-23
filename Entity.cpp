@@ -28,8 +28,8 @@ void Entity::addComponent(Component * component)
 	}
 	else
 	{
-		world->addComponent(this, id);
 		components.insert(std::make_pair(id, std::move(c)));
+		world->addComponent(this, id);
 	}
 
 	

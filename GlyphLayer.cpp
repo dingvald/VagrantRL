@@ -9,13 +9,17 @@ void GlyphLayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_vertices, states);
 }
 
-bool GlyphLayer::load(const std::string& spriteSheet, sf::Vector2u tileSize, std::vector < std::unique_ptr<Glyph> > * glyphs)
+bool GlyphLayer::loadTexture(const std::string& spriteSheet)
 {
 	if (!m_tileset.loadFromFile("tilesets\\" + spriteSheet))
 	{
 		return false;
 	}
+	return true;
+}
 
+bool GlyphLayer::load(sf::Vector2u tileSize, std::vector < std::unique_ptr<Glyph> > * glyphs)
+{
 	m_vertices.setPrimitiveType(sf::Quads);
 	m_vertices.resize(glyphs->size() * 4);
 

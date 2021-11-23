@@ -14,16 +14,21 @@ void GameState::init()
 	world.init();
 
 	auto player = world.addEntity("Player");
-	player->addComponent(new RenderComponent(3, sf::Color::White));
-	player->addComponent(new PositionComponent(10, 10));
+	player->addComponent(new RenderComponent(0, sf::Color::White));
+	player->addComponent(new PositionComponent(16, 16, Layer::Actor));
 	player->addComponent(new TimeComponent(70));
 
-	for (int i = 0; i < 1000; ++i)
+	for (int i = 0; i < 2500; ++i)
 	{
+		unsigned int x, y;
+
+		x = rand() % 1024;
+		y = rand() % 640;
+
 		auto npc = world.addEntity("NPC" + std::to_string(i));
 		//npc->addComponent(new TimeComponent(10*i));
 		npc->addComponent(new RenderComponent(0, sf::Color::Red));
-		npc->addComponent(new PositionComponent(i, i));
+		npc->addComponent(new PositionComponent(x, y, Layer::Actor));
 	}
 }
 

@@ -26,6 +26,15 @@ public:
 	TimeComponent(int speed);
 };
 
+enum class Layer
+{
+	Tile,
+	Item,
+	Actor,
+	Effect,
+	Total
+};
+
 class PositionComponent : public ComponentID<PositionComponent>
 {
 private:
@@ -34,8 +43,9 @@ private:
 public:
 	// Data
 	sf::Vector2u position;
+	Layer layer;
 	//
-	PositionComponent(unsigned int, unsigned int);
+	PositionComponent(unsigned int x, unsigned int y, Layer layer);
 
 	// Event Handlers
 

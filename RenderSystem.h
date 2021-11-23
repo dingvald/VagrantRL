@@ -3,14 +3,6 @@
 #include "GlyphLayer.h"
 #include "Glyph.h"
 
-enum class RenderLayer
-{
-	Tiles,
-	Items,
-	Entities,
-	Effects,
-};
-
 class RenderSystem : public System
 {
 public:
@@ -19,7 +11,16 @@ public:
 	void update(const float dt) override;
 	void render(sf::RenderTarget* target) override;
 
+	void addedEntity(Entity* entity) override;
+	void removeEntity(Entity* entity) override;
+
 private:
-	std::map< RenderLayer, std::vector<std::unique_ptr<Glyph>> > glyphs;
+	std::map<Entity*, std::pair<Layer,unsigned int> > renderedEntities;
+	std::vector< std::vector< std::unique_ptr<Glyph> > > glyphs;
+	std::vector< std::unique_ptr<GlyphLayer> > glyphLayers;
+
+	void createGlyph(Entity* entity);
+	void changeGlyph(Entity* entity);
+	void removeGlyph(Entity* entity);
 };
 
