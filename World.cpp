@@ -24,6 +24,11 @@ Entity* World::addEntity(std::string name)
 
 void World::removeEntity(Entity* entity)
 {
+	for (auto& c : entity->components)
+	{
+		removeComponent(entity, c.first);
+	}
+
 	for (auto& e : entities)
 	{
 		if (e.get() == entity)

@@ -16,7 +16,11 @@ void RenderSystem::init()
 
 void RenderSystem::update(const float dt)
 {
-	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		if (!registeredEntities.empty())
+			world->removeEntity(registeredEntities.back());
+	}
 }
 
 void RenderSystem::render(sf::RenderTarget* target)
@@ -61,9 +65,28 @@ void RenderSystem::changeGlyph(Entity* entity)
 
 void RenderSystem::removeGlyph(Entity* entity)
 {
-	
-	// 
+	auto pair = renderedEntities.at(entity);
+	auto layer = (unsigned int)pair.first;
+	auto index = pair.second;
 
+	auto last_index = glyphs[layer].size() - 1;
 
+	Entity* last_entity;
+	std::pair<Layer, unsigned int> last_pair(pair.first, last_index);
+
+	for (auto& e : renderedEntities)
+	{
+		if (e.second == last_pair)
+		{
+			last_entity = e.first;
+			break;
+		}
+	}
+
+	std::swap(glyphs[layer][index], glyphs[layer][last_index]);
+	renderedEntities.at(last_entity).second = index;
+
+	glyphs[layer].pop_back();
+	renderedEntities.erase(entity);
 }
 

@@ -13,6 +13,9 @@ void GameState::init()
 
 	world.init();
 
+	///////////////////////////////////////////
+
+
 	auto player = world.addEntity("Player");
 	player->addComponent(new RenderComponent(0, sf::Color::White));
 	player->addComponent(new PositionComponent(16, 16, Layer::Actor));
