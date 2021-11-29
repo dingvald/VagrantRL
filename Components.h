@@ -63,3 +63,13 @@ public:
 	int brightness = { 100 };
 	RenderComponent(unsigned int sprite_id, sf::Color color);
 };
+
+class PhysicsComponent : public ComponentID<PhysicsComponent>
+{
+private:
+	void init() override;
+
+public:
+	bool isBlocking;
+	PhysicsComponent(bool isBlocking)
+};

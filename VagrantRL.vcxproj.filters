@@ -76,6 +76,9 @@
     <Filter Include="Renderer\Glyph">
       <UniqueIdentifier>{6df16998-93a8-4a34-81e8-3900b65e6589}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ECS\System\MovementSystem">
+      <UniqueIdentifier>{3f89f11e-e11e-4c20-9b7d-3d403a8e1995}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
       <Filter>ECS\System\RenderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementSystem.cpp">
+      <Filter>ECS\System\MovementSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="Glyph.h">
       <Filter>Renderer\Glyph</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementSystem.h">
+      <Filter>ECS\System\MovementSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

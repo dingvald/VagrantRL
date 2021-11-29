@@ -16,11 +16,7 @@ void RenderSystem::init()
 
 void RenderSystem::update(const float dt)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-	{
-		if (!registeredEntities.empty())
-			world->removeEntity(registeredEntities.back());
-	}
+	
 }
 
 void RenderSystem::render(sf::RenderTarget* target)
