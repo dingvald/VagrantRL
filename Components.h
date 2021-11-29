@@ -71,5 +71,5 @@ private:
 
 public:
 	bool isBlocking;
-	PhysicsComponent(bool isBlocking)
+	PhysicsComponent(bool isBlocking);
 };
