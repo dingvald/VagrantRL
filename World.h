@@ -1,9 +1,12 @@
 #pragma once
 #include "Event.h"
 #include "Component.h"
+#include "Globals.h"
+#include "Map.h"
 
 // Forward declarations
 class System;
+class CoordinateSystem;
 //
 
 class World
@@ -11,6 +14,7 @@ class World
 public:
 	// Data
 	EventBus eventBus;
+	Map map{(unsigned int)Layer::Total,gl::WINDOW_WIDTH,gl::WINDOW_HEIGHT};
 	std::list< std::unique_ptr<Entity> > entities;
 
 	void init();
@@ -32,6 +36,7 @@ public:
 
 	void update(const float dt);
 	void render(sf::RenderTarget* target);
+	
 
 private:
 	std::vector< std::unique_ptr<System> > systems;

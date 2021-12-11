@@ -161,7 +161,8 @@
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GlyphLayer.cpp" />
-    <ClCompile Include="MovementSystem.cpp" />
+    <ClCompile Include="CoordinateSystem.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -185,7 +186,8 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Glyph.h" />
     <ClInclude Include="GlyphLayer.h" />
-    <ClInclude Include="MovementSystem.h" />
+    <ClInclude Include="CoordinateSystem.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="State.h" />

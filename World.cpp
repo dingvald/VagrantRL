@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "System.h"
 #include "Entity.h"
+#include "CoordinateSystem.h"
 #include "World.h"
 
 
@@ -93,6 +94,8 @@ void World::render(sf::RenderTarget* target)
 		sys->render(target);
 	}
 }
+
+
 
 
 

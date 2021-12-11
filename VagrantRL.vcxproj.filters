@@ -19,9 +19,6 @@
     <Filter Include="State">
       <UniqueIdentifier>{c08e65b7-7da7-4e41-8534-4297728db1dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main">
-      <UniqueIdentifier>{d45649c9-e6aa-484c-878c-6c0798fb7185}</UniqueIdentifier>
-    </Filter>
     <Filter Include="State\GameState">
       <UniqueIdentifier>{56c003e8-50b1-46e9-90d2-68d6face2d27}</UniqueIdentifier>
     </Filter>
@@ -76,8 +73,14 @@
     <Filter Include="Renderer\Glyph">
       <UniqueIdentifier>{6df16998-93a8-4a34-81e8-3900b65e6589}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ECS\System\MovementSystem">
+    <Filter Include="ECS\System\CoordinateSystem">
       <UniqueIdentifier>{3f89f11e-e11e-4c20-9b7d-3d403a8e1995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{d45649c9-e6aa-484c-878c-6c0798fb7185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Map">
+      <UniqueIdentifier>{54243995-a3d7-48ef-9c10-35824f169d7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,8 +129,11 @@
     <ClCompile Include="RenderSystem.cpp">
       <Filter>ECS\System\RenderSystem</Filter>
     </ClCompile>
-    <ClCompile Include="MovementSystem.cpp">
-      <Filter>ECS\System\MovementSystem</Filter>
+    <ClCompile Include="CoordinateSystem.cpp">
+      <Filter>ECS\System\CoordinateSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ECS\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -185,8 +191,11 @@
     <ClInclude Include="Glyph.h">
       <Filter>Renderer\Glyph</Filter>
     </ClInclude>
-    <ClInclude Include="MovementSystem.h">
-      <Filter>ECS\System\MovementSystem</Filter>
+    <ClInclude Include="CoordinateSystem.h">
+      <Filter>ECS\System\CoordinateSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>ECS\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

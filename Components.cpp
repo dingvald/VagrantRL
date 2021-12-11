@@ -58,6 +58,10 @@ RenderComponent::RenderComponent(unsigned int sprite_id, sf::Color color) : spri
 {
 }
 
+void PhysicsComponent::init()
+{
+}
+
 PhysicsComponent::PhysicsComponent(bool isBlocking) : isBlocking(isBlocking)
 {
 }

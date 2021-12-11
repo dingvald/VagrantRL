@@ -7,7 +7,7 @@ void GameState::init()
 	// add all systems beofre world init()
 
 	world.addSystem(new TimeSystem);
-	world.addSystem(new MovementSystem);
+	world.addSystem(new CoordinateSystem);
 	world.addSystem(new RenderSystem);
 
 	////////////////////////////////////////////
@@ -21,6 +21,7 @@ void GameState::init()
 	player->addComponent(new RenderComponent(0, sf::Color::White));
 	player->addComponent(new PositionComponent(16, 16, Layer::Actor));
 	player->addComponent(new TimeComponent(70));
+
 
 }
 
