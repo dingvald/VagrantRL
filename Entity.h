@@ -1,6 +1,6 @@
 #pragma once
 #include "World.h"
-#include "Event.h"
+#include "EventBus.h"
 #include "ComponentMask.h"
 
 class Entity
@@ -30,10 +30,11 @@ public:
 	template <class C>
 	void removeComponent()
 	{
-		auto id = ::getComponentID<C>();
+		unsigned int id = ::getComponentID<C>();
 		if (components.count(id))
 		{
 			world->removeComponent(this, id);
+			eventBus.unsubscribe(components.at(id).get());
 			components.erase(id);
 		}
 	}
@@ -52,5 +53,9 @@ public:
 		return nullptr;
 	}
 
-	void fireEvent(Event& ev);
+	template<typename EventType>
+	void fireEvent(std::shared_ptr<EventType> ev)
+	{
+		eventBus.publish(ev.get());
+	}
 };

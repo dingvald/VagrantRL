@@ -1,5 +1,5 @@
 #pragma once
-#include "Event.h"
+#include "EventBus.h"
 #include "Component.h"
 #include "Globals.h"
 #include "Map.h"
@@ -14,7 +14,7 @@ class World
 public:
 	// Data
 	EventBus eventBus;
-	Map map{(unsigned int)Layer::Total,gl::WINDOW_WIDTH,gl::WINDOW_HEIGHT};
+	Map* currentMap = { nullptr };
 	std::list< std::unique_ptr<Entity> > entities;
 
 	void init();

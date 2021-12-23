@@ -1,27 +1,25 @@
 #include "pch.h"
-#include "Event.h"
+#include "Globals.h"
+#include "Entity.h"
 #include "Components.h"
 
 // Test Component
 
-TestComponent::TestComponent(std::string message)
-	: message(message)
-{
-}
-
 void TestComponent::init()
 {
-	eventBus->subscribe(this, EventType::testEvent, &TestComponent::onTestEvent);
+	eventBus->subscribe(this, &TestComponent::onTestEvent);
 }
 
-void TestComponent::onTestEvent(Event& ev)
+void TestComponent::onTestEvent(TestEvent* ev)
 {
-	ev.parameters.at("Message") += (message + "\n");
+	ev->message += (" -> " + owner->getName());
+
+	std::cout << ev->message << "\n";
 }
 
 // Position Component
 
-PositionComponent::PositionComponent(unsigned int x, unsigned int y, Layer layer) : layer(layer)
+PositionComponent::PositionComponent(unsigned int x, unsigned int y, gl::Layer layer) : layer(layer)
 {
 	position.x = x;
 	position.y = y;
@@ -29,12 +27,11 @@ PositionComponent::PositionComponent(unsigned int x, unsigned int y, Layer layer
 
 void PositionComponent::init()
 {
-	eventBus->subscribe(this, EventType::testEvent, &PositionComponent::onTestEvent);
+	eventBus->subscribe(this, &PositionComponent::onTestEvent);
 }
 
-void PositionComponent::onTestEvent(Event& ev)
+void PositionComponent::onTestEvent(TestEvent* ev)
 {
-	ev.parameters.at("Message") += ("x: " + std::to_string(position.x) + ", y: " + std::to_string(position.y) + "\n");
 }
 
 // Actor Component
@@ -63,5 +60,27 @@ void PhysicsComponent::init()
 }
 
 PhysicsComponent::PhysicsComponent(bool isBlocking) : isBlocking(isBlocking)
+{
+}
+
+// Health Component
+
+
+void HealthComponent::init()
+{
+}
+
+HealthComponent::HealthComponent(int health) : health(health), max_health(health)
+{
+
+}
+
+// Faction Component
+
+void FactionComponent::init()
+{
+}
+
+FactionComponent::FactionComponent(Faction faction) : faction(faction)
 {
 }

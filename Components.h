@@ -1,4 +1,6 @@
 #pragma once
+#include "Globals.h"
+#include "EventBus.h"
 #include "Component.h"
 
 class TestComponent : public ComponentID<TestComponent>
@@ -7,11 +9,9 @@ private:
 	void init() override;
 
 public:
-	std::string message;
-	TestComponent(std::string message);
 
 	// Event handlers
-	void onTestEvent(Event& ev);
+	void onTestEvent(TestEvent* ev);
 
 };
 
@@ -26,15 +26,6 @@ public:
 	TimeComponent(int speed);
 };
 
-enum class Layer
-{
-	Tile,
-	Item,
-	Actor,
-	Effect,
-	Total
-};
-
 class PositionComponent : public ComponentID<PositionComponent>
 {
 private:
@@ -42,14 +33,14 @@ private:
 
 public:
 	// Data
-	sf::Vector2u position;
-	Layer layer;
+	sf::Vector2i position;
+	gl::Layer layer;
 	//
-	PositionComponent(unsigned int x, unsigned int y, Layer layer);
+	PositionComponent(unsigned int x, unsigned int y, gl::Layer layer);
 
 	// Event Handlers
 
-	void onTestEvent(Event& ev);
+	void onTestEvent(TestEvent* ev);
 };
 
 class RenderComponent : public ComponentID<RenderComponent>
@@ -64,6 +55,17 @@ public:
 	RenderComponent(unsigned int sprite_id, sf::Color color);
 };
 
+class HealthComponent : public ComponentID<HealthComponent>
+{
+private:
+	void init() override;
+
+public:
+	HealthComponent(int health);
+	int health;
+	int max_health;
+};
+
 class PhysicsComponent : public ComponentID<PhysicsComponent>
 {
 private:
@@ -72,4 +74,47 @@ private:
 public:
 	bool isBlocking;
 	PhysicsComponent(bool isBlocking);
+};
+
+class MyTurnComponent : public ComponentID<MyTurnComponent>
+{
+};
+
+class PlayerAIComponent : public ComponentID<PlayerAIComponent>
+{
+
+};
+
+class AIComponent : public ComponentID<AIComponent>
+{
+
+};
+
+enum class Faction
+{
+	goodguys,
+	badguys,
+	neutral,
+	total
+};
+
+class FactionComponent : public ComponentID<FactionComponent>
+{
+private:
+	void init() override;
+
+public:
+	FactionComponent(Faction faction);
+
+	Faction faction;
+};
+
+class ViewportFocusComponent : public ComponentID<ViewportFocusComponent>
+{
+
+};
+
+class OnScreenComponent : public ComponentID<OnScreenComponent>
+{
+
 };

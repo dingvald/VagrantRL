@@ -1,16 +1,20 @@
 #include "pch.h"
 #include "Event.h"
 #include "Entity.h"
+#include "Components.h"
 #include "TimeSystem.h"
 
 void TimeSystem::init()
 {
 	signature.addComponentByType<TimeComponent>();
 
+	eventBus->subscribe(this, &TimeSystem::onSpendTimeEvent);
+
 	//Time keeper defines the game's unit of time.
 	time_keeper = world->addEntity("Time Keeper");
 	time_keeper->addComponent(new TimeComponent(100));
-	time_keeper->getComponent<TimeComponent>()->built_up_speed = 100;
+	time_keeper->getComponent<TimeComponent>()->built_up_speed = 0;
+	current_actor = time_keeper;
 }
 
 void TimeSystem::update(const float dt)
@@ -19,45 +23,38 @@ void TimeSystem::update(const float dt)
 	{
 		refreshTurnQueue();
 	}
-
-	current_actor = turn_queue.front();
 	
 	if (current_actor == time_keeper)
 	{
 		distributeSpeed();
-
 		time_keeper->getComponent<TimeComponent>()->built_up_speed = 0;
-		
 		refreshTurnQueue();
-		current_actor = turn_queue.front();
 	}
 
-	auto c = current_actor->getComponent<TimeComponent>();
+	if (!current_actor->getComponent<MyTurnComponent>())
+	{
+		current_actor->addComponent(new MyTurnComponent);
+	}
+
+	auto time_comp = current_actor->getComponent<TimeComponent>();
 
 	if (current_actor != last_actor)
 	{
 		last_actor = current_actor;
-		// fire start turn event
-		c->built_up_speed -= 100;
-	}
-	else
-	{
-		// fire continue turn event
-		c->built_up_speed -= 100;
+		current_actor->fireEvent(std::make_shared<StartTurnEvent>());
+		
 	}
 
-	if (current_actor->getComponent<TimeComponent>()->built_up_speed <= 0)
+	if (time_comp->built_up_speed <= 0)
 	{
-		turn_queue.pop();
-		turn_queue.push(current_actor);
-		last_actor = current_actor;
-		current_actor = turn_queue.front();
+		current_actor->removeComponent<MyTurnComponent>();
+		rotateQueue();
 	}
-}
+} 
 
-void TimeSystem::clearTurnQueue(std::queue<Entity*>& q)
+void TimeSystem::clearTurnQueue(std::deque<Entity*>& q)
 {
-	std::queue<Entity*> empty_q;
+	std::deque<Entity*> empty_q;
 	std::swap(q, empty_q);
 }
 
@@ -72,14 +69,16 @@ void TimeSystem::refreshTurnQueue()
 
 	for (auto e : registeredEntities)
 	{
-		turn_queue.push(e);
+		turn_queue.push_back(e);
 	}
+
+	current_actor = turn_queue.front();
 }
 
 void TimeSystem::printTurnQueue()
 {
 	std::cout << "\n";
-	std::queue<Entity*> temp_q = turn_queue;
+	std::deque<Entity*> temp_q = turn_queue;
 	int count = 1;
 	while (!temp_q.empty())
 	{
@@ -87,7 +86,7 @@ void TimeSystem::printTurnQueue()
 		auto c = e->getComponent<TimeComponent>();
 
 		std::cout << count << ". " << e->getName() << " Speed: " << c->speed << " Build-up: " << c->built_up_speed << "\n";
-		temp_q.pop();
+		temp_q.pop_front();
 		++count;
 	}
 	std::cout << "\n";
@@ -100,5 +99,19 @@ void TimeSystem::distributeSpeed()
 		auto c = e->getComponent<TimeComponent>();
 		c->built_up_speed += c->speed;
 	}
+}
+
+void TimeSystem::rotateQueue()
+{
+	last_actor = turn_queue.front();
+	turn_queue.pop_front();
+	turn_queue.push_back(last_actor);
+	current_actor = turn_queue.front();
+}
+
+void TimeSystem::onSpendTimeEvent(SpendTimeEvent* ev)
+{
+	auto time_comp = current_actor->getComponent<TimeComponent>();
+	time_comp->built_up_speed -= ev->time;
 }
 

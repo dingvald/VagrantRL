@@ -11,6 +11,8 @@ private:
 
 	sf::Clock dtClock;
 	float dt;
+	float dt_count;
+	float framerate = 30;
 
 	std::stack<State*> states;
 

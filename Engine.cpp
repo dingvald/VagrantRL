@@ -45,6 +45,7 @@ Engine::~Engine()
 void Engine::updateDT()
 {
 	dt = dtClock.restart().asSeconds();
+	dt_count += dt;
 }
 
 void Engine::updateSFMLEvents()
@@ -81,14 +82,19 @@ void Engine::update()
 
 void Engine::render()
 {
-	window->clear();
-
-	if (!states.empty())
+	if (dt_count >= 1 / framerate)
 	{
-		states.top()->render(window);
-	}
+		window->clear();
 
-	window->display();
+		if (!states.empty())
+		{
+			states.top()->render(window);
+		}
+
+		window->display();
+
+		dt_count = 0.00;
+	}
 }
 
 void Engine::run()

@@ -1,7 +1,6 @@
 #pragma once
 #include "System.h"
 
-class Event;
 
 class TimeSystem : public System
 {
@@ -12,14 +11,17 @@ public:
 
 private:
 
-	std::queue<Entity*> turn_queue;
+	std::deque<Entity*> turn_queue;
 	Entity* current_actor;
-	Entity* last_actor;
+	Entity* last_actor = nullptr;
 	Entity* time_keeper;
 
-	void clearTurnQueue(std::queue<Entity*>& q);
+	void clearTurnQueue(std::deque<Entity*>& q);
 	void refreshTurnQueue();
 	void printTurnQueue();
 	void distributeSpeed();
+	void rotateQueue();
+
+	void onSpendTimeEvent(SpendTimeEvent* ev);
 };
 

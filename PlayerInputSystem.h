@@ -1,0 +1,23 @@
+#pragma once
+#include "System.h"
+
+struct keystatePair
+{
+	int count;
+	float dt_count;
+};
+
+class PlayerInputSystem : public System
+{
+public:
+	void init() override;
+
+	void update(const float dt) override;
+private:
+	float key_refractory_period = { 1.0f / 20.0f };
+	keystatePair keystate[sf::Keyboard::KeyCount] = { 0, 0.0f };
+
+	bool keyPressed(unsigned int key);
+	void updateKeystates(const float dt);
+};
+

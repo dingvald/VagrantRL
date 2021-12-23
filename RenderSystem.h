@@ -2,6 +2,7 @@
 #include "System.h"
 #include "GlyphLayer.h"
 #include "Glyph.h"
+#include "TileMap.h"
 
 class RenderSystem : public System
 {
@@ -15,12 +16,23 @@ public:
 	void removeEntity(Entity* entity) override;
 
 private:
-	std::map<Entity*, std::pair<Layer,unsigned int> > renderedEntities;
+	std::map<Entity*, std::pair<gl::Layer,unsigned int> > renderedEntities;
 	std::vector< std::vector< std::unique_ptr<Glyph> > > glyphs;
 	std::vector< std::unique_ptr<GlyphLayer> > glyphLayers;
+	TileMap tilemap;
+	sf::Vector2i viewport_origin;
+	float updaterate = 30.0;
+	float dt_count = 0.0;
+	
 
 	void createGlyph(Entity* entity);
 	void changeGlyph(Entity* entity);
 	void removeGlyph(Entity* entity);
+
+	void updateGlyphs();
+	void updateTilemap();
+
+	void onViewportMoveEvent(ViewportMoveEvent* ev);
+
 };
 

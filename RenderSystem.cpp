@@ -1,31 +1,46 @@
 #include "pch.h"
+#include "Globals.h"
 #include "RenderSystem.h"
 
 void RenderSystem::init()
 {
-	glyphs.resize((int)Layer::Total);
-	for (int l = 0; l < (int)Layer::Total; ++l)
+	glyphs.resize((int)gl::Layer::Total);
+	for (int l = 0; l < (int)gl::Layer::Total; ++l)
 	{
 		glyphLayers.push_back(std::make_unique<GlyphLayer>());
 		glyphLayers.back()->loadTexture("simpleTileset.png");
 	}
 
+	tilemap.loadTexture("simpleTileset.png");
+	
+
 	signature.addComponentByType<RenderComponent>();
 	signature.addComponentByType<PositionComponent>();
+	signature.addComponentByType<OnScreenComponent>();
+
+	eventBus->subscribe(this, &RenderSystem::onViewportMoveEvent);
 }
 
 void RenderSystem::update(const float dt)
 {
-	
+	dt_count += dt;
+	if (dt_count >= 1 / updaterate)
+	{
+		updateGlyphs();
+		dt_count = 0;
+	}
 }
 
 void RenderSystem::render(sf::RenderTarget* target)
 {
-	for (int l = (int)Layer::Tile; l < (int)Layer::Total; ++l)
+	target->draw(tilemap);
+
+	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
 	{
-		glyphLayers[l]->load(sf::Vector2u(16, 16), &glyphs[l]);
-		target->draw(*glyphLayers[l]);
+		glyphLayers[layer]->load(sf::Vector2u(16, 16), &glyphs[layer]);
+		target->draw(*glyphLayers[layer]);
 	}
+
 }
 
 void RenderSystem::addedEntity(Entity* entity)
@@ -49,8 +64,11 @@ void RenderSystem::createGlyph(Entity* entity)
 
 	auto index = glyphs[static_cast<int>(layer)].size();
 
+	sf::Vector2i coordinatePosition{ (pos->position.x - viewport_origin.x) * gl::TILE_SIZE ,
+		(pos->position.y - viewport_origin.y) * gl::TILE_SIZE };
+
 	renderedEntities.insert(std::make_pair(entity, std::make_pair(layer, index)));
-	glyphs[static_cast<int>(layer)].push_back(std::make_unique<Glyph>(render->sprite_id, render->color, pos->position));
+	glyphs[static_cast<int>(layer)].push_back(std::make_unique<Glyph>(render->sprite_id, render->color, coordinatePosition));
 }
 
 void RenderSystem::changeGlyph(Entity* entity)
@@ -61,6 +79,8 @@ void RenderSystem::changeGlyph(Entity* entity)
 
 void RenderSystem::removeGlyph(Entity* entity)
 {
+	if (!renderedEntities.count(entity)) return;
+
 	auto pair = renderedEntities.at(entity);
 	auto layer = (unsigned int)pair.first;
 	auto index = pair.second;
@@ -68,7 +88,7 @@ void RenderSystem::removeGlyph(Entity* entity)
 	auto last_index = glyphs[layer].size() - 1;
 
 	Entity* last_entity;
-	std::pair<Layer, unsigned int> last_pair(pair.first, last_index);
+	std::pair<gl::Layer, unsigned int> last_pair(pair.first, last_index);
 
 	for (auto& e : renderedEntities)
 	{
@@ -85,4 +105,39 @@ void RenderSystem::removeGlyph(Entity* entity)
 	glyphs[layer].pop_back();
 	renderedEntities.erase(entity);
 }
+
+void RenderSystem::updateGlyphs()
+{
+	for (auto& e : registeredEntities)
+	{
+		changeGlyph(e);
+	}
+}
+
+void RenderSystem::updateTilemap()
+{
+	const Tile* tiles[gl::VIEWPORT_WIDTH][gl::VIEWPORT_HEIGHT];
+	unsigned int ux = 0;
+
+	for (int x = viewport_origin.x; x < viewport_origin.x + (gl::VIEWPORT_WIDTH); ++x)
+	{
+		unsigned int uy = 0;
+		for (int y = viewport_origin.y; y < viewport_origin.y + (gl::VIEWPORT_HEIGHT); ++y)
+		{
+			tiles[ux][uy] = world->currentMap->getTile({ x,y });
+			++uy;
+		}
+		++ux;
+	}
+
+	tilemap.load({ gl::TILE_SIZE,gl::TILE_SIZE }, tiles, gl::VIEWPORT_WIDTH, gl::VIEWPORT_HEIGHT);
+}
+
+void RenderSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
+{
+	viewport_origin = ev->newOrigin;
+	updateTilemap();
+}
+
+
 

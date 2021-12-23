@@ -4,7 +4,6 @@
 
 // Forward declarations
 class Entity;
-class Event;
 class EventBus;
 
 //

@@ -4,25 +4,25 @@
 void GameState::init()
 {
 
-	// add all systems beofre world init()
+	// add all systems before world init()
 
 	world.addSystem(new TimeSystem);
 	world.addSystem(new CoordinateSystem);
+	world.addSystem(new MovementSystem);
 	world.addSystem(new RenderSystem);
+	world.addSystem(new PlayerInputSystem);
+	world.addSystem(new NPCInputSystem);
+	world.addSystem(new CollisionSystem);
+	world.addSystem(new ViewportSystem);
+	// Add map system last
+	world.addSystem(new MapSystem);
+	
 
 	////////////////////////////////////////////
 
 	world.init();
 
 	///////////////////////////////////////////
-
-
-	auto player = world.addEntity("Player");
-	player->addComponent(new RenderComponent(0, sf::Color::White));
-	player->addComponent(new PositionComponent(16, 16, Layer::Actor));
-	player->addComponent(new TimeComponent(70));
-
-
 }
 
 GameState::GameState()
@@ -48,7 +48,6 @@ void GameState::update(const float dt)
 {
 	updateKeybinds(dt);
 	world.update(dt);
-	//std::cout << "Time delta: " << dt << "\n";
 }
 
 void GameState::render(sf::RenderTarget* target)

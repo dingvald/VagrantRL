@@ -5,7 +5,7 @@
 
 
 class EventBus;
-class Event;
+struct Event;
 class World;
 
 class System
