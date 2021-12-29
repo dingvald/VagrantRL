@@ -13,7 +13,7 @@ void PlayerInputSystem::update(const float dt)
 
 	updateKeystates(dt);
 
-	if (keyPressed(sf::Keyboard::Numpad8))
+	if (keyPressed(sf::Keyboard::Numpad8) || keyPressed(sf::Keyboard::Up))
 	{
 		eventBus->publish(new MoveEvent(registeredEntities.front(), { 0,-1 }));
 	}
@@ -21,7 +21,7 @@ void PlayerInputSystem::update(const float dt)
 	{
 		eventBus->publish(new MoveEvent(registeredEntities.front(), { -1,-1 }));
 	}
-	else if (keyPressed(sf::Keyboard::Numpad4))
+	else if (keyPressed(sf::Keyboard::Numpad4) || keyPressed(sf::Keyboard::Left))
 	{
 		eventBus->publish(new MoveEvent(registeredEntities.front(), { -1,0 }));
 	}
@@ -29,7 +29,7 @@ void PlayerInputSystem::update(const float dt)
 	{
 		eventBus->publish(new MoveEvent(registeredEntities.front(), { -1,1 }));
 	}
-	else if (keyPressed(sf::Keyboard::Numpad2))
+	else if (keyPressed(sf::Keyboard::Numpad2) || keyPressed(sf::Keyboard::Down))
 	{
 		eventBus->publish(new MoveEvent(registeredEntities.front(), { 0,1 }));
 	}
@@ -37,7 +37,7 @@ void PlayerInputSystem::update(const float dt)
 	{
 		eventBus->publish(new MoveEvent(registeredEntities.front(), { 1,1 }));
 	}
-	else if (keyPressed(sf::Keyboard::Numpad6))
+	else if (keyPressed(sf::Keyboard::Numpad6) || keyPressed(sf::Keyboard::Right))
 	{
 		eventBus->publish(new MoveEvent(registeredEntities.front(), { 1,0 }));
 	}
