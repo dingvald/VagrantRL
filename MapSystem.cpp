@@ -34,7 +34,7 @@ void MapSystem::buildInitialMap()
 	player->addComponent(new PlayerAIComponent);
 	player->addComponent(new FactionComponent(Faction::goodguys));
 
-	for (int x = 0; x < 10; ++x)
+	for (int x = 0; x < 5; ++x)
 	{
 		int rand_x, rand_y;
 
@@ -50,7 +50,7 @@ void MapSystem::buildInitialMap()
 		npc->addComponent(new FactionComponent(Faction::badguys));
 	}
 
-	for (int x = 0; x < 5000; ++x)
+	for (int x = 0; x < 1000; ++x)
 	{
 		int rand_x, rand_y;
 

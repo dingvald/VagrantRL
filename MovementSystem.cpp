@@ -12,12 +12,12 @@ void MovementSystem::init()
 void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 {
 	auto pos_comp = entity->getComponent<PositionComponent>();
-	auto pos = pos_comp->position;
+	auto pos = (pos_comp->position);
 	unsigned int layer = static_cast<unsigned int>(pos_comp->layer);
 	
-	auto intended_pos = pos + dir;
+	auto intended_pos = pos + (dir * gl::TILE_SIZE);
 
-	if (intended_pos.x < 0 || intended_pos.y < 0 || intended_pos.x > (world->currentMap->getWidth() - 1) || intended_pos.y > (world->currentMap->getHeight() - 1))
+	if (intended_pos.x < 0 || intended_pos.y < 0 || intended_pos.x > (world->currentMap->getWidth() - 1)*gl::TILE_SIZE || intended_pos.y > (world->currentMap->getHeight() - 1)*gl::TILE_SIZE)
 	{
 		return;
 	}
@@ -37,6 +37,7 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 	} 
 	else
 	{
+		// Actually perform the move
 		world->currentMap->removeEntity(entity, layer, pos);
 		world->currentMap->placeEntity(entity, layer, intended_pos);
 		pos_comp->position = intended_pos;
@@ -46,9 +47,9 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 
 Entity* MovementSystem::checkForCollisionAt(sf::Vector2i coordinate)
 {
-	if (world->currentMap->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), coordinate))
+	if (world->currentMap->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), Map::toGridPosition(coordinate)))
 	{
-		return world->currentMap->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), coordinate)->back();
+		return world->currentMap->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), Map::toGridPosition(coordinate))->back();
 	}
 	else
 	{

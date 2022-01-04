@@ -21,8 +21,8 @@ void TestComponent::onTestEvent(TestEvent* ev)
 
 PositionComponent::PositionComponent(unsigned int x, unsigned int y, gl::Layer layer) : layer(layer)
 {
-	position.x = x;
-	position.y = y;
+	position.x = x*gl::TILE_SIZE;
+	position.y = y*gl::TILE_SIZE;
 }
 
 void PositionComponent::init()

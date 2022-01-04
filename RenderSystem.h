@@ -20,7 +20,7 @@ private:
 	std::vector< std::vector< std::unique_ptr<Glyph> > > glyphs;
 	std::vector< std::unique_ptr<GlyphLayer> > glyphLayers;
 	TileMap tilemap;
-	sf::Vector2i viewport_origin;
+	sf::Vector2f viewport_origin;
 	float updaterate = 30.0;
 	float dt_count = 0.0;
 	

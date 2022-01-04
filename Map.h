@@ -17,6 +17,8 @@ public:
 	unsigned int getWidth();
 	unsigned int getHeight();
 
+	static sf::Vector2i toGridPosition(sf::Vector2i position);
+
 private:
 	unsigned int width;
 	unsigned int height;

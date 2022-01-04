@@ -28,10 +28,7 @@ void ViewportSystem::update(const float dt)
 
 	if (dt_count >= 1 / updaterate)
 	{
-		if (viewportMoved())
-		{
-			updateOnScreenEntities();
-		}
+		updateOnScreenEntities();
 	}
 }
 
@@ -44,17 +41,20 @@ void ViewportSystem::centerViewport()
 		old_origin.x = origin.x;
 		old_origin.y = origin.y;
 
+		int tempx = follow_pos.x - ( (width / 2) * gl::TILE_SIZE );
+		int tempy = follow_pos.y - ( (height / 2) * gl::TILE_SIZE );
 
-		origin.x = follow_pos.x - (width / 2);
-		origin.y = follow_pos.y - (height / 2);
+		if (tempx < 0) tempx = 0;
+		if (tempy < 0) tempy = 0;
+		if (tempx > (world->currentMap->getWidth() - width) * gl::TILE_SIZE) tempx = (world->currentMap->getWidth() - width) * gl::TILE_SIZE;
+		if (tempy > (world->currentMap->getHeight() - height) * gl::TILE_SIZE) tempy = (world->currentMap->getHeight() - height) * gl::TILE_SIZE;
 
-		if (origin.x < 0) origin.x = 0;
-		if (origin.y < 0) origin.y = 0;
-		if (origin.x > world->currentMap->getWidth() - width) origin.x = world->currentMap->getWidth() - width;
-		if (origin.y > world->currentMap->getHeight() - height) origin.y = world->currentMap->getHeight() - height;
+		origin.x = static_cast<float>(tempx);
+		origin.y = static_cast<float>(tempy);
 
 		if (viewportMoved())
 		{
+			//std::cout << "Viewport origin: x-> " << origin.x << " y->" << origin.y << "\n";
 			eventBus->publish(new ViewportMoveEvent(origin));
 		}
 	}
@@ -72,7 +72,7 @@ bool ViewportSystem::viewportMoved()
 
 bool ViewportSystem::inViewport(sf::Vector2i pos)
 {
-	if (pos.x < origin.x || pos.y < origin.y || pos.x > origin.x + width - 1 || pos.y > origin.y + height - 1)
+	if (pos.x < origin.x || pos.y < origin.y || pos.x > origin.x + (width - 1)*gl::TILE_SIZE || pos.y > origin.y + (height - 1)*gl::TILE_SIZE)
 	{
 		return false;
 	}
@@ -83,27 +83,32 @@ void ViewportSystem::updateOnScreenEntities()
 {
 	for (auto& e : on_screen_entities)
 	{
-			e->removeComponent<OnScreenComponent>();
+		e->removeComponent<OnScreenComponent>();
 	}
-
 	on_screen_entities.clear();
 
-	for (unsigned int layer = 0; layer < (unsigned int)gl::Layer::Total; ++layer)
-	{ 
-		for (int x = origin.x; x < origin.x + width; ++x)
-		{
-			for (int y = origin.y; y < origin.y + height; ++y)
-			{
-				std::list<Entity*>* listPtr = world->currentMap->getEntitiesAt(layer, { x,y });
+	sf::Vector2i org;
 
+	org.x = static_cast<int>(std::floorf(origin.x / gl::TILE_SIZE));
+	org.y = static_cast<int>(std::floorf(origin.y / gl::TILE_SIZE));
+
+	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
+	{
+		for (int x = org.x; x < org.x + width + 1; ++x)
+		{
+			for (int y = org.y; y < org.y + height + 1; ++y)
+			{
+				auto listPtr = world->currentMap->getEntitiesAt(layer, { x,y });
 				if (listPtr && !listPtr->empty())
 				{
-					on_screen_entities.push_back(listPtr->front());
-					on_screen_entities.back()->addComponent(new OnScreenComponent);
+					auto ent = listPtr->front();
+					on_screen_entities.push_back(ent);
+					ent->addComponent(new OnScreenComponent());
 				}
 			}
 		}
 	}
+
 
 }
 
@@ -111,6 +116,7 @@ void ViewportSystem::updateEntity(Entity* entity)
 {
 	auto pos_comp = entity->getComponent<PositionComponent>();
 	auto render_comp = entity->getComponent<RenderComponent>();
+
 	if (pos_comp && render_comp)
 	{
 		auto pos = pos_comp->position;

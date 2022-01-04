@@ -64,8 +64,8 @@ void RenderSystem::createGlyph(Entity* entity)
 
 	auto index = glyphs[static_cast<int>(layer)].size();
 
-	sf::Vector2i coordinatePosition{ (pos->position.x - viewport_origin.x) * gl::TILE_SIZE ,
-		(pos->position.y - viewport_origin.y) * gl::TILE_SIZE };
+	sf::Vector2f coordinatePosition{ (pos->position.x - viewport_origin.x),
+		(pos->position.y - viewport_origin.y) };
 
 	renderedEntities.insert(std::make_pair(entity, std::make_pair(layer, index)));
 	glyphs[static_cast<int>(layer)].push_back(std::make_unique<Glyph>(render->sprite_id, render->color, coordinatePosition));
@@ -119,10 +119,10 @@ void RenderSystem::updateTilemap()
 	const Tile* tiles[gl::VIEWPORT_WIDTH][gl::VIEWPORT_HEIGHT];
 	unsigned int ux = 0;
 
-	for (int x = viewport_origin.x; x < viewport_origin.x + (gl::VIEWPORT_WIDTH); ++x)
+	for (int x = viewport_origin.x/gl::TILE_SIZE; x < viewport_origin.x/gl::TILE_SIZE + (gl::VIEWPORT_WIDTH); ++x)
 	{
 		unsigned int uy = 0;
-		for (int y = viewport_origin.y; y < viewport_origin.y + (gl::VIEWPORT_HEIGHT); ++y)
+		for (int y = viewport_origin.y/gl::TILE_SIZE; y < viewport_origin.y/gl::TILE_SIZE + (gl::VIEWPORT_HEIGHT); ++y)
 		{
 			tiles[ux][uy] = world->currentMap->getTile({ x,y });
 			++uy;
