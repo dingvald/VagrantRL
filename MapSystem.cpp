@@ -19,7 +19,13 @@ void MapSystem::buildInitialMap()
 	{
 		for (unsigned int y = 0; y < map->getHeight(); ++y)
 		{
-			map->placeTile(new Tile(2, sf::Color{ 100,100,100 }, sf::Color::Black), { x,y });
+			sf::Color col;
+			if (x % 16 && y % 16)
+				col = sf::Color{ 100,100,100 };
+			else
+				col = sf::Color{ 255,255,50 };
+				
+			map->placeTile(new Tile(2, col, sf::Color::Black), { x,y });
 		}
 	}
 	// Add entities
@@ -27,7 +33,7 @@ void MapSystem::buildInitialMap()
 	auto player = world->addEntity("Player");
 	player->addComponent(new TestComponent());
 	player->addComponent(new ViewportFocusComponent);
-	player->addComponent(new RenderComponent(0, sf::Color{ 100, 100, 100 }));
+	player->addComponent(new RenderComponent(0, sf::Color{ 225, 225, 225 }));
 	player->addComponent(new PositionComponent(2, 16, gl::Layer::Actor));
 	player->addComponent(new HealthComponent(10));
 	player->addComponent(new TimeComponent(100));
@@ -50,7 +56,7 @@ void MapSystem::buildInitialMap()
 		npc->addComponent(new FactionComponent(Faction::badguys));
 	}
 
-	for (int x = 0; x < 1000; ++x)
+	for (int x = 0; x < 100; ++x)
 	{
 		int rand_x, rand_y;
 
