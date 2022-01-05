@@ -36,25 +36,27 @@ void ViewportSystem::centerViewport()
 {
 	if (following)
 	{
-		auto follow_pos = following->getComponent<PositionComponent>()->position;
+		old_origin = origin;
 
-		old_origin.x = origin.x;
-		old_origin.y = origin.y;
+		auto follow_pos = following->getComponent<PositionComponent>()->position;
 
 		int tempx = follow_pos.x - ( (width / 2) * gl::TILE_SIZE );
 		int tempy = follow_pos.y - ( (height / 2) * gl::TILE_SIZE );
 
+		// clamp viewport origin to map edges
 		if (tempx < 0) tempx = 0;
 		if (tempy < 0) tempy = 0;
 		if (tempx > (world->currentMap->getWidth() - width) * gl::TILE_SIZE) tempx = (world->currentMap->getWidth() - width) * gl::TILE_SIZE;
 		if (tempy > (world->currentMap->getHeight() - height) * gl::TILE_SIZE) tempy = (world->currentMap->getHeight() - height) * gl::TILE_SIZE;
 
-		origin.x = static_cast<float>(tempx);
-		origin.y = static_cast<float>(tempy);
+		sf::Vector2f target = { static_cast<float>(tempx), static_cast<float>(tempy) };
+
+		origin = lerpToTarget(origin, target);
+
+		std::cout << origin.x << ", " << origin.y << "\n";
 
 		if (viewportMoved())
 		{
-			//std::cout << "Viewport origin: x-> " << origin.x << " y->" << origin.y << "\n";
 			eventBus->publish(new ViewportMoveEvent(origin));
 		}
 	}
@@ -142,4 +144,22 @@ void ViewportSystem::updateEntity(Entity* entity)
 void ViewportSystem::onMoveEvent(MoveEvent* ev)
 {
 	updateEntity(ev->entity);
+}
+
+sf::Vector2f ViewportSystem::lerpToTarget(sf::Vector2f pos, const sf::Vector2f target_pos)
+{
+	sf::Vector2f delta = (pos - target_pos) * 0.015f;
+
+	if (std::fabs(delta.x) < 0.02)
+	{
+		delta.x = 0;
+		pos.x = target_pos.x;
+	}
+	if (std::fabs(delta.y) < 0.02)
+	{
+		delta.y = 0;
+		pos.y = target_pos.y;
+	}
+
+	return pos - delta;
 }

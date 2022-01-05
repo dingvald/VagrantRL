@@ -136,7 +136,7 @@ void RenderSystem::updateTilemap()
 void RenderSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
 {
 	viewport_origin = ev->newOrigin;
-	updateTilemap();
+	//updateTilemap();
 }
 
 
