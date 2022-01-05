@@ -53,7 +53,7 @@ void ViewportSystem::centerViewport()
 
 		origin = lerpToTarget(origin, target);
 
-		std::cout << origin.x << ", " << origin.y << "\n";
+		//std::cout << origin.x << ", " << origin.y << "\n";
 
 		if (viewportMoved())
 		{

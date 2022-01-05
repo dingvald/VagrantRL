@@ -14,7 +14,8 @@ public:
 
 	void update(const float dt) override;
 private:
-	float key_refractory_period = { 1.0f / 20.0f };
+	float key_refractory_period = { 1.0f / 60.0f };
+	float first_press_delay = { 0.5 };
 	keystatePair keystate[sf::Keyboard::KeyCount] = { 0, 0.0f };
 
 	bool keyPressed(unsigned int key);

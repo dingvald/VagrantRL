@@ -53,7 +53,7 @@ void PlayerInputSystem::update(const float dt)
 
 bool PlayerInputSystem::keyPressed(unsigned int key)
 {
-	if (keystate[key].count == 1) return true;
+	if (keystate[key].count > 0 && keystate[key].count < 4) return true;
 	else return false;
 }
 
@@ -69,16 +69,28 @@ void PlayerInputSystem::updateKeystates(const float dt)
 			{
 				keystate[key].count++;
 			}
-			else
+			else if (keystate[key].count == 1 || keystate[key].count == 4)
 			{
-				if (keystate[key].dt_count >= key_refractory_period)
+				if (keystate[key].dt_count >= first_press_delay)
 				{
-					keystate[key].count = 1;
+					keystate[key].count = 2;
 					keystate[key].dt_count = 0.0f;
 				}
 				else
 				{
+					keystate[key].count = 4;
+				}
+			}
+			else if (keystate[key].count == 2 || keystate[key].count == 5)
+			{
+				if (keystate[key].dt_count >= key_refractory_period)
+				{
 					keystate[key].count = 2;
+					keystate[key].dt_count = 0.0f;
+				}
+				else
+				{
+					keystate[key].count = 5;
 				}
 			}
 		}
