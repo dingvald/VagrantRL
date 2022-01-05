@@ -94,7 +94,7 @@ void ViewportSystem::updateOnScreenEntities()
 	org.x = static_cast<int>(std::floorf(origin.x / gl::TILE_SIZE));
 	org.y = static_cast<int>(std::floorf(origin.y / gl::TILE_SIZE));
 
-	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
+	for (int layer = 1; layer < (int)gl::Layer::Total; ++layer)
 	{
 		for (int x = org.x; x < org.x + width + 1; ++x)
 		{

@@ -12,6 +12,7 @@ namespace gl
 
 	enum class Layer
 	{
+		Tile,
 		Item,
 		Actor,
 		Effect,

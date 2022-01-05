@@ -116,27 +116,23 @@ void RenderSystem::updateGlyphs()
 
 void RenderSystem::updateTilemap()
 {
-	const Tile* tiles[gl::VIEWPORT_WIDTH][gl::VIEWPORT_HEIGHT];
-	unsigned int ux = 0;
-
+	glyphs[(int)gl::Layer::Tile].clear();
 	for (int x = viewport_origin.x/gl::TILE_SIZE; x < viewport_origin.x/gl::TILE_SIZE + (gl::VIEWPORT_WIDTH); ++x)
 	{
-		unsigned int uy = 0;
 		for (int y = viewport_origin.y/gl::TILE_SIZE; y < viewport_origin.y/gl::TILE_SIZE + (gl::VIEWPORT_HEIGHT); ++y)
 		{
-			tiles[ux][uy] = world->currentMap->getTile({ x,y });
-			++uy;
-		}
-		++ux;
-	}
+			sf::Vector2f coordinate_position = { x * gl::TILE_SIZE - viewport_origin.x, y * gl::TILE_SIZE - viewport_origin.y };
 
-	tilemap.load({ gl::TILE_SIZE,gl::TILE_SIZE }, tiles, gl::VIEWPORT_WIDTH, gl::VIEWPORT_HEIGHT);
+			Tile* tile = world->currentMap->getTile({ x,y });
+			glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(tile->sprite, tile->fg, coordinate_position));
+		}
+	}
 }
 
 void RenderSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
 {
 	viewport_origin = ev->newOrigin;
-	//updateTilemap();
+	updateTilemap();
 }
 
 
