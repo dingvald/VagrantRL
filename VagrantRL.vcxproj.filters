@@ -106,11 +106,11 @@
     <Filter Include="ECS\System\Map Builder System">
       <UniqueIdentifier>{6d2eb08d-c8ee-4eca-bd16-c51e3c7c7979}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ECS\Tile">
-      <UniqueIdentifier>{88479350-971f-498e-be4b-be7231a79bb5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\System\Viewport System">
       <UniqueIdentifier>{2fc70299-e086-4d61-9b33-f4da11473fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Helpers\Tile">
+      <UniqueIdentifier>{88479350-971f-498e-be4b-be7231a79bb5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -267,7 +267,7 @@
       <Filter>ECS\System\Map Builder System</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
-      <Filter>ECS\Tile</Filter>
+      <Filter>Render Helpers\Tile</Filter>
     </ClInclude>
     <ClInclude Include="ViewportSystem.h">
       <Filter>ECS\System\Viewport System</Filter>

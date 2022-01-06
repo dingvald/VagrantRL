@@ -15,7 +15,7 @@ public:
 	// Data
 	EventBus eventBus;
 	Map* currentMap = { nullptr };
-	std::list< std::unique_ptr<Entity> > entities;
+	Entity* player;
 
 	void init();
 
@@ -39,7 +39,9 @@ public:
 	
 
 private:
+	unsigned int next_entity_id = { 0 };
 	std::vector< std::unique_ptr<System> > systems;
+	std::map<unsigned int, std::unique_ptr<Entity> > entities;
 	
 };
 

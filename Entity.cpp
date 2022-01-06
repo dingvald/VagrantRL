@@ -15,19 +15,19 @@ std::string Entity::getName()
 void Entity::addComponent(Component * component)
 {
 	auto c = std::unique_ptr<Component>(component);
-	auto id = c->getID();
+	auto _id = c->getID();
 
-	if (components.count(id))
+	if (components.count(_id))
 	{
-		std::cout << this->getName() << " already has Component" << id << "!\n";
+		std::cout << this->getName() << " already has Component" << _id << "!\n";
 		return;
 	}
 	else
 	{
 		component->setOwnerTo(this);
 		component->init();
-		components.insert(std::make_pair(id, std::move(c)));
-		world->addComponent(this, id);
+		components.insert(std::make_pair(_id, std::move(c)));
+		world->addComponent(this, _id);
 	}
 
 	

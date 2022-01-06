@@ -11,6 +11,7 @@ private:
 
 	// Data
 	std::string name;
+	unsigned int id;
 	std::map<unsigned int, std::unique_ptr<Component> > components;
 	EventBus eventBus;
 	World* world;
@@ -30,22 +31,22 @@ public:
 	template <class C>
 	void removeComponent()
 	{
-		unsigned int id = ::getComponentID<C>();
-		if (components.count(id))
+		unsigned int _id = ::getComponentID<C>();
+		if (components.count(_id))
 		{
-			world->removeComponent(this, id);
-			eventBus.unsubscribe(components.at(id).get());
-			components.erase(id);
+			world->removeComponent(this, _id);
+			eventBus.unsubscribe(components.at(_id).get());
+			components.erase(_id);
 		}
 	}
 
 	template <class C>
 	C* getComponent()
 	{
-		unsigned int id = ::getComponentID<C>();
-		if (components.count(id))
+		unsigned int _id = ::getComponentID<C>();
+		if (components.count(_id))
 		{
-			auto ptr = components.at(id).get();
+			auto ptr = components.at(_id).get();
 
 			return static_cast<C*>(ptr);
 		}

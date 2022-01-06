@@ -26,6 +26,7 @@ void RenderSystem::update(const float dt)
 	dt_count += dt;
 	if (dt_count >= 1 / updaterate)
 	{
+		updateTilemap();
 		updateGlyphs();
 		dt_count = 0;
 	}
@@ -132,7 +133,6 @@ void RenderSystem::updateTilemap()
 void RenderSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
 {
 	viewport_origin = ev->newOrigin;
-	updateTilemap();
 }
 
 

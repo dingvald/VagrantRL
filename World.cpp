@@ -16,11 +16,11 @@ void World::init()
 Entity* World::addEntity(std::string name)
 {
 	auto ent = std::make_unique<Entity>(name);
-	entities.push_back(std::move(ent));
+	ent->id = next_entity_id;
+	ent->world = this;
+	entities.insert({ next_entity_id, std::move(ent) });
 
-	entities.back().get()->world = this;
-
-	return entities.back().get();
+	return entities.at(next_entity_id++).get();
 }
 
 void World::removeEntity(Entity* entity)
@@ -30,14 +30,9 @@ void World::removeEntity(Entity* entity)
 		removeComponent(entity, c.first);
 	}
 
-	for (auto& e : entities)
-	{
-		if (e.get() == entity)
-		{
-			entities.remove(e);
-			return;
-		}
-	}
+	auto _id = entity->id;
+
+	entities.erase(_id);
 }
 
 void World::addComponent(Entity* entity, unsigned int id)
