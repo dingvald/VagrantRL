@@ -35,6 +35,12 @@ void World::removeEntity(Entity* entity)
 	entities.erase(_id);
 }
 
+void World::setAsPlayer(Entity* entity)
+{
+	player.id = entity->id;
+	player.ptr = entity;
+}
+
 void World::addComponent(Entity* entity, unsigned int id)
 {
 	ComponentMask oldMask = entity->signature;
@@ -88,6 +94,62 @@ void World::render(sf::RenderTarget* target)
 	{
 		sys->render(target);
 	}
+}
+
+void World::save_entities(std::list<unsigned int> list_of_ids)
+{
+	std::ofstream os("data\\object_data.json");
+	cereal::JSONOutputArchive oarchive(os);
+	for (auto id : list_of_ids)
+	{
+		entities.at(id)->save(oarchive);
+		removeEntity(entities.at(id).get());
+	}
+}
+
+std::list<Entity*> World::load_entities(std::list<unsigned int> list_of_ids)
+{
+	return std::list<Entity*>();
+}
+
+void World::save_player()
+{
+	sf::Clock timer;
+	std::cout << "Saving player data..." << "\n";
+	timer.restart();
+	std::ofstream os("data\\player_data.json");
+	cereal::JSONOutputArchive oarchive(os);
+
+	entities.at(player.id)->save(oarchive);
+	auto t = timer.getElapsedTime().asSeconds();
+	std::cout << "Save Complete! (Time: " << t << ")" << "\n";
+}
+
+void World::load_player()
+{
+}
+
+void World::save_game()
+{
+	sf::Clock timer;
+	
+	std::cout << "Saving..." << "\n";
+	timer.restart();
+	std::ofstream os("data\\data.json");
+
+	cereal::JSONOutputArchive oarchive(os);
+
+	for (auto& e : entities)
+	{
+		e.second->save(oarchive);
+	}
+	auto t = timer.getElapsedTime().asSeconds();
+
+	std::cout << "Save Complete! (Time: " << t << ")" << "\n";
+}
+
+void World::load_game()
+{
 }
 
 

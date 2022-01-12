@@ -2,27 +2,27 @@
 #include "World.h"
 #include "EventBus.h"
 #include "ComponentMask.h"
+#include "cereal/access.hpp"
 
 class Entity
 {
+public:
+	unsigned int id;
+
 private:
 	friend World;
 	friend Component;
+	friend class cereal::access;
 
 	// Data
 	std::string name;
-	unsigned int id;
 	std::map<unsigned int, std::unique_ptr<Component> > components;
 	EventBus eventBus;
 	World* world;
 	ComponentMask signature;
 	
 public:
-	// Data
-	
-
-	// Functions
-	Entity(std::string);
+	Entity(std::string name);
 	
 	std::string getName();
 	
@@ -58,5 +58,17 @@ public:
 	void fireEvent(std::shared_ptr<EventType> ev)
 	{
 		eventBus.publish(ev.get());
+	}
+
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(name, id, components);
+	}
+
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(name, id, components);
 	}
 };

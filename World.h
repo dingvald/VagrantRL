@@ -4,9 +4,15 @@
 #include "Globals.h"
 #include "Map.h"
 
+struct Player
+{
+	unsigned int id;
+	Entity* ptr;
+};
+
+
 // Forward declarations
 class System;
-class CoordinateSystem;
 //
 
 class World
@@ -15,7 +21,7 @@ public:
 	// Data
 	EventBus eventBus;
 	Map* currentMap = { nullptr };
-	Entity* player;
+	Player player{ 0,nullptr };
 
 	void init();
 
@@ -24,6 +30,8 @@ public:
 	Entity* addEntity(std::string name);
 
 	void removeEntity(Entity* entity);
+
+	void setAsPlayer(Entity* entity);
 
 	// Dealing with Components
 
@@ -36,6 +44,17 @@ public:
 
 	void update(const float dt);
 	void render(sf::RenderTarget* target);
+
+	// Dealing with persistence
+
+	void save_entities(std::list<unsigned int> list_of_ids);
+	std::list<Entity*> load_entities(std::list<unsigned int> list_of_ids);
+
+	void save_player();
+	void load_player();
+
+	void save_game();
+	void load_game();
 	
 
 private:

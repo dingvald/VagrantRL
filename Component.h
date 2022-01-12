@@ -1,5 +1,5 @@
 #pragma once
-
+#include "cereal/access.hpp"
 
 
 // Forward declarations
@@ -19,12 +19,15 @@ inline unsigned int counter()
 class Component
 {
 public:
+	friend class cereal::access;
+
 	virtual ~Component() {};
 	virtual void init() = 0;
 	virtual unsigned int getID() = 0;
 	void setOwnerTo(Entity* entity);
 
 protected:
+
 	Entity* owner;
 	unsigned int owner_id = { 0 };
 	EventBus* eventBus;

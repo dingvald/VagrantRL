@@ -1,0 +1,152 @@
+{
+    "value0": "Player",
+    "value1": 1,
+    "value2": [
+        {
+            "key": 1,
+            "value": {
+                "polymorphic_id": 2147483649,
+                "polymorphic_name": "TimeComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1,
+                        "value1": 100,
+                        "value2": 100
+                    }
+                }
+            }
+        },
+        {
+            "key": 2,
+            "value": {
+                "polymorphic_id": 2147483650,
+                "polymorphic_name": "PositionComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1,
+                        "value1": {
+                            "value0": 656,
+                            "value1": 464
+                        },
+                        "value2": 2
+                    }
+                }
+            }
+        },
+        {
+            "key": 3,
+            "value": {
+                "polymorphic_id": 2147483651,
+                "polymorphic_name": "RenderComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1,
+                        "value1": 0,
+                        "value2": {
+                            "value0": 225,
+                            "value1": 225,
+                            "value2": 225
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "key": 4,
+            "value": {
+                "polymorphic_id": 2147483652,
+                "polymorphic_name": "OnScreenComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1
+                    }
+                }
+            }
+        },
+        {
+            "key": 5,
+            "value": {
+                "polymorphic_id": 2147483653,
+                "polymorphic_name": "PlayerAIComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1
+                    }
+                }
+            }
+        },
+        {
+            "key": 6,
+            "value": {
+                "polymorphic_id": 2147483654,
+                "polymorphic_name": "MyTurnComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1
+                    }
+                }
+            }
+        },
+        {
+            "key": 8,
+            "value": {
+                "polymorphic_id": 2147483655,
+                "polymorphic_name": "ViewportFocusComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1
+                    }
+                }
+            }
+        },
+        {
+            "key": 9,
+            "value": {
+                "polymorphic_id": 2147483656,
+                "polymorphic_name": "TestComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1
+                    }
+                }
+            }
+        },
+        {
+            "key": 10,
+            "value": {
+                "polymorphic_id": 2147483657,
+                "polymorphic_name": "HealthComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1,
+                        "value1": 10,
+                        "value2": 10
+                    }
+                }
+            }
+        },
+        {
+            "key": 11,
+            "value": {
+                "polymorphic_id": 2147483658,
+                "polymorphic_name": "FactionComponent",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 1,
+                        "value1": 0
+                    }
+                }
+            }
+        }
+    ]
+}

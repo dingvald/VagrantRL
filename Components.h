@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "EventBus.h"
 #include "Component.h"
+#include "SFMLSerialization.h"
 
 class TestComponent : public ComponentID<TestComponent>
 {
@@ -10,9 +11,21 @@ private:
 
 public:
 
+	TestComponent() {}
+
 	// Event handlers
 	void onTestEvent(TestEvent* ev);
 
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id);
+	}
 };
 
 class TimeComponent : public ComponentID<TimeComponent>
@@ -23,7 +36,18 @@ private:
 public:
 	int speed;
 	int built_up_speed;
-	TimeComponent(int speed);
+	TimeComponent(int speed = 100);
+
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id, speed, built_up_speed);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id, speed, built_up_speed);
+	}
 };
 
 class PositionComponent : public ComponentID<PositionComponent>
@@ -36,7 +60,18 @@ public:
 	sf::Vector2i position;
 	gl::Layer layer;
 	//
-	PositionComponent(unsigned int x, unsigned int y, gl::Layer layer);
+	PositionComponent(sf::Vector2i position = {0,0}, gl::Layer layer = gl::Layer::Tile);
+
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id, position, layer);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id, position, layer);
+	}
 
 	// Event Handlers
 
@@ -51,8 +86,19 @@ private:
 public:
 	unsigned int sprite_id;
 	sf::Color color;
-	int brightness = { 100 };
-	RenderComponent(unsigned int sprite_id, sf::Color color);
+
+	RenderComponent(unsigned int sprite_id = 0, sf::Color color = sf::Color::White);
+
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id, sprite_id, color);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id, sprite_id, color);
+	}
 };
 
 class HealthComponent : public ComponentID<HealthComponent>
@@ -61,9 +107,20 @@ private:
 	void init() override;
 
 public:
-	HealthComponent(int health);
+	HealthComponent(int health = 5);
 	int health;
 	int max_health;
+
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id, health, max_health);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id, health, max_health);
+	}
 };
 
 class PhysicsComponent : public ComponentID<PhysicsComponent>
@@ -73,21 +130,69 @@ private:
 
 public:
 	bool isBlocking;
-	PhysicsComponent(bool isBlocking);
+	PhysicsComponent(bool isBlocking = false);
+
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id, isBlocking);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id, isBlocking);
+	}
 };
 
 class MyTurnComponent : public ComponentID<MyTurnComponent>
 {
+public:
+	MyTurnComponent() {}
+
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id);
+	}
 };
 
 class PlayerAIComponent : public ComponentID<PlayerAIComponent>
 {
+public:
+	PlayerAIComponent() {}
 
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id);
+	}
 };
 
 class AIComponent : public ComponentID<AIComponent>
 {
+public:
+	AIComponent() {}
 
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id);
+	}
 };
 
 enum class Faction
@@ -104,17 +209,80 @@ private:
 	void init() override;
 
 public:
-	FactionComponent(Faction faction);
+	FactionComponent(Faction faction = Faction::neutral);
 
 	Faction faction;
+
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		int fac = (int)faction;
+		ar(owner_id, fac);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id, (int)faction);
+	}
 };
 
 class ViewportFocusComponent : public ComponentID<ViewportFocusComponent>
 {
+public:
+	ViewportFocusComponent() {}
 
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id);
+	}
 };
 
 class OnScreenComponent : public ComponentID<OnScreenComponent>
 {
+public:
+	OnScreenComponent() {}
 
+	template<class Archive>
+	void save(Archive& ar) const
+	{
+		ar(owner_id);
+	}
+	template<class Archive>
+	void load(Archive& ar)
+	{
+		ar(owner_id);
+	}
 };
+
+
+CEREAL_REGISTER_TYPE(TestComponent)
+CEREAL_REGISTER_TYPE(TimeComponent)
+CEREAL_REGISTER_TYPE(PositionComponent)
+CEREAL_REGISTER_TYPE(RenderComponent)
+CEREAL_REGISTER_TYPE(HealthComponent)
+CEREAL_REGISTER_TYPE(PhysicsComponent)
+CEREAL_REGISTER_TYPE(MyTurnComponent)
+CEREAL_REGISTER_TYPE(PlayerAIComponent)
+CEREAL_REGISTER_TYPE(AIComponent)
+CEREAL_REGISTER_TYPE(FactionComponent)
+CEREAL_REGISTER_TYPE(ViewportFocusComponent)
+CEREAL_REGISTER_TYPE(OnScreenComponent)
+
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, TestComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, TimeComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PositionComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, RenderComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, HealthComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PhysicsComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MyTurnComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PlayerAIComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, AIComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, FactionComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, ViewportFocusComponent)
+CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, OnScreenComponent)

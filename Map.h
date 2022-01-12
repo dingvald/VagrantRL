@@ -23,7 +23,7 @@ private:
 	unsigned int width;
 	unsigned int height;
 
-	std::vector<std::vector< std::vector< std::list<Entity*> > > > entitiesAt;
+	std::vector<std::vector< std::vector< std::list<Entity*> > > > entitiesAt; //layer, x_pos, y_pos
 	std::vector< std::vector< std::unique_ptr<Tile> > > tiles;
 };
 

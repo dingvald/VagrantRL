@@ -19,10 +19,9 @@ void TestComponent::onTestEvent(TestEvent* ev)
 
 // Position Component
 
-PositionComponent::PositionComponent(unsigned int x, unsigned int y, gl::Layer layer) : layer(layer)
+PositionComponent::PositionComponent(sf::Vector2i position, gl::Layer layer) : position(position *= gl::TILE_SIZE), layer(layer)
 {
-	position.x = x*gl::TILE_SIZE;
-	position.y = y*gl::TILE_SIZE;
+
 }
 
 void PositionComponent::init()
@@ -40,6 +39,8 @@ void TimeComponent::init()
 {
 
 }
+
+// Time component
 
 TimeComponent::TimeComponent(int speed) : speed(speed), built_up_speed(0)
 {

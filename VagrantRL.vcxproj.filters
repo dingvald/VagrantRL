@@ -112,6 +112,9 @@
     <Filter Include="Render Helpers\Tile">
       <UniqueIdentifier>{88479350-971f-498e-be4b-be7231a79bb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SFML serialization">
+      <UniqueIdentifier>{eed73771-22c3-41b4-a80e-b2960147f099}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="ViewportSystem.h">
       <Filter>ECS\System\Viewport System</Filter>
+    </ClInclude>
+    <ClInclude Include="SFMLSerialization.h">
+      <Filter>SFML serialization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

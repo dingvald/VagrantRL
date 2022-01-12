@@ -49,6 +49,10 @@ void PlayerInputSystem::update(const float dt)
 	{
 		eventBus->publish(new MoveEvent(registeredEntities.front(), { 0,0 }));
 	}
+	else if (keyPressed(sf::Keyboard::Space))
+	{
+		world->save_player();
+	}
 }
 
 bool PlayerInputSystem::keyPressed(unsigned int key)
