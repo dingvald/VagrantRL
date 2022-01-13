@@ -39,6 +39,36 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position
 	
 }
 
+void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height)
+{
+
+	if (x_start > width) return;
+	if (y_start > height) return;
+
+	if ((x_start + rect_width) > width)
+	{
+		rect_width = width - x_start;
+	}
+	if ((y_start + rect_height) > height)
+	{
+		rect_height = height - y_start;
+	}
+
+	for (unsigned int layer = 0; layer < (unsigned int)gl::Layer::Total; ++layer)
+	{
+		for (unsigned int x = x_start; x < x_start + rect_width; ++x)
+		{
+			for (unsigned int y = y_start; y < y_start + rect_height; ++y)
+			{
+				auto list = entitiesAt[layer][x][y];
+				if (list.empty()) continue;
+
+				
+			}
+		}
+	}
+}
+
 void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 {
 	auto pos = toGridPosition(position);

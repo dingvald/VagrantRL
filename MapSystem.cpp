@@ -13,6 +13,25 @@ void MapSystem::init()
 
 void MapSystem::buildInitialMap()
 {
+	auto player = world->addEntity("Player");
+	world->setAsPlayer(player);
+	player->addComponent(new PositionComponent({ 216,216 }, gl::Layer::Actor));
+	player->addComponent(new RenderComponent(0, sf::Color(100, 100, 100)));
+	player->addComponent(new TimeComponent(100));
+	player->addComponent(new PlayerAIComponent());
+	player->addComponent(new ViewportFocusComponent());
+
+	for (int i = 0; i < 1000; ++i)
+	{
+		int rand_x = rand() % world->currentMap->getWidth();
+		int rand_y = rand() % world->currentMap->getHeight();
+
+		auto npc = world->addEntity("NPC" + i);
+		npc->addComponent(new PositionComponent({ rand_x,rand_y }, gl::Layer::Actor));
+		npc->addComponent(new RenderComponent(0, sf::Color::Red));
+		npc->addComponent(new TimeComponent(50));
+		npc->addComponent(new AIComponent());
+	}
 	
 }
 
@@ -26,27 +45,4 @@ void MapSystem::shiftActiveMap(sf::Vector2i dir)
 	x_start = std::max(0, (int)(dir.x * (num_of_loaded_chunks.x - 1) * map_chunk_size.x));
 	y_start = std::max(0, (int)(dir.y * (num_of_loaded_chunks.y - 1) * map_chunk_size.y));
 
-	std::list<unsigned int> entity_ids;
-
-	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
-	{
-		for (int x = x_start; x < x_start + map_chunk_size.x; ++x)
-		{
-			for (int y = y_start; y < y_start + map_chunk_size.y; ++y)
-			{
-				auto ent_list = map->getEntitiesAt(layer, { x,y });
-
-				if (ent_list)
-				{
-					for (auto& e : *ent_list)
-					{
-						entity_ids.push_back(e->id);
-					}
-				}
-			}
-		}
-	}
-	
-
-	world->save_entities(entity_ids);
 }

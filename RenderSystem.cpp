@@ -16,7 +16,6 @@ void RenderSystem::init()
 
 	signature.addComponentByType<RenderComponent>();
 	signature.addComponentByType<PositionComponent>();
-	signature.addComponentByType<OnScreenComponent>();
 
 	eventBus->subscribe(this, &RenderSystem::onViewportMoveEvent);
 }
@@ -109,9 +108,25 @@ void RenderSystem::removeGlyph(Entity* entity)
 
 void RenderSystem::updateGlyphs()
 {
-	for (auto& e : registeredEntities)
+	sf::Vector2i org;
+
+	org.x = static_cast<int>(std::floorf(viewport_origin.x / gl::TILE_SIZE));
+	org.y = static_cast<int>(std::floorf(viewport_origin.y / gl::TILE_SIZE));
+
+	for (int layer = 1; layer < (int)gl::Layer::Total; ++layer)
 	{
-		changeGlyph(e);
+		for (int x = org.x; x < org.x + gl::VIEWPORT_WIDTH + 1; ++x)
+		{
+			for (int y = org.y; y < org.y + gl::VIEWPORT_HEIGHT + 1; ++y)
+			{
+				auto listPtr = world->currentMap->getEntitiesAt(layer, { x,y });
+				if (listPtr && !listPtr->empty())
+				{
+					auto ent = listPtr->front();
+					changeGlyph(ent);
+				}
+			}
+		}
 	}
 }
 
@@ -125,7 +140,15 @@ void RenderSystem::updateTilemap()
 			sf::Vector2f coordinate_position = { x * gl::TILE_SIZE - viewport_origin.x, y * gl::TILE_SIZE - viewport_origin.y };
 
 			Tile* tile = world->currentMap->getTile({ x,y });
-			glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(tile->sprite, tile->fg, coordinate_position));
+			if (tile)
+			{
+				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(tile->sprite, tile->fg, coordinate_position));
+			}
+			else
+			{
+				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color(100,100,100), coordinate_position));
+			}
+			
 		}
 	}
 }

@@ -83,6 +83,7 @@ bool ViewportSystem::inViewport(sf::Vector2i pos)
 
 void ViewportSystem::updateOnScreenEntities()
 {
+	/*
 	for (auto& e : on_screen_entities)
 	{
 		e->removeComponent<OnScreenComponent>();
@@ -110,8 +111,7 @@ void ViewportSystem::updateOnScreenEntities()
 			}
 		}
 	}
-
-
+	*/
 }
 
 void ViewportSystem::updateEntity(Entity* entity)

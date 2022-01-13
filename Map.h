@@ -8,6 +8,7 @@ public:
 	Map(unsigned int num_of_layers, unsigned int width, unsigned int height);
 
 	std::list<Entity*>* getEntitiesAt(unsigned int layer, sf::Vector2i position);
+	void applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height);
 	void placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position);
 	void removeEntity(Entity* entity, unsigned int layer, sf::Vector2i position);
 
