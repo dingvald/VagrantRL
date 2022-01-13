@@ -39,7 +39,8 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position
 	
 }
 
-void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height)
+void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height,
+	std::function<void(Entity*)> fun)
 {
 
 	if (x_start > width) return;
@@ -60,9 +61,13 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 		{
 			for (unsigned int y = y_start; y < y_start + rect_height; ++y)
 			{
-				auto list = entitiesAt[layer][x][y];
-				if (list.empty()) continue;
+				auto list = &entitiesAt[layer][x][y];
+				if (list->empty()) continue;
 
+				for (auto e : *list)
+				{
+					fun(e);
+				}
 				
 			}
 		}

@@ -13,7 +13,6 @@ public:
 	void render(sf::RenderTarget* target) override;
 
 	void addedEntity(Entity* entity) override;
-	void removeEntity(Entity* entity) override;
 
 private:
 	std::map<Entity*, std::pair<gl::Layer,unsigned int> > renderedEntities;
@@ -27,9 +26,8 @@ private:
 
 	void createGlyph(Entity* entity);
 	void changeGlyph(Entity* entity);
-	void removeGlyph(Entity* entity);
 
-	void updateGlyphs();
+	void updateEntities();
 	void updateTilemap();
 
 	void onViewportMoveEvent(ViewportMoveEvent* ev);

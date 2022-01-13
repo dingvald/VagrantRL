@@ -26,7 +26,7 @@ void RenderSystem::update(const float dt)
 	if (dt_count >= 1 / updaterate)
 	{
 		updateTilemap();
-		updateGlyphs();
+		updateEntities();
 		dt_count = 0;
 	}
 }
@@ -34,7 +34,6 @@ void RenderSystem::update(const float dt)
 void RenderSystem::render(sf::RenderTarget* target)
 {
 	target->draw(tilemap);
-
 	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
 	{
 		glyphLayers[layer]->load(sf::Vector2u(16, 16), &glyphs[layer]);
@@ -48,86 +47,39 @@ void RenderSystem::addedEntity(Entity* entity)
 	createGlyph(entity);
 }
 
-void RenderSystem::removeEntity(Entity* entity)
-{
-	removeGlyph(entity);
-}
-
 void RenderSystem::createGlyph(Entity* entity)
 {
-	if (renderedEntities.count(entity)) return;
-
 	auto render = entity->getComponent<RenderComponent>();
 	auto pos = entity->getComponent<PositionComponent>();
 
 	auto layer = pos->layer;
 
-	auto index = glyphs[static_cast<int>(layer)].size();
-
 	sf::Vector2f coordinatePosition{ (pos->position.x - viewport_origin.x),
 		(pos->position.y - viewport_origin.y) };
 
-	renderedEntities.insert(std::make_pair(entity, std::make_pair(layer, index)));
 	glyphs[static_cast<int>(layer)].push_back(std::make_unique<Glyph>(render->sprite_id, render->color, coordinatePosition));
 }
 
 void RenderSystem::changeGlyph(Entity* entity)
 {
-	removeGlyph(entity);
 	createGlyph(entity);
 }
 
-void RenderSystem::removeGlyph(Entity* entity)
-{
-	if (!renderedEntities.count(entity)) return;
-
-	auto pair = renderedEntities.at(entity);
-	auto layer = (unsigned int)pair.first;
-	auto index = pair.second;
-
-	auto last_index = glyphs[layer].size() - 1;
-
-	Entity* last_entity;
-	std::pair<gl::Layer, unsigned int> last_pair(pair.first, last_index);
-
-	for (auto& e : renderedEntities)
-	{
-		if (e.second == last_pair)
-		{
-			last_entity = e.first;
-			break;
-		}
-	}
-
-	std::swap(glyphs[layer][index], glyphs[layer][last_index]);
-	renderedEntities.at(last_entity).second = index;
-
-	glyphs[layer].pop_back();
-	renderedEntities.erase(entity);
-}
-
-void RenderSystem::updateGlyphs()
+void RenderSystem::updateEntities()
 {
 	sf::Vector2i org;
+
+	for (int i = 1; i < (int)gl::Layer::Total; ++i)
+	{
+		glyphs[i].clear();
+	}
 
 	org.x = static_cast<int>(std::floorf(viewport_origin.x / gl::TILE_SIZE));
 	org.y = static_cast<int>(std::floorf(viewport_origin.y / gl::TILE_SIZE));
 
-	for (int layer = 1; layer < (int)gl::Layer::Total; ++layer)
-	{
-		for (int x = org.x; x < org.x + gl::VIEWPORT_WIDTH + 1; ++x)
-		{
-			for (int y = org.y; y < org.y + gl::VIEWPORT_HEIGHT + 1; ++y)
-			{
-				auto listPtr = world->currentMap->getEntitiesAt(layer, { x,y });
-				if (listPtr && !listPtr->empty())
-				{
-					auto ent = listPtr->front();
-					changeGlyph(ent);
-				}
-			}
-		}
-	}
+	auto fun = std::bind(&RenderSystem::changeGlyph, this, std::placeholders::_1);
+
+	world->currentMap->applyFuncToEntitiesInRect(org.x, org.y, gl::VIEWPORT_WIDTH + 1, gl::VIEWPORT_HEIGHT + 1, fun);
 }
 
 void RenderSystem::updateTilemap()

@@ -21,16 +21,14 @@ void MapSystem::buildInitialMap()
 	player->addComponent(new PlayerAIComponent());
 	player->addComponent(new ViewportFocusComponent());
 
-	for (int i = 0; i < 1000; ++i)
+	for (int i = 0; i < 10000; ++i)
 	{
 		int rand_x = rand() % world->currentMap->getWidth();
 		int rand_y = rand() % world->currentMap->getHeight();
 
-		auto npc = world->addEntity("NPC" + i);
+		auto npc = world->addEntity("Tree" + i);
 		npc->addComponent(new PositionComponent({ rand_x,rand_y }, gl::Layer::Actor));
-		npc->addComponent(new RenderComponent(0, sf::Color::Red));
-		npc->addComponent(new TimeComponent(50));
-		npc->addComponent(new AIComponent());
+		npc->addComponent(new RenderComponent(3, sf::Color::Green));
 	}
 	
 }

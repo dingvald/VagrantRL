@@ -13,16 +13,12 @@ private:
 	unsigned int width;
 	sf::Vector2f origin = { 0.00f, 0.00f };
 	sf::Vector2f old_origin;
-	std::list<Entity*> on_screen_entities;
 	float updaterate = 30.0;
 	float dt_count = 0.0;
 
 	void centerViewport();
 	bool viewportMoved();
 	bool inViewport(sf::Vector2i pos);
-	void updateOnScreenEntities();
-	void updateEntity(Entity* entity);
-	void onMoveEvent(MoveEvent* ev);
 	sf::Vector2f lerpToTarget(sf::Vector2f pos, const sf::Vector2f target_pos);
 };
 
