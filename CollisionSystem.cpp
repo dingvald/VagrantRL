@@ -41,7 +41,7 @@ void CollisionSystem::onCollisionEvent(CollisionEvent* ev)
 		case Relationship::friendly:
 		{
 			// Swap places
-			eventBus->publish(new SwapPlacesEvent(ev->initiator, ev->receiver));
+			eventBus->publish(std::make_unique<SwapPlacesEvent>(ev->initiator, ev->receiver).get());
 		}
 		break;
 		case Relationship::hostile:

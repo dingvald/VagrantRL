@@ -15,8 +15,8 @@ struct TestEvent : public Event
 struct MoveEvent : public Event
 {
 	MoveEvent(Entity* entity, sf::Vector2i dir) : entity(entity), dir(dir) {}
-	sf::Vector2i dir;
 	Entity* entity;
+	sf::Vector2i dir;
 };
 
 struct StartTurnEvent : public Event

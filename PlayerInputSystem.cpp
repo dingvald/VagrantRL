@@ -15,39 +15,39 @@ void PlayerInputSystem::update(const float dt)
 
 	if (keyPressed(sf::Keyboard::Numpad8) || keyPressed(sf::Keyboard::Up))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { 0,-1 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(0, -1)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Numpad7))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { -1,-1 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(-1, -1)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Numpad4) || keyPressed(sf::Keyboard::Left))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { -1,0 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(-1, 0)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Numpad1))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { -1,1 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(-1, 1)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Numpad2) || keyPressed(sf::Keyboard::Down))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { 0,1 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(0, 1)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Numpad3))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { 1,1 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(1, 1)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Numpad6) || keyPressed(sf::Keyboard::Right))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { 1,0 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(1, 0)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Numpad9))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { 1,-1 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(1, -1)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Numpad5))
 	{
-		eventBus->publish(new MoveEvent(registeredEntities.front(), { 0,0 }));
+		eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(0, 0)).get());
 	}
 	else if (keyPressed(sf::Keyboard::Space))
 	{

@@ -28,11 +28,11 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 	{
 		if (entity != entity_in_the_way)
 		{
-			eventBus->publish(new CollisionEvent(entity, entity_in_the_way));
+			eventBus->publish(std::make_unique<CollisionEvent>(entity, entity_in_the_way).get());
 		}
 		else
 		{
-			eventBus->publish(new SpendTimeEvent(100));
+			eventBus->publish(std::make_unique<SpendTimeEvent>(100).get());
 		}
 	} 
 	else
@@ -41,7 +41,7 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 		world->currentMap->removeEntity(entity, layer, pos);
 		world->currentMap->placeEntity(entity, layer, intended_pos);
 		pos_comp->position = intended_pos;
-		eventBus->publish(new SpendTimeEvent(100));
+		eventBus->publish(std::make_unique<SpendTimeEvent>(100).get());
 	}
 }
 

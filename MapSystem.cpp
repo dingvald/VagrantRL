@@ -28,7 +28,7 @@ void MapSystem::buildInitialMap()
 
 		auto npc = world->addEntity("Tree" + i);
 		npc->addComponent(new PositionComponent({ rand_x,rand_y }, gl::Layer::Actor));
-		npc->addComponent(new RenderComponent(3, sf::Color::Green));
+		npc->addComponent(new RenderComponent(5, sf::Color(75, 120, 50)));
 	}
 	
 }

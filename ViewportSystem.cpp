@@ -48,7 +48,7 @@ void ViewportSystem::centerViewport()
 
 		if (viewportMoved())
 		{
-			eventBus->publish(new ViewportMoveEvent(origin));
+			eventBus->publish(std::make_unique<ViewportMoveEvent>(origin).get());
 		}
 	}
 }
