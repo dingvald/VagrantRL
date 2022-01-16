@@ -14,6 +14,7 @@ void GameState::init()
 	world.addSystem(new NPCInputSystem);
 	world.addSystem(new CollisionSystem);
 	world.addSystem(new ViewportSystem);
+	world.addSystem(new GUISystem);
 	// Add map system last
 	world.addSystem(new MapSystem);
 	

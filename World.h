@@ -22,6 +22,7 @@ public:
 	EventBus eventBus;
 	Map* currentMap = { nullptr };
 	Player player{ 0,nullptr };
+	sf::Vector2u worldPosition;
 
 	void init();
 

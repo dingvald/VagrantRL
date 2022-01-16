@@ -12,3 +12,4 @@
 #include "CollisionSystem.h"
 #include "MapSystem.h"
 #include "ViewportSystem.h"
+#include "GUISystem.h"
