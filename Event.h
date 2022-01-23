@@ -48,8 +48,9 @@ struct SwapPlacesEvent : public Event
 
 struct ViewportMoveEvent : public Event
 {
-	ViewportMoveEvent(sf::Vector2f origin) : newOrigin(origin) {}
+	ViewportMoveEvent(sf::Vector2f origin, sf::Vector2f oldOrigin) : newOrigin(origin), oldOrigin(oldOrigin) {}
 
 	sf::Vector2f newOrigin;
+	sf::Vector2f oldOrigin;
 };
 

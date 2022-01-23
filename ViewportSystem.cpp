@@ -14,7 +14,7 @@ void ViewportSystem::update(const float dt)
 	if (registeredEntities.size() == 1)
 	{
 		following = registeredEntities.front();
-		centerViewport();
+		focusViewport();
 	}
 
 	if (registeredEntities.size() > 1)
@@ -23,7 +23,7 @@ void ViewportSystem::update(const float dt)
 	}
 }
 
-void ViewportSystem::centerViewport()
+void ViewportSystem::focusViewport()
 {
 	if (following)
 	{
@@ -44,11 +44,9 @@ void ViewportSystem::centerViewport()
 
 		origin = lerpToTarget(origin, target);
 
-		//std::cout << origin.x << ", " << origin.y << "\n";
-
 		if (viewportMoved())
 		{
-			eventBus->publish(std::make_unique<ViewportMoveEvent>(origin).get());
+			eventBus->publish(std::make_unique<ViewportMoveEvent>(origin,old_origin).get());
 		}
 	}
 }
@@ -89,3 +87,5 @@ sf::Vector2f ViewportSystem::lerpToTarget(sf::Vector2f pos, const sf::Vector2f t
 
 	return pos - delta;
 }
+
+

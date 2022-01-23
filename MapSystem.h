@@ -19,7 +19,7 @@ private:
 	static const unsigned int world_map_height = { 100 };
 
 	unsigned int worldMap[world_map_width][world_map_height];
-	sf::Vector2u starting_position = { 24,24 };
+	sf::Vector2u starting_position = { 0,0 };
 	
 
 	void buildInitialMap(sf::Vector2u starting_pos); // 9 map chunks loaded at all times (except on edges)

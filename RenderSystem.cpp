@@ -98,7 +98,15 @@ void RenderSystem::updateTilemap()
 			}
 			else
 			{
-				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color(100,100,100), coordinate_position));
+				if (x % 64 && y % 64)
+				{
+					glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color(100, 100, 100), coordinate_position));
+				}
+				else
+				{
+					glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color::Yellow, coordinate_position));
+				}
+				
 			}
 			
 		}

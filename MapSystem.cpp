@@ -26,13 +26,13 @@ void MapSystem::buildInitialMap(sf::Vector2u starting_pos)
 	//
 	auto player = world->addEntity("Player");
 	world->setAsPlayer(player);
-	player->addComponent(new PositionComponent({ 72,72 }, gl::Layer::Actor));
+	player->addComponent(new PositionComponent({ 128,128 }, gl::Layer::Actor));
 	player->addComponent(new RenderComponent(0, sf::Color(100, 100, 100)));
 	player->addComponent(new TimeComponent(100));
 	player->addComponent(new PlayerAIComponent());
 	player->addComponent(new ViewportFocusComponent());
 
-	for (int i = 0; i < 10000; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		int rand_x = rand() % world->currentMap->getWidth();
 		int rand_y = rand() % world->currentMap->getHeight();
@@ -48,24 +48,106 @@ void MapSystem::buildInitialMap(sf::Vector2u starting_pos)
 
 void MapSystem::shiftActiveMap(sf::Vector2i dir)
 {
+	world->worldPosition.x += dir.x;
+	world->worldPosition.y += dir.y;
+
 	// save row/column of tiles + entities depending on direction
 	
-	int x_start, x_end;
-	int y_start, y_end;
-
-	x_start = std::max(0, (int)(dir.x * (num_of_loaded_chunks.x - 1) * map_chunk_size.x));
-	y_start = std::max(0, (int)(dir.y * (num_of_loaded_chunks.y - 1) * map_chunk_size.y));
+	
 
 }
 
 void MapSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
 {
-	// get viewport center
-	sf::Vector2i center;
 
-	center.x = ((int)ev->newOrigin.x + (gl::VIEWPORT_WIDTH * gl::TILE_SIZE) / 2) / gl::TILE_SIZE;
-	center.y = ((int)ev->newOrigin.y + (gl::VIEWPORT_HEIGHT * gl::TILE_SIZE) / 2) / gl::TILE_SIZE;
+	sf::Vector2f origin = ev->newOrigin;
+	sf::Vector2f old_origin = ev->oldOrigin;
+	sf::Vector2f fdiff = origin - old_origin;
+	sf::Vector2i dir;
+	//
+	// Purpose is to determine whether the viewport center has crossed a map chunk boundary
+	//
 
+	// X direction
+	if (fdiff.x > 0.0f)
+	{
+		dir.x = 1;
 
+	}
+	else if (fdiff.x < 0.0f)
+	{
+		dir.x = -1;
+	}
+	else
+	{
+		dir.x = 0;
+	}
+	// Y direction
+	if (fdiff.y > 0.0f)
+	{
+		dir.y = 1;
+	}
+	else if (fdiff.y < 0.0f)
+	{
+		dir.y = -1;
+	}
+	else
+	{
+		dir.y = 0;
+	}
 
+	sf::Vector2f center;
+	sf::Vector2f old_center;
+
+	center.x = origin.x + (gl::VIEWPORT_WIDTH * gl::TILE_SIZE) / 2;
+	center.y = origin.y + (gl::VIEWPORT_HEIGHT * gl::TILE_SIZE) / 2;
+	old_center.x = old_origin.x + (gl::VIEWPORT_WIDTH * gl::TILE_SIZE) / 2;
+	old_center.y = old_origin.y + (gl::VIEWPORT_HEIGHT * gl::TILE_SIZE) / 2;
+
+	int x_int = -1;
+	int y_int = -1;
+
+	if (std::floorf(center.x) != std::floorf(old_center.x))
+	{
+		x_int = (int)std::floorf(center.x);
+	}
+
+	if (std::floorf(center.y) != std::floorf(old_center.y))
+	{
+		y_int = (int)std::floorf(center.y);
+	}
+
+	if (dir.x == 1)
+	{
+		if (!(x_int % (map_chunk_size.x * gl::TILE_SIZE)))
+		{
+			std::cout << "Crossing map chunk boundary at x = " << x_int << "\n";
+			shiftActiveMap({ dir.x, 0 });
+		}
+	}
+	else
+	{
+		if (!(x_int % (map_chunk_size.x * gl::TILE_SIZE -1)))
+		{
+			std::cout << "Crossing map chunk boundary at x = " << x_int << "\n";
+			shiftActiveMap({ dir.x, 0 });
+		}
+	}
+
+	if (dir.y == 1)
+	{
+		if (!(y_int % (map_chunk_size.y * gl::TILE_SIZE)))
+		{
+			//std::cout << "Crossing map chunk boundary at y = " << y_int << "\n";
+			shiftActiveMap({ 0, dir.y });
+		}
+	}
+	else
+	{
+		if (!(y_int % (map_chunk_size.y * gl::TILE_SIZE - 1)))
+		{
+			//std::cout << "Crossing map chunk boundary at y = " << y_int << "\n";
+			shiftActiveMap({ 0, dir.y });
+		}
+	}
 }
