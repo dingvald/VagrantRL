@@ -72,14 +72,14 @@ bool ViewportSystem::inViewport(sf::Vector2i pos)
 
 sf::Vector2f ViewportSystem::lerpToTarget(sf::Vector2f pos, const sf::Vector2f target_pos)
 {
-	sf::Vector2f delta = (pos - target_pos) * 0.015f;
+	sf::Vector2f delta = (pos - target_pos) * speed;
 
-	if (std::fabs(delta.x) < 0.02)
+	if (std::fabs(delta.x) < speed)
 	{
 		delta.x = 0;
 		pos.x = target_pos.x;
 	}
-	if (std::fabs(delta.y) < 0.02)
+	if (std::fabs(delta.y) < speed)
 	{
 		delta.y = 0;
 		pos.y = target_pos.y;

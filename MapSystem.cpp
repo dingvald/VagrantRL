@@ -4,7 +4,7 @@
 void MapSystem::init()
 {
 	map = std::make_unique<Map>(static_cast<unsigned int>(gl::Layer::Total), map_chunk_size.x * num_of_loaded_chunks.x,
-		map_chunk_size.y * num_of_loaded_chunks.y);
+		map_chunk_size.y * num_of_loaded_chunks.y, world);
 
 	world->currentMap = map.get();
 
@@ -26,13 +26,13 @@ void MapSystem::buildInitialMap(sf::Vector2u starting_pos)
 	//
 	auto player = world->addEntity("Player");
 	world->setAsPlayer(player);
-	player->addComponent(new PositionComponent({ 128,128 }, gl::Layer::Actor));
+	player->addComponent(new PositionComponent({ 16,16 }, gl::Layer::Actor));
 	player->addComponent(new RenderComponent(0, sf::Color(100, 100, 100)));
 	player->addComponent(new TimeComponent(100));
 	player->addComponent(new PlayerAIComponent());
 	player->addComponent(new ViewportFocusComponent());
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		int rand_x = rand() % world->currentMap->getWidth();
 		int rand_y = rand() % world->currentMap->getHeight();
@@ -48,12 +48,29 @@ void MapSystem::buildInitialMap(sf::Vector2u starting_pos)
 
 void MapSystem::shiftActiveMap(sf::Vector2i dir)
 {
+	sf::Vector2i old_world_pos;
+	old_world_pos.x = (int)world->worldPosition.x;
+	old_world_pos.y = (int)world->worldPosition.y;
+
 	world->worldPosition.x += dir.x;
 	world->worldPosition.y += dir.y;
 
+	sf::Vector2i rotate_dir = dir;
+	
+	if (world->worldPosition.x <= 1)
+	{
+		if (old_world_pos.x <= 1) dir.x = 0;
+	}
+	if (world->worldPosition.y <= 1)
+	{
+		if (old_world_pos.y <= 1) dir.y = 0;
+	}
+
+
 	// save row/column of tiles + entities depending on direction
 	
-	
+
+	world->currentMap->rotateMap(dir, map_chunk_size.x);
 
 }
 
@@ -104,50 +121,75 @@ void MapSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
 	old_center.x = old_origin.x + (gl::VIEWPORT_WIDTH * gl::TILE_SIZE) / 2;
 	old_center.y = old_origin.y + (gl::VIEWPORT_HEIGHT * gl::TILE_SIZE) / 2;
 
-	int x_int = -1;
-	int y_int = -1;
+	std::vector<int> x_ints;
+	std::vector<int> y_ints;
 
-	if (std::floorf(center.x) != std::floorf(old_center.x))
+	sf::Vector2f floored_center;
+	sf::Vector2f floored_old_center;
+
+	floored_center.x = std::floorf(center.x);
+	floored_center.y = std::floorf(center.y);
+	floored_old_center.x = std::floorf(old_center.x);
+	floored_old_center.y = std::floorf(old_center.y);
+
+	if (floored_center.x != floored_old_center.x)
 	{
-		x_int = (int)std::floorf(center.x);
+		int range = (int)std::fabs(floored_center.x - floored_old_center.x);
+		for (int x = 0; x < range; ++x)
+		{
+			x_ints.push_back((int)floored_center.x + x);
+		}
 	}
 
-	if (std::floorf(center.y) != std::floorf(old_center.y))
+	if (floored_center.y != floored_old_center.y)
 	{
-		y_int = (int)std::floorf(center.y);
+		int range = (int)std::fabs(floored_center.y - floored_old_center.y);
+		for (int y = 0; y < range; ++y)
+		{
+			y_ints.push_back((int)floored_center.y + y);
+		}
 	}
 
 	if (dir.x == 1)
 	{
-		if (!(x_int % (map_chunk_size.x * gl::TILE_SIZE)))
+		
+		for (int x_int : x_ints)
 		{
-			std::cout << "Crossing map chunk boundary at x = " << x_int << "\n";
-			shiftActiveMap({ dir.x, 0 });
+			if (!(x_int % (map_chunk_size.x * gl::TILE_SIZE)))
+			{
+				shiftActiveMap({ dir.x, 0 });
+			}
 		}
 	}
 	else
 	{
-		if (!(x_int % (map_chunk_size.x * gl::TILE_SIZE -1)))
+		for (int x_int : x_ints)
 		{
-			std::cout << "Crossing map chunk boundary at x = " << x_int << "\n";
-			shiftActiveMap({ dir.x, 0 });
+			if (!(x_int % (map_chunk_size.x * gl::TILE_SIZE - 1)))
+			{
+				shiftActiveMap({ dir.x, 0 });
+			}
 		}
 	}
 
 	if (dir.y == 1)
 	{
-		if (!(y_int % (map_chunk_size.y * gl::TILE_SIZE)))
+		for (int y_int : y_ints)
 		{
-			//std::cout << "Crossing map chunk boundary at y = " << y_int << "\n";
-			shiftActiveMap({ 0, dir.y });
+			if (!(y_int % (map_chunk_size.y * gl::TILE_SIZE)))
+			{
+				shiftActiveMap({ 0, dir.y });
+			}
 		}
 	}
 	else
 	{
-		if (!(y_int % (map_chunk_size.y * gl::TILE_SIZE - 1)))
+		for (int y_int : y_ints)
 		{
-			//std::cout << "Crossing map chunk boundary at y = " << y_int << "\n";
-			shiftActiveMap({ 0, dir.y });
+			if (!(y_int % (map_chunk_size.y * gl::TILE_SIZE - 1)))
+			{
+				shiftActiveMap({ 0, dir.y });
+			}
 		}
 	}
 }

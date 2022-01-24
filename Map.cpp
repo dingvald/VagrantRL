@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Map.h"
 
-Map::Map(unsigned int num_of_layers, unsigned int width, unsigned int height) : height(height), width(width)
+Map::Map(unsigned int num_of_layers, unsigned int width, unsigned int height, World* world) : height(height), width(width), world(world)
 {
 	entitiesAt.resize(num_of_layers);
 	for (unsigned int l = 0; l < num_of_layers; ++l)
@@ -76,13 +76,13 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 
 void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 {
-	auto pos = toGridPosition(position);
+	auto pos = world->worldToGridPosition(position);
 	entitiesAt[layer][pos.x][pos.y].push_back(entity);
 }
 
 void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 {
-	auto pos = toGridPosition(position);
+	auto pos = world->worldToGridPosition(position);
 	entitiesAt[layer][pos.x][pos.y].remove(entity);
 }
 
@@ -111,9 +111,42 @@ unsigned int Map::getHeight()
 	return height;
 }
 
-sf::Vector2i Map::toGridPosition(sf::Vector2i position)
+void Map::rotateMap(sf::Vector2i dir, int range)
 {
-	position /= gl::TILE_SIZE;
+	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
+	{
+		auto x_vec = &entitiesAt[layer];
 
-	return position;
+		// rotate left when moving right...
+		if (dir.x == 1)
+		{
+			std::rotate(x_vec->begin(), x_vec->begin() + range, x_vec->end());
+		}
+		// rotate right when moving left...
+		else if (dir.x == -1)
+		{
+			std::rotate(x_vec->rbegin(), x_vec->rbegin() + range, x_vec->rend());
+		}
+
+		if (dir.y != 0)
+		{
+			int size = x_vec->size();
+
+			for (int x = 0; x < size; ++x)
+			{
+				auto y_vec = &(*x_vec)[x];
+
+				// rotate up when moving down
+				if (dir.y == 1)
+				{
+					std::rotate(y_vec->begin(), y_vec->begin() + range, y_vec->end());
+				}
+				// rotate down when moving up
+				else if (dir.y == -1)
+				{
+					std::rotate(y_vec->rbegin(), y_vec->rbegin() + range, y_vec->rend());
+				}
+			}
+		}
+	}
 }

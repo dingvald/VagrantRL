@@ -54,7 +54,7 @@ void GUISystem::setDebugInfo()
 	ss.str(""); // clear string stream
 
 	// player position on active map
-	auto pos = Map::toGridPosition(world->player.ptr->getComponent<PositionComponent>()->position);
+	auto pos = world->worldToGridPosition(world->player.ptr->getComponent<PositionComponent>()->position);
 
 	ss << "Player position: [" << pos.x << ", " << pos.y << "]";
 	debug_info.push_back(ss.str());

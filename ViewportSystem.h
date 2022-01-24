@@ -13,6 +13,7 @@ private:
 	unsigned int width;
 	sf::Vector2f origin = { 1.00f, 1.00f };
 	sf::Vector2f old_origin;
+	float speed = 0.005;
 	float updaterate = 30.0;
 	float dt_count = 0.0;
 

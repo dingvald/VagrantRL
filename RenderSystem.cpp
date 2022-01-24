@@ -74,8 +74,10 @@ void RenderSystem::updateEntities()
 		glyphs[i].clear();
 	}
 
-	org.x = static_cast<int>(std::floorf(viewport_origin.x / gl::TILE_SIZE));
-	org.y = static_cast<int>(std::floorf(viewport_origin.y / gl::TILE_SIZE));
+	org.x = static_cast<int>(std::floorf(viewport_origin.x));
+	org.y = static_cast<int>(std::floorf(viewport_origin.y));
+
+	org = world->worldToGridPosition(org);
 
 	auto fun = std::bind(&RenderSystem::changeGlyph, this, std::placeholders::_1);
 

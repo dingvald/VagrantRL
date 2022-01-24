@@ -1,11 +1,12 @@
 #pragma once
 #include "Tile.h"
 class Entity;
+class World;
 
 class Map
 {
 public:
-	Map(unsigned int num_of_layers, unsigned int width, unsigned int height);
+	Map(unsigned int num_of_layers, unsigned int width, unsigned int height, World *world);
 
 	std::list<Entity*>* getEntitiesAt(unsigned int layer, sf::Vector2i position);
 	void applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height, std::function<void(Entity*)> fun);
@@ -18,9 +19,10 @@ public:
 	unsigned int getWidth();
 	unsigned int getHeight();
 
-	static sf::Vector2i toGridPosition(sf::Vector2i position);
+	void rotateMap(sf::Vector2i dir, int range);
 
 private:
+	World* world;
 	unsigned int width;
 	unsigned int height;
 

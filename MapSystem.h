@@ -26,6 +26,8 @@ private:
 
 	void shiftActiveMap(sf::Vector2i dir);
 
+	void loadOrBuildChunk(sf::Vector2i coords);
+
 	void onViewportMoveEvent(ViewportMoveEvent* ev);
 
 	
