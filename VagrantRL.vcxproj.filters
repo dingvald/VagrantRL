@@ -118,6 +118,9 @@
     <Filter Include="ECS\System\GUI System">
       <UniqueIdentifier>{689b60a5-7a29-4d41-b9bf-dc8e8684e401}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helper Classes">
+      <UniqueIdentifier>{8c7eef8e-57f9-473d-a476-a8ac4ae8abca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -194,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="GUISystem.cpp">
       <Filter>ECS\System\GUI System</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Helper Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="GUISystem.h">
       <Filter>ECS\System\GUI System</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Helper Classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

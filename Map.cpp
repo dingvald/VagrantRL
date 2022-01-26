@@ -1,17 +1,14 @@
 #include "pch.h"
 #include "Entity.h"
+#include "Grid.h"
 #include "Map.h"
 
 Map::Map(unsigned int num_of_layers, unsigned int width, unsigned int height, World* world) : height(height), width(width), world(world)
 {
-	entitiesAt.resize(num_of_layers);
+	entities.resize(num_of_layers);
 	for (unsigned int l = 0; l < num_of_layers; ++l)
 	{
-		entitiesAt[l].resize(width);
-		for (unsigned int x = 0; x < width; ++x)
-		{
-			entitiesAt[l][x].resize(height);
-		}
+		entities[l].resize(width);
 	}
 
 	tiles.resize(width);
@@ -28,13 +25,13 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position
 		return nullptr;
 	}
 
-	if (entitiesAt[layer][position.x][position.y].empty())
+	if (entities[layer].at(position.x,position.y)->empty())
 	{
 		return nullptr;
 	}
 	else
 	{
-		return &entitiesAt[layer][position.x][position.y];
+		return entities[layer].at(position.x, position.y);
 	}
 	
 }
@@ -61,7 +58,7 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 		{
 			for (unsigned int y = y_start; y < y_start + rect_height; ++y)
 			{
-				auto list = &entitiesAt[layer][x][y];
+				auto list = entities[layer].at(x,y);
 				if (list->empty()) continue;
 
 				for (auto e : *list)
@@ -77,13 +74,13 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 {
 	auto pos = world->worldToGridPosition(position);
-	entitiesAt[layer][pos.x][pos.y].push_back(entity);
+	entities[layer].at(pos.x, pos.y)->push_back(entity);
 }
 
 void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 {
 	auto pos = world->worldToGridPosition(position);
-	entitiesAt[layer][pos.x][pos.y].remove(entity);
+	entities[layer].at(pos.x, pos.y)->remove(entity);
 }
 
 void Map::placeTile(Tile* tile, sf::Vector2u position)
@@ -115,38 +112,6 @@ void Map::rotateMap(sf::Vector2i dir, int range)
 {
 	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
 	{
-		auto x_vec = &entitiesAt[layer];
-
-		// rotate left when moving right...
-		if (dir.x == 1)
-		{
-			std::rotate(x_vec->begin(), x_vec->begin() + range, x_vec->end());
-		}
-		// rotate right when moving left...
-		else if (dir.x == -1)
-		{
-			std::rotate(x_vec->rbegin(), x_vec->rbegin() + range, x_vec->rend());
-		}
-
-		if (dir.y != 0)
-		{
-			int size = x_vec->size();
-
-			for (int x = 0; x < size; ++x)
-			{
-				auto y_vec = &(*x_vec)[x];
-
-				// rotate up when moving down
-				if (dir.y == 1)
-				{
-					std::rotate(y_vec->begin(), y_vec->begin() + range, y_vec->end());
-				}
-				// rotate down when moving up
-				else if (dir.y == -1)
-				{
-					std::rotate(y_vec->rbegin(), y_vec->rbegin() + range, y_vec->rend());
-				}
-			}
-		}
+		entities[layer].shift(dir.x, dir.y, range);
 	}
 }

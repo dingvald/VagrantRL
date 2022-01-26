@@ -26,7 +26,7 @@ void MapSystem::buildInitialMap(sf::Vector2u starting_pos)
 	//
 	auto player = world->addEntity("Player");
 	world->setAsPlayer(player);
-	player->addComponent(new PositionComponent({ 16,16 }, gl::Layer::Actor));
+	player->addComponent(new PositionComponent({ 16,127 }, gl::Layer::Actor));
 	player->addComponent(new RenderComponent(0, sf::Color(100, 100, 100)));
 	player->addComponent(new TimeComponent(100));
 	player->addComponent(new PlayerAIComponent());

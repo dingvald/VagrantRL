@@ -1,5 +1,6 @@
 #pragma once
 #include "Tile.h"
+#include "Grid.h"
 class Entity;
 class World;
 
@@ -26,7 +27,7 @@ private:
 	unsigned int width;
 	unsigned int height;
 
-	std::vector<std::vector< std::vector< std::list<Entity*> > > > entitiesAt; //layer, x_pos, y_pos
+	std::vector<Grid<std::list<Entity*>>> entities;
 	std::vector< std::vector< std::unique_ptr<Tile> > > tiles;
 };
 
