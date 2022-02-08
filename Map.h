@@ -15,8 +15,8 @@ public:
 	void placeEntity(Entity* entity, unsigned int layer, sf::Vector2i world_position);
 	void removeEntity(Entity* entity, unsigned int layer, sf::Vector2i world_position);
 
-	void addChunkToGrid(MapChunk* chunk, int layer);
-	MapChunk* getChunk(int layer, sf::Vector2i relative_pos);
+	void addChunkToGrid(MapChunk* chunk);
+	MapChunk* getChunk(sf::Vector2i relative_pos);
 
 	unsigned int getWidth();
 	unsigned int getHeight();
@@ -32,6 +32,6 @@ private:
 	int column_index = 0;
 	int row_index = 0;
 
-	std::vector< std::vector< std::vector< std::unique_ptr<MapChunk> > > > map_chunk; // [layer][world_position.x][world_position.y]->at(x,y)
+	std::vector< std::vector< std::unique_ptr<MapChunk> > > map_chunk; // [layer][world_position.x][world_position.y]->at(x,y)
 };
 

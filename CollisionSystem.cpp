@@ -7,7 +7,6 @@ void CollisionSystem::init()
 }
 
 
-
 Relationship CollisionSystem::getRelationship(Entity* e1, Entity* e2)
 {
 // TODO in future: get the relationship using the faction system (?) 

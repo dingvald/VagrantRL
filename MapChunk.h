@@ -9,8 +9,8 @@ public:
 	sf::Vector2i world_coordinate;
 	int size;
 
-	std::list<Entity*>* at(sf::Vector2i tile_position);
+	std::list<Entity*>* at(int layer, sf::Vector2i tile_position);
 private:
-	std::vector< std::vector< std::list<Entity*> > > entities;
+	std::vector< std::vector<std::vector< std::list<Entity*> > > > entities; // layer, x , y
 };
 

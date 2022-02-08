@@ -27,20 +27,6 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	//
 
 	updateLoadedChunks();
-
-	/*
-	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
-	{
-		for (int x = starting_pos.x; x < starting_pos.x + num_of_loaded_chunks.x; ++x)
-		{
-			for (int y = starting_pos.y; y < starting_pos.y + num_of_loaded_chunks.y; ++y)
-			{
-				world->currentMap->addChunkToGrid(new MapChunk({ x,y }, map_chunk_size.x), layer);
-			}
-		}
-	}
-	*/
-
 	
 	auto player = world->addEntity("Player");
 	world->setAsPlayer(player);
@@ -66,10 +52,6 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	//
 	std::cout << "Map complete." << "\n";
 	//
-
-
-
-
 }
 
 void MapSystem::shiftActiveMap(sf::Vector2i dir)
@@ -118,11 +100,16 @@ void MapSystem::updateLoadedChunks()
 		for (int y = center_pos.y - 1; y < center_pos.y - 1 + num_of_loaded_chunks.y; ++y)
 		{
 			for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
-			world->currentMap->addChunkToGrid(new MapChunk({ x,y }, map_chunk_size.x), layer);
+			{
+				if (chunk_status.count({ x,y })) continue;
+
+				world->currentMap->addChunkToGrid(new MapChunk({ x,y }, map_chunk_size.x));
+				chunk_status.insert({{x,y}, "Loaded"});
+			}
 		}
 	}
 
-	printLoadedChunkCoords();
+	printChunkStatus();
 
 	// get current world coord
 
@@ -265,16 +252,13 @@ void MapSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
 	calculateWorldMapPosition(ev->newOrigin, ev->oldOrigin);
 }
 
-void MapSystem::printLoadedChunkCoords()
+void MapSystem::printChunkStatus()
 {
-	std::cout << "Currently active chunks:\n";
-	for (int y = 0; y < num_of_loaded_chunks.y; ++y)
-	{
-		for (int x = 0; x < num_of_loaded_chunks.x; ++x)
-		{
-			auto c = world->currentMap->getChunk(0, { x,y });
+	std::cout << "Chunk Status:\n";
 
-			std::cout << "(" << c->world_coordinate.x << ", " << c->world_coordinate.y << ")\n";
-		}
+	for (auto c : chunk_status)
+	{
+		std::cout << c.first.first << ", " << c.first.second << ": " << c.second << "\n";
 	}
+	
 }

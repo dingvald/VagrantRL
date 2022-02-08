@@ -103,9 +103,6 @@
     <Filter Include="ECS\System\Collision System">
       <UniqueIdentifier>{4d565cc9-c0b9-42ba-919f-dcd9dcfb9058}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ECS\System\Map Builder System">
-      <UniqueIdentifier>{6d2eb08d-c8ee-4eca-bd16-c51e3c7c7979}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\System\Viewport System">
       <UniqueIdentifier>{2fc70299-e086-4d61-9b33-f4da11473fdd}</UniqueIdentifier>
     </Filter>
@@ -120,6 +117,9 @@
     </Filter>
     <Filter Include="Helper Classes">
       <UniqueIdentifier>{8c7eef8e-57f9-473d-a476-a8ac4ae8abca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Mapping System">
+      <UniqueIdentifier>{6d2eb08d-c8ee-4eca-bd16-c51e3c7c7979}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +190,7 @@
       <Filter>ECS\System\Collision System</Filter>
     </ClCompile>
     <ClCompile Include="MapSystem.cpp">
-      <Filter>ECS\System\Map Builder System</Filter>
+      <Filter>ECS\System\Mapping System</Filter>
     </ClCompile>
     <ClCompile Include="ViewportSystem.cpp">
       <Filter>ECS\System\Viewport System</Filter>
@@ -282,7 +282,7 @@
       <Filter>ECS\System\Collision System</Filter>
     </ClInclude>
     <ClInclude Include="MapSystem.h">
-      <Filter>ECS\System\Map Builder System</Filter>
+      <Filter>ECS\System\Mapping System</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Render Helpers\Tile</Filter>
