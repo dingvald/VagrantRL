@@ -11,6 +11,7 @@ private:
 	unsigned int threshold = { 8 };
 	unsigned int height;
 	unsigned int width;
+	bool is_origin_init = false;
 	sf::Vector2f origin = { 1.00f, 1.00f };
 	sf::Vector2f old_origin;
 	float speed = 0.005;

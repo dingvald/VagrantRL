@@ -27,26 +27,38 @@ void ViewportSystem::focusViewport()
 {
 	if (following)
 	{
-		old_origin = origin;
-
-		auto follow_pos = following->getComponent<PositionComponent>()->position;
-
-		int tempx = follow_pos.x - ( (width / 2) * gl::TILE_SIZE );
-		int tempy = follow_pos.y - ( (height / 2) * gl::TILE_SIZE );
-
-		// clamp viewport origin to map edges
-		if (tempx < 0) tempx = 0;
-		if (tempy < 0) tempy = 0;
-		if (tempx > (world->currentMap->getWidth() - width) * gl::TILE_SIZE) tempx = (world->currentMap->getWidth() - width) * gl::TILE_SIZE;
-		if (tempy > (world->currentMap->getHeight() - height) * gl::TILE_SIZE) tempy = (world->currentMap->getHeight() - height) * gl::TILE_SIZE;
-
-		sf::Vector2f target = { static_cast<float>(tempx), static_cast<float>(tempy) };
-
-		origin = lerpToTarget(origin, target);
-
-		if (viewportMoved())
+		if (!is_origin_init)
 		{
-			eventBus->publish(std::make_unique<ViewportMoveEvent>(origin,old_origin).get());
+			origin.x = (float)following->getComponent<PositionComponent>()->position.x - ((width / 2) * gl::TILE_SIZE);
+			origin.y = (float)following->getComponent<PositionComponent>()->position.y - ((height / 2) * gl::TILE_SIZE);
+			old_origin = origin;
+			eventBus->publish(std::make_unique<ViewportMoveEvent>(origin, old_origin).get());
+
+			is_origin_init = true;
+		}
+		else
+		{
+			old_origin = origin;
+
+			auto follow_pos = following->getComponent<PositionComponent>()->position;
+
+			int tempx = follow_pos.x - ((width / 2) * gl::TILE_SIZE);
+			int tempy = follow_pos.y - ((height / 2) * gl::TILE_SIZE);
+
+			// clamp viewport origin to map edges
+			if (tempx < 0) tempx = 0;
+			if (tempy < 0) tempy = 0;
+			if (tempx > (world->currentMap->getWidth() - width) * gl::TILE_SIZE) tempx = (world->currentMap->getWidth() - width) * gl::TILE_SIZE;
+			if (tempy > (world->currentMap->getHeight() - height) * gl::TILE_SIZE) tempy = (world->currentMap->getHeight() - height) * gl::TILE_SIZE;
+
+			sf::Vector2f target = { static_cast<float>(tempx), static_cast<float>(tempy) };
+
+			origin = lerpToTarget(origin, target);
+
+			if (viewportMoved())
+			{
+				eventBus->publish(std::make_unique<ViewportMoveEvent>(origin, old_origin).get());
+			}
 		}
 	}
 }

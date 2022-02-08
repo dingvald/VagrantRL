@@ -1,64 +1,95 @@
 #include "pch.h"
 #include "Entity.h"
-#include "Grid.h"
 #include "Map.h"
 
-Map::Map(unsigned int num_of_layers, unsigned int width, unsigned int height, World* world) : height(height), width(width), world(world)
-{
-	entities.resize(num_of_layers);
-	for (unsigned int l = 0; l < num_of_layers; ++l)
-	{
-		entities[l].resize(width);
-	}
 
-	tiles.resize(width);
-	for (unsigned int x = 0; x < width; ++x)
+
+Map::Map(unsigned int num_of_layers, int chunk_size, int chunk_load_width, World* world) 
+	: chunk_size(chunk_size), chunk_load_width(chunk_load_width), world(world)
+{
+	width = chunk_size * chunk_load_width;
+	height = width;
+
+	map_chunk.resize(num_of_layers);
+	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
 	{
-		tiles[x].resize(height);
+		map_chunk[layer].resize(chunk_load_width);
+		for (int x = 0; x < chunk_load_width; ++x)
+		{
+			map_chunk[layer][x].resize(chunk_load_width);
+			for (int y = 0; y < chunk_load_width; ++y)
+			{
+				map_chunk[layer][x][y] = nullptr;
+			}
+		}
 	}
 }
 
 std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position)
 {
-	if (position.x > width - 1 || position.y > height - 1 || position.x < 0 || position.y < 0)
+	if ((position.x/gl::TILE_SIZE) > width - 1 || (position.y/gl::TILE_SIZE) > height - 1 || position.x < 0 || position.y < 0)
 	{
 		return nullptr;
 	}
+	// index into world map
+	int worldmap_index_x = position.x / chunk_size / gl::TILE_SIZE;
+	int worldmap_index_y = position.y / chunk_size / gl::TILE_SIZE;
+	// index into tiles
+	int tile_index_x = (position.x / gl::TILE_SIZE) - worldmap_index_x*chunk_size;
+	int tile_index_y = (position.y / gl::TILE_SIZE) - worldmap_index_y*chunk_size;
 
-	if (entities[layer].at(position.x,position.y)->empty())
+	// index into chunks in memory
+
+	int chunk_index_x = 0;
+	int chunk_index_y = 0;
+
+	if (world->worldPosition.x == 0)
 	{
-		return nullptr;
+		chunk_index_x = column_index + (worldmap_index_x - world->worldPosition.x);
 	}
 	else
 	{
-		return entities[layer].at(position.x, position.y);
+		chunk_index_x = column_index + (worldmap_index_x - world->worldPosition.x + 1);
+	}
+	if (world->worldPosition.y == 0)
+	{
+		chunk_index_y = row_index + (worldmap_index_y - world->worldPosition.y);
+	}
+	else
+	{
+		chunk_index_y = row_index + (worldmap_index_y - world->worldPosition.y + 1);
 	}
 	
+	
+
+	if (worldmap_index_x == 0) chunk_index_x = 0;
+	if (worldmap_index_y == 0) chunk_index_y = 0;
+
+	if (chunk_index_x >= chunk_load_width || chunk_index_y >= chunk_load_width)
+	{
+		std::cout << "Trying to access a chunk that is out of bounds...\n";
+		return nullptr;
+	}
+
+	return map_chunk[layer][chunk_index_x][chunk_index_y]->at({ tile_index_x, tile_index_y });
 }
 
 void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height,
 	std::function<void(Entity*)> fun)
 {
 
-	if (x_start > width) return;
-	if (y_start > height) return;
-
-	if ((x_start + rect_width) > width)
-	{
-		rect_width = width - x_start;
-	}
-	if ((y_start + rect_height) > height)
-	{
-		rect_height = height - y_start;
-	}
+	int x_start_tile = x_start / gl::TILE_SIZE;
+	int y_start_tile = y_start / gl::TILE_SIZE;
 
 	for (unsigned int layer = 0; layer < (unsigned int)gl::Layer::Total; ++layer)
 	{
-		for (unsigned int x = x_start; x < x_start + rect_width; ++x)
+		for (int x = x_start_tile; x < x_start_tile + rect_width; ++x)
 		{
-			for (unsigned int y = y_start; y < y_start + rect_height; ++y)
+			for (int y = y_start_tile; y < y_start_tile + rect_height; ++y)
 			{
-				auto list = entities[layer].at(x,y);
+				if (x > width || y > height) break;
+				auto list = getEntitiesAt(layer, { x*gl::TILE_SIZE, y*gl::TILE_SIZE });
+				if (!list) break;
 				if (list->empty()) continue;
 
 				for (auto e : *list)
@@ -73,29 +104,57 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 
 void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 {
-	auto pos = world->worldToGridPosition(position);
-	entities[layer].at(pos.x, pos.y)->push_back(entity);
+	auto list_ptr = getEntitiesAt(layer, position);
+	if (!list_ptr)
+	{
+		std::cout << "List does not exist...!\n";
+	}
+	else
+	{
+		list_ptr->push_back(entity);
+	}
 }
 
 void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 {
-	auto pos = world->worldToGridPosition(position);
-	entities[layer].at(pos.x, pos.y)->remove(entity);
+	getEntitiesAt(layer, position)->remove(entity);
 }
 
-void Map::placeTile(Tile* tile, sf::Vector2u position)
+void Map::addChunkToGrid(MapChunk* chunk, int layer)
 {
-	if (position.x < 0 || position.y < 0 || position.x > width || position.y > height)
+	if (!chunk) return;
+
+	auto chunk_position = chunk->world_coordinate;
+
+	int chunk_index_x = chunk_position.x;
+	int chunk_index_y = chunk_position.y;
+	if (world->worldPosition.x != 0)
 	{
-		return;
+		chunk_index_x = chunk_position.x - world->worldPosition.x + 1;
+	}
+	if (world->worldPosition.y != 0)
+	{
+		chunk_index_y = chunk_position.y - world->worldPosition.y + 1;
 	}
 
-	tiles[position.x][position.y] = std::unique_ptr<Tile>(tile);
+	auto chunk_ptr = map_chunk[layer][chunk_index_x][chunk_index_y].get();
+
+	if (chunk_ptr)
+	{
+		//std::cout << "Chunk already exists at position " << chunk_index_x << ", " << chunk_index_x << "\n";
+	}
+	else
+	{
+		map_chunk[layer][chunk_index_x][chunk_index_y].reset(chunk);
+	}
 }
 
-Tile* Map::getTile(sf::Vector2i position)
+MapChunk* Map::getChunk(int layer, sf::Vector2i relative_pos)
 {
-	return tiles[position.x][position.y].get();
+	if (relative_pos.x < 0 || relative_pos.y < 0) return nullptr;
+	if (relative_pos.x > chunk_load_width || relative_pos.y > chunk_load_width) return nullptr;
+
+	return map_chunk[layer][relative_pos.x][relative_pos.y].get();
 }
 
 unsigned int Map::getWidth()
@@ -110,8 +169,20 @@ unsigned int Map::getHeight()
 
 void Map::rotateMap(sf::Vector2i dir, int range)
 {
-	for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
+	if (range > chunk_load_width)
 	{
-		entities[layer].shift(dir.x, dir.y, range);
+		std::cout << "ERROR: rotate range > than the loaded chunk number...\n";
+		return;
 	}
+
+	column_index += dir.x * range;
+	row_index += dir.y * range;
+
+	if (column_index > chunk_load_width) column_index -= chunk_load_width;
+	if (row_index > chunk_load_width) row_index -= chunk_load_width;
+	if (column_index < 0) column_index += (chunk_load_width + column_index);
+	if (row_index < 0) row_index += (chunk_load_width + row_index);
+
+	std::cout << "Column index: " << column_index << "\n";
+	std::cout << "Row index: " << row_index << "\n";
 }

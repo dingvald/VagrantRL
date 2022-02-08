@@ -201,6 +201,9 @@
     <ClCompile Include="Grid.cpp">
       <Filter>Helper Classes</Filter>
     </ClCompile>
+    <ClCompile Include="MapChunk.cpp">
+      <Filter>ECS\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -295,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>Helper Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapChunk.h">
+      <Filter>ECS\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

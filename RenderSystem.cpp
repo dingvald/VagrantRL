@@ -23,7 +23,7 @@ void RenderSystem::init()
 void RenderSystem::update(const float dt)
 {
 	dt_count += dt;
-	if (dt_count >= 1 / updaterate)
+	if (dt_count >= 1.000f / updaterate)
 	{
 		updateTilemap();
 		updateEntities();
@@ -77,8 +77,6 @@ void RenderSystem::updateEntities()
 	org.x = static_cast<int>(std::floorf(viewport_origin.x));
 	org.y = static_cast<int>(std::floorf(viewport_origin.y));
 
-	org = world->worldToGridPosition(org);
-
 	auto fun = std::bind(&RenderSystem::changeGlyph, this, std::placeholders::_1);
 
 	world->currentMap->applyFuncToEntitiesInRect(org.x, org.y, gl::VIEWPORT_WIDTH + 1, gl::VIEWPORT_HEIGHT + 1, fun);
@@ -93,24 +91,14 @@ void RenderSystem::updateTilemap()
 		{
 			sf::Vector2f coordinate_position = { x * gl::TILE_SIZE - viewport_origin.x, y * gl::TILE_SIZE - viewport_origin.y };
 
-			Tile* tile = world->currentMap->getTile({ x,y });
-			if (tile)
+			if (x % 64 && y % 64)
 			{
-				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(tile->sprite, tile->fg, coordinate_position));
+				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color(100, 100, 100), coordinate_position));
 			}
 			else
 			{
-				if (x % 64 && y % 64)
-				{
-					glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color(100, 100, 100), coordinate_position));
-				}
-				else
-				{
-					glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color::Yellow, coordinate_position));
-				}
-				
+				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color::Yellow, coordinate_position));
 			}
-			
 		}
 	}
 }
@@ -119,6 +107,3 @@ void RenderSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
 {
 	viewport_origin = ev->newOrigin;
 }
-
-
-

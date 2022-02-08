@@ -172,6 +172,7 @@
     <ClCompile Include="CoordinateSystem.cpp" />
     <ClCompile Include="GUISystem.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapChunk.cpp" />
     <ClCompile Include="MapSystem.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="CoordinateSystem.h" />
     <ClInclude Include="GUISystem.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapChunk.h" />
     <ClInclude Include="MapSystem.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="MovementSystem.h" />

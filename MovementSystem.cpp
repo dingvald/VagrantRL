@@ -47,9 +47,11 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 
 Entity* MovementSystem::checkForCollisionAt(sf::Vector2i coordinate)
 {
-	if (world->currentMap->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), world->worldToGridPosition(coordinate)))
+	auto list_ptr = world->currentMap->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), coordinate);
+
+	if (list_ptr && !list_ptr->empty())
 	{
-		return world->currentMap->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), world->worldToGridPosition(coordinate))->back();
+		return list_ptr->back();
 	}
 	else
 	{

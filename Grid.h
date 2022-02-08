@@ -5,7 +5,7 @@ class Grid
 {
 public:
 	Grid(int size = 0);
-	T* at(int x, int y);
+	T at(int x, int y);
 	void shift(int x_dir, int y_dir, int range);
 	int size();
 	void resize(int size);
@@ -31,7 +31,7 @@ inline Grid<T>::Grid(int size) : _size(size)
 }
 
 template<class T>
-inline T* Grid<T>::at(int x, int y)
+inline T Grid<T>::at(int x, int y)
 {
 	if (x >= _size || y >= _size)
 	{
@@ -39,7 +39,7 @@ inline T* Grid<T>::at(int x, int y)
 		return nullptr;
 	}
 
-	T* ret = nullptr;
+	T ret = nullptr;
 
 	int x_index = x + _column_offset;
 	int y_index = y + _row_offset;
@@ -50,7 +50,7 @@ inline T* Grid<T>::at(int x, int y)
 	if (x_index < 0 || y_index < 0)
 	std::cout << x_index << ", " << y_index << "\n";
 
-	ret = &_contents[x_index][y_index];
+	ret = _contents[x_index][y_index];
 
 	return ret;
 }
@@ -63,6 +63,10 @@ inline void Grid<T>::shift(int x_dir, int y_dir, int range)
 
 	_column_offset += x_dir * range;
 	_row_offset += y_dir * range;
+
+	if (_column_offset >= _size) _column_offset -= _size;
+	if (_row_offset >= _size) _row_offset -= _size;
+
 }
 
 template<class T>
