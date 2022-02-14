@@ -95,17 +95,40 @@ void MapSystem::updateLoadedChunks()
 	if (center_pos.x == 0) center_pos.x = 1;
 	if (center_pos.y == 0) center_pos.y = 1;
 
+	std::list<std::pair<int, int>> old_coord_list = loaded_chunk_coords;
+	loaded_chunk_coords.clear();
+
 	for (int x = center_pos.x - 1; x < center_pos.x - 1 + num_of_loaded_chunks.x; ++x)
 	{
 		for (int y = center_pos.y - 1; y < center_pos.y - 1 + num_of_loaded_chunks.y; ++y)
 		{
-			for (int layer = 0; layer < (int)gl::Layer::Total; ++layer)
-			{
-				if (chunk_status.count({ x,y })) continue;
+			loaded_chunk_coords.push_back({ x,y });
+		}
+	}
 
-				world->map->addChunkToGrid(new MapChunk({ x,y }, map_chunk_size.x));
-				chunk_status.insert({{x,y}, "Loaded"});
-			}
+	for (auto coord : loaded_chunk_coords)
+	{
+		if (chunk_status.count(coord))
+		{
+			chunk_status.at(coord) = "Loaded";
+		}
+		else
+		{
+			chunk_status.insert({ coord, "Freshly Loaded" });
+			world->map->addChunkToGrid(new MapChunk({ coord.first, coord.second }, map_chunk_size.x));
+		}
+	}	
+
+	for (auto old_coord : old_coord_list)
+	{
+		bool isFound = false;
+		for (auto coord : loaded_chunk_coords)
+		{
+			if (coord == old_coord) isFound = true;
+		}
+		if (!isFound)
+		{
+			chunk_status.at(old_coord) = "Saved";
 		}
 	}
 
