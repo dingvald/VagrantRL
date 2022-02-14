@@ -99,7 +99,7 @@ void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 	auto list_ptr = getEntitiesAt(layer, position);
 	if (!list_ptr)
 	{
-		std::cout << "List does not exist...!\n";
+		std::cout << "Cannot place entity--List does not exist...!\n";
 	}
 	else
 	{
@@ -109,7 +109,15 @@ void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 
 void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 {
-	getEntitiesAt(layer, position)->remove(entity);
+	auto list_ptr = getEntitiesAt(layer, position);
+	if (!list_ptr)
+	{
+		std::cout << "Cannot remove entity--List does not exist...!\n";
+	}
+	else
+	{
+		list_ptr->remove(entity);
+	}
 }
 
 void Map::addChunkToGrid(MapChunk* chunk)
@@ -160,7 +168,7 @@ unsigned int Map::getHeight()
 	return height;
 }
 
-void Map::rotateMap(sf::Vector2i dir, int range)
+void Map::shift(sf::Vector2i dir, int range)
 {
 	if (range > chunk_load_width)
 	{

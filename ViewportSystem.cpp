@@ -48,8 +48,8 @@ void ViewportSystem::focusViewport()
 			// clamp viewport origin to map edges
 			if (tempx < 0) tempx = 0;
 			if (tempy < 0) tempy = 0;
-			if (tempx > (world->currentMap->getWidth() - width) * gl::TILE_SIZE) tempx = (world->currentMap->getWidth() - width) * gl::TILE_SIZE;
-			if (tempy > (world->currentMap->getHeight() - height) * gl::TILE_SIZE) tempy = (world->currentMap->getHeight() - height) * gl::TILE_SIZE;
+			//if (tempx > (world->map->getWidth() - width) * gl::TILE_SIZE) tempx = (world->map->getWidth() - width) * gl::TILE_SIZE;
+			//if (tempy > (world->map->getHeight() - height) * gl::TILE_SIZE) tempy = (world->map->getHeight() - height) * gl::TILE_SIZE;
 
 			sf::Vector2f target = { static_cast<float>(tempx), static_cast<float>(tempy) };
 

@@ -7,7 +7,7 @@ void MapSystem::init()
 	map = std::make_unique<Map>(static_cast<unsigned int>(gl::Layer::Total), map_chunk_size.x,
 		num_of_loaded_chunks.x, world);
 
-	world->currentMap = map.get();
+	world->map = map.get();
 
 	eventBus->subscribe(this, &MapSystem::onViewportMoveEvent);
 
@@ -39,8 +39,8 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 
 	for (int i = 0; i < 100; ++i)
 	{
-		int x_rand = rand() % world->currentMap->getWidth();
-		int y_rand = rand() % world->currentMap->getHeight();
+		int x_rand = rand() % world->map->getWidth();
+		int y_rand = rand() % world->map->getHeight();
 
 		auto tree = world->addEntity("Tree");
 		tree->addComponent(new PositionComponent({ starting_pos.x * map_chunk_size.x + x_rand, starting_pos.y * map_chunk_size.y + y_rand }, gl::Layer::Actor));
@@ -79,7 +79,7 @@ void MapSystem::shiftActiveMap(sf::Vector2i dir)
 
 
 	// save row/column of tiles + entities depending on direction
-	world->currentMap->rotateMap(dir, 1);
+	world->map->shift(dir, 1);
 
 
 	updateLoadedChunks();
@@ -103,7 +103,7 @@ void MapSystem::updateLoadedChunks()
 			{
 				if (chunk_status.count({ x,y })) continue;
 
-				world->currentMap->addChunkToGrid(new MapChunk({ x,y }, map_chunk_size.x));
+				world->map->addChunkToGrid(new MapChunk({ x,y }, map_chunk_size.x));
 				chunk_status.insert({{x,y}, "Loaded"});
 			}
 		}

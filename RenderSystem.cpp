@@ -79,7 +79,7 @@ void RenderSystem::updateEntities()
 
 	auto fun = std::bind(&RenderSystem::changeGlyph, this, std::placeholders::_1);
 
-	world->currentMap->applyFuncToEntitiesInRect(org.x, org.y, gl::VIEWPORT_WIDTH + 1, gl::VIEWPORT_HEIGHT + 1, fun);
+	world->map->applyFuncToEntitiesInRect(org.x, org.y, gl::VIEWPORT_WIDTH + 1, gl::VIEWPORT_HEIGHT + 1, fun);
 }
 
 void RenderSystem::updateTilemap()

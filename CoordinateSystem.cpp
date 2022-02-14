@@ -16,13 +16,13 @@ void CoordinateSystem::addedEntity(Entity* entity)
 {
 	auto comp = entity->getComponent<PositionComponent>();
 
-	world->currentMap->placeEntity(entity, (unsigned int)comp->layer, comp->position);
+	world->map->placeEntity(entity, (unsigned int)comp->layer, comp->position);
 }
 
 void CoordinateSystem::removeEntity(Entity* entity)
 {
 	auto comp = entity->getComponent<PositionComponent>();
 
-	world->currentMap->removeEntity(entity, (unsigned int)comp->layer, comp->position);
+	world->map->removeEntity(entity, (unsigned int)comp->layer, comp->position);
 }
 

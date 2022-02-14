@@ -17,7 +17,7 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 	
 	auto intended_pos = pos + (dir * gl::TILE_SIZE);
 
-	if (intended_pos.x < 0 || intended_pos.y < 0 || intended_pos.x > (world->currentMap->getWidth() - 1)*gl::TILE_SIZE || intended_pos.y > (world->currentMap->getHeight() - 1)*gl::TILE_SIZE)
+	if (intended_pos.x < 0 || intended_pos.y < 0)
 	{
 		return;
 	}
@@ -38,8 +38,8 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 	else
 	{
 		// Actually perform the move
-		world->currentMap->removeEntity(entity, layer, pos);
-		world->currentMap->placeEntity(entity, layer, intended_pos);
+		world->map->removeEntity(entity, layer, pos);
+		world->map->placeEntity(entity, layer, intended_pos);
 		pos_comp->position = intended_pos;
 		eventBus->publish(std::make_unique<SpendTimeEvent>(100).get());
 	}
@@ -47,7 +47,7 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 
 Entity* MovementSystem::checkForCollisionAt(sf::Vector2i coordinate)
 {
-	auto list_ptr = world->currentMap->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), coordinate);
+	auto list_ptr = world->map->getEntitiesAt(static_cast<unsigned int>(gl::Layer::Actor), coordinate);
 
 	if (list_ptr && !list_ptr->empty())
 	{
@@ -69,9 +69,9 @@ void MovementSystem::onSwapPlacesEvent(SwapPlacesEvent* ev)
 	auto pos1 = ev->e1->getComponent<PositionComponent>()->position;
 	auto pos2 = ev->e2->getComponent<PositionComponent>()->position;
 
-	world->currentMap->removeEntity(ev->e2, static_cast<unsigned int>(gl::Layer::Actor), pos2);
+	world->map->removeEntity(ev->e2, static_cast<unsigned int>(gl::Layer::Actor), pos2);
 	move(ev->e1, pos2 - pos1);
-	world->currentMap->placeEntity(ev->e2, static_cast<unsigned int>(gl::Layer::Actor), pos1);
+	world->map->placeEntity(ev->e2, static_cast<unsigned int>(gl::Layer::Actor), pos1);
 	
 	ev->e2->getComponent<PositionComponent>()->position = pos1;
 }

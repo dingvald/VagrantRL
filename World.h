@@ -20,7 +20,7 @@ class World
 public:
 	// Data
 	EventBus eventBus;
-	Map* currentMap = { nullptr };
+	Map* map = { nullptr };
 	Player player{ 0,nullptr };
 	sf::Vector2i worldPosition;
 

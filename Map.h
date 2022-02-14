@@ -21,7 +21,7 @@ public:
 	unsigned int getWidth();
 	unsigned int getHeight();
 
-	void rotateMap(sf::Vector2i dir, int range);
+	void shift(sf::Vector2i dir, int range);
 
 private:
 	World* world;
@@ -32,6 +32,6 @@ private:
 	int column_index = 0;
 	int row_index = 0;
 
-	std::vector< std::vector< std::unique_ptr<MapChunk> > > map_chunk; // [layer][world_position.x][world_position.y]->at(x,y)
+	std::vector< std::vector< std::unique_ptr<MapChunk> > > map_chunk; // [world_position.x][world_position.y]->at(layer,x,y)
 };
 
