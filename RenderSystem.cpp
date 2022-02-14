@@ -16,12 +16,11 @@ void RenderSystem::init()
 
 	signature.addComponentByType<RenderComponent>();
 	signature.addComponentByType<PositionComponent>();
-
-	eventBus->subscribe(this, &RenderSystem::onViewportMoveEvent);
 }
 
 void RenderSystem::update(const float dt)
 {
+	viewport_origin = world->viewportOrigin;
 	dt_count += dt;
 	if (dt_count >= 1.000f / updaterate)
 	{
@@ -54,10 +53,10 @@ void RenderSystem::createGlyph(Entity* entity)
 
 	auto layer = pos->layer;
 
-	sf::Vector2f coordinatePosition{ (pos->position.x - viewport_origin.x),
+	sf::Vector2f screenPosition{ (pos->position.x - viewport_origin.x),
 		(pos->position.y - viewport_origin.y) };
 
-	glyphs[static_cast<int>(layer)].push_back(std::make_unique<Glyph>(render->sprite_id, render->color, coordinatePosition));
+	glyphs[static_cast<int>(layer)].push_back(std::make_unique<Glyph>(render->sprite_id, render->color, screenPosition));
 }
 
 void RenderSystem::changeGlyph(Entity* entity)
@@ -91,7 +90,7 @@ void RenderSystem::updateTilemap()
 		{
 			sf::Vector2f coordinate_position = { x * gl::TILE_SIZE - viewport_origin.x, y * gl::TILE_SIZE - viewport_origin.y };
 
-			if (x % 64 && y % 64)
+			if (x % gl::CHUNK_SIZE && y % gl::CHUNK_SIZE)
 			{
 				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color(100, 100, 100), coordinate_position));
 			}
@@ -101,9 +100,4 @@ void RenderSystem::updateTilemap()
 			}
 		}
 	}
-}
-
-void RenderSystem::onViewportMoveEvent(ViewportMoveEvent* ev)
-{
-	viewport_origin = ev->newOrigin;
 }

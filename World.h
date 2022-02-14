@@ -23,6 +23,7 @@ public:
 	Map* map = { nullptr };
 	Player player{ 0,nullptr };
 	sf::Vector2i worldPosition;
+	sf::Vector2f viewportOrigin;
 
 	void init();
 

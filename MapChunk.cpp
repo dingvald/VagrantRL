@@ -14,7 +14,6 @@ MapChunk::MapChunk(sf::Vector2i world_coordinate, int chunk_size)
 			entities[layer][x].resize(size);
 		}
 	}
-	
 }
 
 std::list<Entity*>* MapChunk::at(int layer, sf::Vector2i tile_position)

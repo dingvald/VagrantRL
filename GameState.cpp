@@ -9,11 +9,11 @@ void GameState::init()
 	world.addSystem(new TimeSystem);
 	world.addSystem(new CoordinateSystem);
 	world.addSystem(new MovementSystem);
+	world.addSystem(new ViewportSystem);
 	world.addSystem(new RenderSystem);
 	world.addSystem(new PlayerInputSystem);
 	world.addSystem(new NPCInputSystem);
 	world.addSystem(new CollisionSystem);
-	world.addSystem(new ViewportSystem);
 	world.addSystem(new GUISystem);
 	// Add map system last
 	world.addSystem(new MapSystem);

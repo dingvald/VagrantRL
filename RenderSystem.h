@@ -30,7 +30,5 @@ private:
 	void updateEntities();
 	void updateTilemap();
 
-	void onViewportMoveEvent(ViewportMoveEvent* ev);
-
 };
 

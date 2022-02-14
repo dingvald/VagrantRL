@@ -89,7 +89,6 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 				{
 					fun(e);
 				}
-				
 			}
 		}
 	}

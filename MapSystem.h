@@ -11,9 +11,8 @@ public:
 
 private:
 	std::unique_ptr<Map> map;
-	sf::Vector2i map_chunk_size = { 64, 64 };
 	sf::Vector2i num_of_loaded_chunks = { 3,3 };
-	sf::Vector2i starting_position = { 0,0 }; // does not really "choose" position TODO: need to change how this affects viewport starting position...
+	sf::Vector2i starting_position = { 5,5 }; // does not really "choose" position TODO: need to change how this affects viewport starting position...
 	std::map<std::pair<int, int>, std::string> chunk_status;
 	std::list<std::pair<int, int>> loaded_chunk_coords;
 	
