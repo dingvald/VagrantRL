@@ -50,9 +50,8 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 		tree->addComponent(new PositionComponent({ starting_pos.x * gl::CHUNK_SIZE + x_rand, starting_pos.y * gl::CHUNK_SIZE + y_rand }, gl::Layer::Actor));
 		tree->addComponent(new RenderComponent(5, sf::Color::Green));
 
-	}
+	} */
 
-	*/
 	//
 	std::cout << "Map complete." << "\n";
 	//
