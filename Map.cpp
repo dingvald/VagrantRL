@@ -42,7 +42,7 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position
 
 	if (world->worldPosition.x == 0)
 	{
-		chunk_index_x = column_index + (worldmap_index_x - world->worldPosition.x);
+		chunk_index_x = column_index + (worldmap_index_x - world->worldPosition.x) + 1;
 	}
 	else
 	{
@@ -50,7 +50,7 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position
 	}
 	if (world->worldPosition.y == 0)
 	{
-		chunk_index_y = row_index + (worldmap_index_y - world->worldPosition.y);
+		chunk_index_y = row_index + (worldmap_index_y - world->worldPosition.y) + 1;
 	}
 	else
 	{
@@ -129,26 +129,25 @@ void Map::addChunkToGrid(MapChunk* chunk)
 
 	int chunk_index_x = chunk_position.x;
 	int chunk_index_y = chunk_position.y;
+
 	if (world->worldPosition.x != 0)
 	{
-		chunk_index_x = chunk_position.x - world->worldPosition.x + 1;
+		chunk_index_x = chunk_position.x - world->worldPosition.x + 1 + column_index;
+		if (chunk_index_x < 0) chunk_index_x += chunk_load_width;
+		if (chunk_index_x >= chunk_load_width) chunk_index_x -= chunk_load_width;
 	}
 	if (world->worldPosition.y != 0)
 	{
-		chunk_index_y = chunk_position.y - world->worldPosition.y + 1;
+		chunk_index_y = chunk_position.y - world->worldPosition.y + 1 + row_index;
+		if (chunk_index_y < 0) chunk_index_y += chunk_load_width;
+		if (chunk_index_y >= chunk_load_width) chunk_index_y -= chunk_load_width;
 	}
 
-	auto chunk_ptr = map_chunk[chunk_index_x][chunk_index_y].get();
+	auto chunk_ptr = map_chunk[chunk_index_x][chunk_index_y];
 
-	if (chunk_ptr)
-	{
-		//std::cout << "Chunk already exists at position " << chunk_index_x << ", " << chunk_index_x << "\n";
-		delete chunk;
-	}
-	else
-	{
-		map_chunk[chunk_index_x][chunk_index_y].reset(chunk);
-	}
+	if (chunk == chunk_ptr) return;
+
+	map_chunk[chunk_index_x][chunk_index_y] = chunk;
 	
 }
 
@@ -157,7 +156,16 @@ MapChunk* Map::getChunk(sf::Vector2i relative_pos)
 	if (relative_pos.x < 0 || relative_pos.y < 0) return nullptr;
 	if (relative_pos.x >= chunk_load_width || relative_pos.y >= chunk_load_width) return nullptr;
 
-	return map_chunk[relative_pos.x][relative_pos.y].get();
+	relative_pos.x += column_index;
+	relative_pos.y += row_index;
+
+	if (relative_pos.x < 0) relative_pos.x += chunk_load_width;
+	if (relative_pos.x >= chunk_load_width) relative_pos.x -= chunk_load_width;
+
+	if (relative_pos.y < 0) relative_pos.y += chunk_load_width;
+	if (relative_pos.y >= chunk_load_width) relative_pos.y -= chunk_load_width;
+
+	return map_chunk[relative_pos.x][relative_pos.y];
 }
 
 unsigned int Map::getWidth()
@@ -183,8 +191,8 @@ void Map::shift(sf::Vector2i dir, int range)
 
 	if (column_index >= chunk_load_width) column_index -= chunk_load_width;
 	if (row_index >= chunk_load_width) row_index -= chunk_load_width;
-	if (column_index < 0) column_index += (chunk_load_width + column_index);
-	if (row_index < 0) row_index += (chunk_load_width + row_index);
+	if (column_index < 0) column_index += (chunk_load_width);
+	if (row_index < 0) row_index += (chunk_load_width);
 
 	std::cout << "Column index: " << column_index << "\n";
 	std::cout << "Row index: " << row_index << "\n";

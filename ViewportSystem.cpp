@@ -31,6 +31,7 @@ void ViewportSystem::focusViewport()
 		{
 			origin.x = (float)following->getComponent<PositionComponent>()->position.x - ((width / 2) * gl::TILE_SIZE);
 			origin.y = (float)following->getComponent<PositionComponent>()->position.y - ((height / 2) * gl::TILE_SIZE);
+			world->viewportOrigin = origin;
 			old_origin = origin;
 			eventBus->publish(std::make_unique<ViewportMoveEvent>(origin, old_origin).get());
 
@@ -54,6 +55,7 @@ void ViewportSystem::focusViewport()
 			sf::Vector2f target = { static_cast<float>(tempx), static_cast<float>(tempy) };
 
 			origin = lerpToTarget(origin, target);
+			world->viewportOrigin = origin;
 
 			if (viewportMoved())
 			{

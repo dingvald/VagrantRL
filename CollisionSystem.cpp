@@ -51,6 +51,7 @@ void CollisionSystem::onCollisionEvent(CollisionEvent* ev)
 		break;
 		case Relationship::inanimate:
 		{
+			std::cout << "There is a " << ev->receiver->getName() << " here!\n";
 			// Do nothing
 		}
 		break;

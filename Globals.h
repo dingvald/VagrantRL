@@ -7,6 +7,7 @@ namespace gl
 	const int VIEWPORT_WIDTH = 64;
 	const int VIEWPORT_HEIGHT = 32;
 	const int TILE_SIZE = 16;
+	const int CHUNK_SIZE = 64;
 
 	const unsigned int COMPONENT_MAX = 256;
 

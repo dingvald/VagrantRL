@@ -33,6 +33,7 @@ void MovementSystem::move(Entity* entity, sf::Vector2i dir)
 		else
 		{
 			eventBus->publish(std::make_unique<SpendTimeEvent>(100).get());
+			std::cout << "You are in the way!\n";
 		}
 	} 
 	else
