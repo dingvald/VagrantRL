@@ -27,7 +27,6 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	//
 
 	updateLoadedChunks();
-	printChunkBuffer();
 	
 	std::cout << "Creating player...\n";
 
@@ -40,17 +39,24 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	player->addComponent(new ViewportFocusComponent());
 
 	std::cout << "Player complete.\n";
-	/*
-	for (int i = 0; i < 100; ++i)
+
+	sf::Color col_array[3] = {
+		sf::Color(8, 84, 34),
+		sf::Color(20, 105, 21),
+		sf::Color(17, 69, 38)
+	};
+
+	for (int i = 0; i < 10000; ++i)
 	{
-		int x_rand = rand() % world->map->getWidth();
-		int y_rand = rand() % world->map->getHeight();
+		int x_rand = (rand() % world->map->getWidth()) - gl::CHUNK_SIZE;
+		int y_rand = (rand() % world->map->getHeight()) - gl::CHUNK_SIZE;
+		int col_rand = rand() % 3;
 
 		auto tree = world->addEntity("Tree");
 		tree->addComponent(new PositionComponent({ starting_pos.x * gl::CHUNK_SIZE + x_rand, starting_pos.y * gl::CHUNK_SIZE + y_rand }, gl::Layer::Actor));
-		tree->addComponent(new RenderComponent(5, sf::Color::Green));
+		tree->addComponent(new RenderComponent(5, col_array[col_rand]));
 
-	} */
+	}
 
 	//
 	std::cout << "Map complete." << "\n";
@@ -66,22 +72,14 @@ void MapSystem::shiftActiveMap(sf::Vector2i dir)
 	world->worldPosition.x += dir.x;
 	world->worldPosition.y += dir.y;
 
-	sf::Vector2i rotate_dir = dir;
+	sf::Vector2i shift_dir = dir;
 	
-	if (world->worldPosition.x <= 1)
-	{
-		if (old_world_pos.x <= 1) dir.x = 0;
-	}
-	if (world->worldPosition.y <= 1)
-	{
-		if (old_world_pos.y <= 1) dir.y = 0;
-	}
-
-	world->map->shift(dir, 1);
-
-
+	world->map->shift(shift_dir, 1);
 	updateLoadedChunks();
-	printLoadedChunkGrid();
+
+	auto rect = world->map->boundary();
+
+	std::cout << "Boundary origin: (" << rect.left << ", " << rect.top << ")\n";
 }
 
 void MapSystem::updateLoadedChunks()
@@ -135,6 +133,8 @@ void MapSystem::updateLoadedChunks()
 			}
 		}
 	}
+
+	printLoadedChunkGrid();
 }
 
 void MapSystem::loadOrBuildChunk(sf::Vector2i coords)
@@ -299,7 +299,7 @@ void MapSystem::printChunkBuffer()
 	for(auto chunk : chunk_buffer)
 	{
 		std::cout << "Coordinates: (" << chunk.first.first << ", " << chunk.first.second << ")\n";
-		std::cout << "Confirrmed Coordinates: (" << chunk.second->world_coordinate.x << ", " << chunk.second->world_coordinate.y << ")\n";
+		std::cout << "Confirmed Coordinates: (" << chunk.second->world_coordinate.x << ", " << chunk.second->world_coordinate.y << ")\n";
 
 		std::cout << "\n";
 	}

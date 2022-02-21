@@ -21,6 +21,8 @@ public:
 	unsigned int getWidth();
 	unsigned int getHeight();
 
+	sf::Rect<int> boundary();
+
 	void shift(sf::Vector2i dir, int range);
 
 private:

@@ -47,11 +47,6 @@ public:
 	void update(const float dt);
 	void render(sf::RenderTarget* target);
 
-	// Dealing with the map
-
-	sf::Vector2i worldToGridPosition(sf::Vector2i world_position);
-	sf::Vector2i gridToWorldPosition(sf::Vector2i grid_position);
-
 	// Dealing with persistence
 
 	void save_entities(std::list<unsigned int> list_of_ids);

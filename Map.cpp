@@ -37,48 +37,33 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position
 
 	// index into chunks in memory
 
-	int chunk_index_x = 0;
-	int chunk_index_y = 0;
-
-	if (world->worldPosition.x == 0)
-	{
-		chunk_index_x = column_index + (worldmap_index_x - world->worldPosition.x) + 1;
-	}
-	else
-	{
-		chunk_index_x = column_index + (worldmap_index_x - world->worldPosition.x + 1);
-	}
-	if (world->worldPosition.y == 0)
-	{
-		chunk_index_y = row_index + (worldmap_index_y - world->worldPosition.y) + 1;
-	}
-	else
-	{
-		chunk_index_y = row_index + (worldmap_index_y - world->worldPosition.y + 1);
-	}
+	int chunk_index_x = (worldmap_index_x - world->worldPosition.x) + 1;
+	int chunk_index_y = (worldmap_index_y - world->worldPosition.y) + 1;
+	
 
 	if (chunk_index_x >= chunk_load_width) chunk_index_x -= chunk_load_width;
 	if (chunk_index_y >= chunk_load_width) chunk_index_y -= chunk_load_width;
+	if (chunk_index_x < 0) chunk_index_x += chunk_load_width;
+	if (chunk_index_y < 0) chunk_index_y += chunk_load_width;
+
+	auto chunk_ptr = getChunk({ chunk_index_x, chunk_index_y });
 	
 
-	if (worldmap_index_x == 0) chunk_index_x = 0;
-	if (worldmap_index_y == 0) chunk_index_y = 0;
-
-	return map_chunk[chunk_index_x][chunk_index_y]->at(layer, { tile_index_x, tile_index_y });
+	return chunk_ptr->at(layer, { tile_index_x, tile_index_y });
 }
 
 void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height,
 	std::function<void(Entity*)> fun)
 {
 
-	int x_start_tile = x_start / gl::TILE_SIZE;
-	int y_start_tile = y_start / gl::TILE_SIZE;
+	int x_start_tile = (int)x_start / gl::TILE_SIZE;
+	int y_start_tile = (int)y_start / gl::TILE_SIZE;
 
 	for (unsigned int layer = 0; layer < (unsigned int)gl::Layer::Total; ++layer)
 	{
-		for (int x = x_start_tile; x < x_start_tile + rect_width; ++x)
+		for (int x = x_start_tile; x < x_start_tile + (int)rect_width; ++x)
 		{
-			for (int y = y_start_tile; y < y_start_tile + rect_height; ++y)
+			for (int y = y_start_tile; y < y_start_tile + (int)rect_height; ++y)
 			{
 				//if (x > width || y > height) break;
 				auto list = getEntitiesAt(layer, { x*gl::TILE_SIZE, y*gl::TILE_SIZE });
@@ -126,21 +111,13 @@ void Map::addChunkToGrid(MapChunk* chunk)
 
 	auto chunk_position = chunk->world_coordinate;
 
-	int chunk_index_x = chunk_position.x;
-	int chunk_index_y = chunk_position.y;
+	int chunk_index_x = chunk_position.x - world->worldPosition.x + 1 + column_index;
+	if (chunk_index_x < 0) chunk_index_x += chunk_load_width;
+	if (chunk_index_x >= chunk_load_width) chunk_index_x -= chunk_load_width;
 
-	if (world->worldPosition.x != 0)
-	{
-		chunk_index_x = chunk_position.x - world->worldPosition.x + 1 + column_index;
-		if (chunk_index_x < 0) chunk_index_x += chunk_load_width;
-		if (chunk_index_x >= chunk_load_width) chunk_index_x -= chunk_load_width;
-	}
-	if (world->worldPosition.y != 0)
-	{
-		chunk_index_y = chunk_position.y - world->worldPosition.y + 1 + row_index;
-		if (chunk_index_y < 0) chunk_index_y += chunk_load_width;
-		if (chunk_index_y >= chunk_load_width) chunk_index_y -= chunk_load_width;
-	}
+	int chunk_index_y = chunk_position.y - world->worldPosition.y + 1 + row_index;
+	if (chunk_index_y < 0) chunk_index_y += chunk_load_width;
+	if (chunk_index_y >= chunk_load_width) chunk_index_y -= chunk_load_width;
 
 	auto chunk_ptr = map_chunk[chunk_index_x][chunk_index_y];
 
@@ -177,6 +154,19 @@ unsigned int Map::getHeight()
 	return height;
 }
 
+sf::Rect<int> Map::boundary()
+{
+	int xL, xR, yT, yB;
+
+	auto top_left_chunk = getChunk({ 0,0 });
+
+	xL = top_left_chunk->world_coordinate.x * chunk_size * gl::TILE_SIZE;
+	yT = top_left_chunk->world_coordinate.y * chunk_size * gl::TILE_SIZE;
+	
+	sf::Rect<int> ret(xL,yT,width,height);
+	return ret;
+}
+
 void Map::shift(sf::Vector2i dir, int range)
 {
 	if (range > chunk_load_width)
@@ -192,7 +182,4 @@ void Map::shift(sf::Vector2i dir, int range)
 	if (row_index >= chunk_load_width) row_index -= chunk_load_width;
 	if (column_index < 0) column_index += (chunk_load_width);
 	if (row_index < 0) row_index += (chunk_load_width);
-
-	std::cout << "Column index: " << column_index << "\n";
-	std::cout << "Row index: " << row_index << "\n";
 }
