@@ -71,11 +71,10 @@ void MapSystem::shiftActiveMap(sf::Vector2i dir)
 
 	world->worldPosition.x += dir.x;
 	world->worldPosition.y += dir.y;
-
-	sf::Vector2i shift_dir = dir;
 	
-	world->map->shift(shift_dir, 1);
 	updateLoadedChunks();
+
+	printLoadedChunkGrid();
 
 	auto rect = world->map->boundary();
 
@@ -92,30 +91,31 @@ void MapSystem::updateLoadedChunks()
 	std::list<std::pair<int, int>> old_coord_list = loaded_chunk_coords;
 	loaded_chunk_coords.clear();
 
+	int grid_x = 0;
 	for (int x = center_pos.x - 1; x < center_pos.x - 1 + num_of_loaded_chunks.x; ++x)
 	{
+		int grid_y = 0;
 		for (int y = center_pos.y - 1; y < center_pos.y - 1 + num_of_loaded_chunks.y; ++y)
 		{
 			loaded_chunk_coords.push_back({ x,y });
-		}
-	}
 
-	for (auto coord : loaded_chunk_coords)
-	{
-		if (chunk_status.count(coord))
-		{
-			chunk_status.at(coord) = "Loaded";
-			auto loaded_chunk = chunk_buffer.at(coord);
-			world->map->addChunkToGrid(loaded_chunk.get());
+			if (chunk_status.count({x,y}))
+			{
+				chunk_status.at({ x,y }) = "Loaded";
+				auto loaded_chunk = chunk_buffer.at({x,y});
+				world->map->addChunkToGrid(loaded_chunk.get(),{grid_x, grid_y});
+			}
+			else
+			{
+				std::shared_ptr<MapChunk> new_chunk(new MapChunk({ x,y }, gl::CHUNK_SIZE));
+				chunk_status.insert({ {x,y}, "Freshly Built" });
+				chunk_buffer.insert({ {x,y}, new_chunk });
+				world->map->addChunkToGrid(new_chunk.get(), {grid_x, grid_y});
+			}
+			++grid_y;
 		}
-		else
-		{
-			std::shared_ptr<MapChunk> new_chunk(new MapChunk({ coord.first, coord.second }, gl::CHUNK_SIZE));
-			chunk_status.insert({ coord, "Freshly Built" });
-			chunk_buffer.insert({ coord, new_chunk});
-			world->map->addChunkToGrid(new_chunk.get());
-		}
-	}	
+		++grid_x;
+	}
 
 	for (auto old_coord : old_coord_list)
 	{

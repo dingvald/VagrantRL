@@ -15,8 +15,8 @@ public:
 	void placeEntity(Entity* entity, unsigned int layer, sf::Vector2i world_position);
 	void removeEntity(Entity* entity, unsigned int layer, sf::Vector2i world_position);
 
-	void addChunkToGrid(MapChunk* chunk);
-	MapChunk* getChunk(sf::Vector2i relative_pos);
+	void addChunkToGrid(MapChunk* chunk, sf::Vector2i grid_pos);
+	MapChunk* getChunk(sf::Vector2i grid_pos);
 
 	unsigned int getWidth();
 	unsigned int getHeight();

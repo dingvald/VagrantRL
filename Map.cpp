@@ -105,43 +105,37 @@ void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i position
 	}
 }
 
-void Map::addChunkToGrid(MapChunk* chunk)
+void Map::addChunkToGrid(MapChunk* chunk, sf::Vector2i grid_pos)
 {
 	if (!chunk) return;
 
-	auto chunk_position = chunk->world_coordinate;
+	if (grid_pos.x < 0 || grid_pos.y < 0)
+	{
+		std::cout << "Grid position out of range\n";
+		return;
+	}
+	if (grid_pos.x >= chunk_load_width || grid_pos.y >= chunk_load_width)
+	{
+		std::cout << "Grid position out of range\n";
+		return;
+	}
 
-	int chunk_index_x = chunk_position.x - world->worldPosition.x + 1 + column_index;
-	if (chunk_index_x < 0) chunk_index_x += chunk_load_width;
-	if (chunk_index_x >= chunk_load_width) chunk_index_x -= chunk_load_width;
-
-	int chunk_index_y = chunk_position.y - world->worldPosition.y + 1 + row_index;
-	if (chunk_index_y < 0) chunk_index_y += chunk_load_width;
-	if (chunk_index_y >= chunk_load_width) chunk_index_y -= chunk_load_width;
-
-	auto chunk_ptr = map_chunk[chunk_index_x][chunk_index_y];
-
-	if (chunk == chunk_ptr) return;
-
-	map_chunk[chunk_index_x][chunk_index_y] = chunk;
+	map_chunk[grid_pos.x][grid_pos.y] = chunk;
 	
 }
 
-MapChunk* Map::getChunk(sf::Vector2i relative_pos)
+MapChunk* Map::getChunk(sf::Vector2i grid_pos)
 {
-	if (relative_pos.x < 0 || relative_pos.y < 0) return nullptr;
-	if (relative_pos.x >= chunk_load_width || relative_pos.y >= chunk_load_width) return nullptr;
+	if (grid_pos.x < 0 || grid_pos.y < 0) return nullptr;
+	if (grid_pos.x >= chunk_load_width || grid_pos.y >= chunk_load_width) return nullptr;
 
-	relative_pos.x += column_index;
-	relative_pos.y += row_index;
+	if (grid_pos.x < 0) grid_pos.x += chunk_load_width;
+	if (grid_pos.x >= chunk_load_width) grid_pos.x -= chunk_load_width;
 
-	if (relative_pos.x < 0) relative_pos.x += chunk_load_width;
-	if (relative_pos.x >= chunk_load_width) relative_pos.x -= chunk_load_width;
+	if (grid_pos.y < 0) grid_pos.y += chunk_load_width;
+	if (grid_pos.y >= chunk_load_width) grid_pos.y -= chunk_load_width;
 
-	if (relative_pos.y < 0) relative_pos.y += chunk_load_width;
-	if (relative_pos.y >= chunk_load_width) relative_pos.y -= chunk_load_width;
-
-	return map_chunk[relative_pos.x][relative_pos.y];
+	return map_chunk[grid_pos.x][grid_pos.y];
 }
 
 unsigned int Map::getWidth()
