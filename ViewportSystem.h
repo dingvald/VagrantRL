@@ -19,6 +19,7 @@ private:
 	float dt_count = 0.0;
 
 	void focusViewport();
+	void updateWorldPosition();
 	bool viewportMoved();
 	bool inViewport(sf::Vector2i pos);
 	sf::Vector2f lerpToTarget(sf::Vector2f pos, const sf::Vector2f target_pos);

@@ -21,6 +21,8 @@ void ViewportSystem::update(const float dt)
 	{
 		std::cout << "Error: too many entities for viewport to focus on!!!\n";
 	}
+
+	updateWorldPosition();
 }
 
 void ViewportSystem::focusViewport()
@@ -63,6 +65,15 @@ void ViewportSystem::focusViewport()
 			}
 		}
 	}
+}
+
+void ViewportSystem::updateWorldPosition()
+{
+	sf::Vector2i view_center;
+	view_center.x = ((static_cast<int>(std::floorf(origin.x)) / gl::TILE_SIZE) + width / 2) / gl::CHUNK_SIZE;
+	view_center.y = ((static_cast<int>(std::floorf(origin.y)) / gl::TILE_SIZE) + height / 2) / gl::CHUNK_SIZE;
+
+	world->worldPosition = view_center;
 }
 
 bool ViewportSystem::viewportMoved()

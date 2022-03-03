@@ -23,8 +23,6 @@ public:
 
 	sf::Rect<int> boundary();
 
-	void shift(sf::Vector2i dir, int range);
-
 private:
 	World* world;
 	unsigned int width; // in tiles

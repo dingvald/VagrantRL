@@ -38,7 +38,9 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position
 	// index into chunks in memory
 
 	int chunk_index_x = (worldmap_index_x - world->worldPosition.x) + 1;
+	if (world->worldPosition.x == 0) chunk_index_x -= 1;
 	int chunk_index_y = (worldmap_index_y - world->worldPosition.y) + 1;
+	if (world->worldPosition.y == 0) chunk_index_y -= 1;
 	
 
 	if (chunk_index_x >= chunk_load_width) chunk_index_x -= chunk_load_width;
@@ -159,21 +161,4 @@ sf::Rect<int> Map::boundary()
 	
 	sf::Rect<int> ret(xL,yT,width,height);
 	return ret;
-}
-
-void Map::shift(sf::Vector2i dir, int range)
-{
-	if (range > chunk_load_width)
-	{
-		std::cout << "ERROR: rotate range > than the loaded chunk number...\n";
-		return;
-	}
-
-	column_index += dir.x * range;
-	row_index += dir.y * range;
-
-	if (column_index >= chunk_load_width) column_index -= chunk_load_width;
-	if (row_index >= chunk_load_width) row_index -= chunk_load_width;
-	if (column_index < 0) column_index += (chunk_load_width);
-	if (row_index < 0) row_index += (chunk_load_width);
 }
