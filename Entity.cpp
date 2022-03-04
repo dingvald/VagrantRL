@@ -27,10 +27,15 @@ void Entity::addComponent(Component * component)
 		component->setOwnerTo(this);
 		component->init();
 		components.insert(std::make_pair(_id, std::move(c)));
-		world->addComponent(this, _id);
+		if (world)
+		{
+			world->addComponent(this, _id);
+		}
+		else
+		{
+			signature.addComponentByID(_id);
+		}
 	}
-
-	
 }
 
 

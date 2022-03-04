@@ -27,7 +27,7 @@ public:
 	bool noLongerMatches(ComponentMask oldMask, ComponentMask systemMask);
 
 private:
-	std::bitset<gl::COMPONENT_MAX> mask;
+	std::bitset<gl::COMPONENT_MAX> mask = {0};
 
 	bool matches(ComponentMask otherMask);
 	

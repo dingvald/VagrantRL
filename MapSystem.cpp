@@ -33,13 +33,16 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	
 	std::cout << "Creating player...\n";
 
-	auto player = world->addEntity("Player");
-	world->setAsPlayer(player);
+	auto player = std::make_unique<Entity>("Player");
 	player->addComponent(new PositionComponent({starting_pos.x*gl::CHUNK_SIZE + 32,starting_pos.y*gl::CHUNK_SIZE + 32}, gl::Layer::Actor));
 	player->addComponent(new RenderComponent(0, sf::Color(100, 100, 100)));
 	player->addComponent(new TimeComponent(100));
 	player->addComponent(new PlayerAIComponent());
-	player->addComponent(new ViewportFocusComponent());
+	player->addComponent(new ViewportFocusComponent()); 
+	
+	world->setAsPlayer(player.get());
+	world->registerEntity(std::move(player));
+	
 
 	std::cout << "Player complete.\n";
 
@@ -55,12 +58,12 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 		int y_rand = (rand() % world->map->getHeight()) - gl::CHUNK_SIZE;
 		int col_rand = rand() % 3;
 
-		auto tree = world->addEntity("Tree");
+		auto tree = std::make_unique<Entity>("Tree");
 		tree->addComponent(new PositionComponent({ starting_pos.x * gl::CHUNK_SIZE + x_rand, starting_pos.y * gl::CHUNK_SIZE + y_rand }, gl::Layer::Actor));
 		tree->addComponent(new RenderComponent(5, col_array[col_rand]));
 
+		world->registerEntity(std::move(tree));
 	}
-
 	//
 	std::cout << "Map complete." << "\n";
 	//

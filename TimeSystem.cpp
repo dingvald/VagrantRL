@@ -11,10 +11,13 @@ void TimeSystem::init()
 	eventBus->subscribe(this, &TimeSystem::onSpendTimeEvent);
 
 	//Time keeper defines the game's unit of time.
-	time_keeper = world->addEntity("Time Keeper");
-	time_keeper->addComponent(new TimeComponent(100));
-	time_keeper->getComponent<TimeComponent>()->built_up_speed = 0;
+	auto t_keeper = std::make_unique<Entity>("Time Keeper");
+	time_keeper = t_keeper.get();
+	t_keeper->addComponent(new TimeComponent(100));
+	t_keeper->getComponent<TimeComponent>()->built_up_speed = 0;
 	current_actor = time_keeper;
+
+	world->registerEntity(std::move(t_keeper));
 }
 
 void TimeSystem::update(const float dt)

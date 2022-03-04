@@ -13,12 +13,22 @@ void World::init()
 	}
 }
 
-Entity* World::addEntity(std::string name)
+Entity* World::registerEntity(std::unique_ptr<Entity> entity)
 {
-	auto ent = std::make_unique<Entity>(name);
-	ent->id = next_entity_id;
-	ent->world = this;
-	entities.insert({ next_entity_id, std::move(ent) });
+	entity->id = next_entity_id;
+	entity->world = this;
+	auto ent = entity.get();
+	entities.insert({ next_entity_id, std::move(entity) });
+
+	auto blank_mask = ComponentMask();
+
+	for (auto& system : systems)
+	{
+		if (ent->signature.isNewMatch(blank_mask, system->signature))
+		{
+			system->registerEntity(ent);
+		}
+	}
 
 	return entities.at(next_entity_id++).get();
 }

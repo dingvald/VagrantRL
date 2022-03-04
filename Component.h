@@ -29,7 +29,6 @@ public:
 protected:
 
 	Entity* owner;
-	unsigned int owner_id = { 0 };
 	EventBus* eventBus;
 };
 

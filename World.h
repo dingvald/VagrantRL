@@ -29,7 +29,7 @@ public:
 
 	// Dealing with entities
 
-	Entity* addEntity(std::string name);
+	Entity* registerEntity(std::unique_ptr<Entity> entity);
 
 	void removeEntity(Entity* entity);
 

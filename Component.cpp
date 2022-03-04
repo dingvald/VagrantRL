@@ -10,7 +10,6 @@
 void Component::setOwnerTo(Entity* entity)
 {
 	owner = entity;
-	owner_id = entity->id;
 	eventBus = &(owner->eventBus);
 }
 

@@ -2,7 +2,10 @@
 #include "Globals.h"
 #include "EventBus.h"
 #include "Component.h"
+#include "Entity.h"
 #include "SFMLSerialization.h"
+
+
 
 class TestComponent : public ComponentID<TestComponent>
 {
@@ -19,12 +22,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 };
 
@@ -41,12 +44,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id, speed, built_up_speed);
+		ar(owner->id, speed, built_up_speed);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id, speed, built_up_speed);
+		ar(owner->id, speed, built_up_speed);
 	}
 };
 
@@ -65,12 +68,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id, position, layer);
+		ar(owner->id, position, layer);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id, position, layer);
+		ar(owner->id, position, layer);
 	}
 
 	// Event Handlers
@@ -92,12 +95,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id, sprite_id, color);
+		ar(owner->id, sprite_id, color);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id, sprite_id, color);
+		ar(owner->id, sprite_id, color);
 	}
 };
 
@@ -114,12 +117,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id, health, max_health);
+		ar(owner->id, health, max_health);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id, health, max_health);
+		ar(owner->id, health, max_health);
 	}
 };
 
@@ -135,12 +138,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id, isBlocking);
+		ar(owner->id, isBlocking);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id, isBlocking);
+		ar(owner->id, isBlocking);
 	}
 };
 
@@ -152,12 +155,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 };
 
@@ -169,12 +172,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 };
 
@@ -186,12 +189,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 };
 
@@ -217,12 +220,12 @@ public:
 	void save(Archive& ar) const
 	{
 		int fac = (int)faction;
-		ar(owner_id, fac);
+		ar(owner->id, fac);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id, (int)faction);
+		ar(owner->id, (int)faction);
 	}
 };
 
@@ -234,12 +237,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 };
 
@@ -251,12 +254,12 @@ public:
 	template<class Archive>
 	void save(Archive& ar) const
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 	template<class Archive>
 	void load(Archive& ar)
 	{
-		ar(owner_id);
+		ar(owner->id);
 	}
 };
 
