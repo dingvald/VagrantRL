@@ -26,6 +26,8 @@
 #include <string>
 #include <typeinfo>
 #include <bitset>
+#include <thread>
+#include <mutex>
 
 // SFML
 #include <SFML/Audio.hpp>

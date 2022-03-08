@@ -9,6 +9,7 @@ void MapSystem::init()
 
 	world->map = map.get();
 
+	fill_buffer_thread = std::make_unique<std::thread>(MapSystem::fillChunkBuffer, this);
 	buildInitialMap(starting_position);
 }
 
@@ -26,6 +27,8 @@ void MapSystem::update(const float dt)
 void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 {
 	world->worldPosition = starting_pos;
+	world_position = starting_pos;
+	old_world_position = starting_pos;
 
 	//
 	std::cout << "Building initial map (Location [" << world->worldPosition.x << ", " << world->worldPosition.y << "])..." << "\n";
@@ -81,33 +84,26 @@ void MapSystem::updateLoadedChunks()
 	updateChunkStatus(old_world_position, center_pos);
 	printChunkStatus();
 
-	for (int x = center_pos.x - 1; x < center_pos.x - 1 + num_of_loaded_chunks.x; ++x)
-	{
-		for (int y = center_pos.y - 1; y < center_pos.y - 1 + num_of_loaded_chunks.y; ++y)
-		{
-			if (chunk_status.count({x,y}))
-			{
-				auto loaded_chunk = chunk_buffer.at({x,y});
-				world->map->addChunkToGrid(loaded_chunk.get(),{x - center_pos.x + 1, y - center_pos.y + 1});
-			}
-			else
-			{
-				std::shared_ptr<MapChunk> new_chunk(new MapChunk({ x,y }, gl::CHUNK_SIZE));
-				chunk_status.insert({ {x,y}, "Freshly Built" });
-				chunk_buffer.insert({ {x,y}, new_chunk });
-				world->map->addChunkToGrid(new_chunk.get(), {x - center_pos.x + 1, y - center_pos.y + 1});
-			}
-		}
-	}
+
+
+	
 }
 
-std::list<std::pair<int, int>> MapSystem::getCoordsAboutCenter(sf::Vector2i center_pos)
+std::list<std::pair<int, int>> MapSystem::getCoordsAboutCenter(sf::Vector2i center_pos, int width)
 {
 	std::list<std::pair<int, int>> coord_list;
 
-	for (int x = center_pos.x - 1; x < center_pos.x - 1 + num_of_loaded_chunks.x; ++x)
+	if (!(width % 2))
 	{
-		for (int y = center_pos.y - 1; y < center_pos.y - 1 + num_of_loaded_chunks.y; ++y)
+		std::cout << "ERROR (MapSystem.cpp): Choose an odd integer for the width...\n";
+		width -= 1;
+	}
+
+	int offset = (width - 1) / 2;
+
+	for (int x = center_pos.x - offset; x < center_pos.x - offset + width; ++x)
+	{
+		for (int y = center_pos.y - offset; y < center_pos.y - offset + width; ++y)
 		{
 			coord_list.push_back({ x,y });
 		}
@@ -118,10 +114,25 @@ std::list<std::pair<int, int>> MapSystem::getCoordsAboutCenter(sf::Vector2i cent
 
 void MapSystem::updateChunkStatus(sf::Vector2i old_center, sf::Vector2i new_center)
 {
-	auto current_coords = getCoordsAboutCenter(new_center);
-	auto old_coords = getCoordsAboutCenter(old_center);
+	auto active_coords = getCoordsAboutCenter(new_center, num_of_loaded_chunks.x);
+	auto old_coords = getCoordsAboutCenter(old_center, num_of_loaded_chunks.x);
+	auto fuzzy_load_coords = getCoordsAboutCenter(new_center, num_of_loaded_chunks.x + 2);
+
+	active_chunk_coords = active_coords;
 
 	// Mutex lock?
+
+	for (auto fuzzy : fuzzy_load_coords)
+	{
+		if (chunk_status.count(fuzzy))
+		{
+			chunk_status.at(fuzzy) = "Fuzzy";
+		}
+		else
+		{
+			chunk_status.insert({ fuzzy, "Fuzzy" });
+		}
+	}
 
 	for (auto old_coord : old_coords)
 	{
@@ -135,7 +146,7 @@ void MapSystem::updateChunkStatus(sf::Vector2i old_center, sf::Vector2i new_cent
 		}
 	}
 
-	for (auto coord : current_coords)
+	for (auto coord : active_coords)
 	{
 		if (chunk_status.count(coord))
 		{
@@ -159,6 +170,11 @@ void MapSystem::updateChunkStatus(sf::Vector2i old_center, sf::Vector2i new_cent
 	}
 
 	// Mutex unlock?
+}
+
+void MapSystem::fillChunkBuffer()
+{
+
 }
 
 void MapSystem::printChunkStatus()

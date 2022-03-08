@@ -17,18 +17,21 @@ private:
 	sf::Vector2i starting_position = { 1000,1000 };
 	std::map<std::pair<int, int>, std::string> chunk_status;
 	std::map<std::pair<int, int>, std::shared_ptr<MapChunk>> chunk_buffer;
-	std::list<std::pair<int, int>> loaded_chunk_coords;
+	std::list<std::pair<int, int>> active_chunk_coords;
 	sf::Vector2i world_position = { 0,0 };
 	sf::Vector2i old_world_position = { 0,0 };
+	std::unique_ptr<std::thread> fill_buffer_thread;
 	
 
 	void buildInitialMap(sf::Vector2i starting_pos); // 9 map chunks loaded at all times (except on edges)
 
 	void updateLoadedChunks();
 
-	std::list<std::pair<int, int>> getCoordsAboutCenter(sf::Vector2i center_pos);
+	std::list<std::pair<int, int>> getCoordsAboutCenter(sf::Vector2i center_pos, int width);
 
 	void updateChunkStatus(sf::Vector2i old_center, sf::Vector2i new_center);
+
+	void fillChunkBuffer();
 
 	void printChunkStatus();
 
