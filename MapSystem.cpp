@@ -9,7 +9,7 @@ void MapSystem::init()
 
 	world->map = map.get();
 
-	fill_buffer_thread = std::make_unique<std::thread>(MapSystem::fillChunkBuffer, this);
+	fill_buffer_thread = std::thread{ &MapSystem::fillChunkBuffer, this };
 	buildInitialMap(starting_position);
 }
 
@@ -20,7 +20,6 @@ void MapSystem::update(const float dt)
 		old_world_position = world_position;
 		world_position = world->worldPosition;
 		updateLoadedChunks();
-		
 	}
 }
 
@@ -33,9 +32,18 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	//
 	std::cout << "Building initial map (Location [" << world->worldPosition.x << ", " << world->worldPosition.y << "])..." << "\n";
 	//
+	std::cout << "Building chunks...\n";
+	auto starting_coords = getCoordsAboutCenter(starting_pos, num_of_loaded_chunks.x);
+	for (auto coord : starting_coords)
+	{
+		auto chunk = std::make_shared<MapChunk>(sf::Vector2i(coord.first, coord.second), gl::CHUNK_SIZE);
+		chunk_buffer.insert({ coord, chunk });
+		world->map->addChunkToGrid(chunk.get(), { coord.first - starting_pos.x + 1, coord.second - starting_pos.y + 1});
+	}
+	std::cout << "Chunks complete.\n";
 
 	updateLoadedChunks();
-	
+
 	std::cout << "Creating player...\n";
 
 	auto player = std::make_unique<Entity>("Player");
@@ -81,12 +89,7 @@ void MapSystem::updateLoadedChunks()
 	if (center_pos.x == 0) center_pos.x = 1;
 	if (center_pos.y == 0) center_pos.y = 1;
 
-	updateChunkStatus(old_world_position, center_pos);
-	printChunkStatus();
-
-
-
-	
+	updateChunkBuildQ(old_world_position, center_pos);
 }
 
 std::list<std::pair<int, int>> MapSystem::getCoordsAboutCenter(sf::Vector2i center_pos, int width)
@@ -112,80 +115,64 @@ std::list<std::pair<int, int>> MapSystem::getCoordsAboutCenter(sf::Vector2i cent
 	return coord_list;
 }
 
-void MapSystem::updateChunkStatus(sf::Vector2i old_center, sf::Vector2i new_center)
+void MapSystem::updateChunkBuildQ(sf::Vector2i old_center, sf::Vector2i new_center)
 {
 	auto active_coords = getCoordsAboutCenter(new_center, num_of_loaded_chunks.x);
-	auto old_coords = getCoordsAboutCenter(old_center, num_of_loaded_chunks.x);
 	auto fuzzy_load_coords = getCoordsAboutCenter(new_center, num_of_loaded_chunks.x + 2);
-
+	
 	active_chunk_coords = active_coords;
-
-	// Mutex lock?
 
 	for (auto fuzzy : fuzzy_load_coords)
 	{
-		if (chunk_status.count(fuzzy))
+		for (auto coord : active_coords)
 		{
-			chunk_status.at(fuzzy) = "Fuzzy";
-		}
-		else
-		{
-			chunk_status.insert({ fuzzy, "Fuzzy" });
+			chunk_buffer_lock.lock();
+			auto chunk = chunk_buffer.at(coord);
+			chunk_buffer_lock.unlock();
+			world->map->addChunkToGrid(chunk.get(), { coord.first - new_center.x + 1, coord.second - new_center.y + 1 });
+
+			if (fuzzy == coord) continue;
+
+			build_queue_lock.lock();
+			build_queue.push_back(fuzzy);
+			build_queue_lock.unlock();
 		}
 	}
-
-	for (auto old_coord : old_coords)
-	{
-		if (chunk_status.count(old_coord))
-		{
-			chunk_status.at(old_coord) = "Inactive";
-		}
-		else
-		{
-			std::cout << "ERROR: Somehow this old_coord is not in the status map...\n";
-		}
-	}
-
-	for (auto coord : active_coords)
-	{
-		if (chunk_status.count(coord))
-		{
-			if (chunk_status.at(coord) == "Inactive")
-			{
-				// Grab from buffer
-
-				// Set to "Active"
-				chunk_status.at(coord) = "Active";
-			}
-			else if (chunk_status.at(coord) == "Active")
-			{
-				// Do nothing.... I think...
-			}
-		}
-		else
-		{
-			std::cout << "ERROR: Trying to make un built chunk active... thread loading too slow!!!\n";
-			// Maybe insert an emergency Load/build in certain cases i.e teleportation?
-		}
-	}
-
-	// Mutex unlock?
 }
 
 void MapSystem::fillChunkBuffer()
 {
-
-}
-
-void MapSystem::printChunkStatus()
-{
-	std::cout << "Chunk Status:\n";
-
-	for (auto c : chunk_status)
+	while (1)
 	{
-		std::cout << c.first.first << ", " << c.first.second << ": " << c.second << "\n";
+		build_queue_lock.lock();
+		while (!build_queue.empty())
+		{
+			build_queue_buffer.push_back(build_queue.front());
+			build_queue.pop_front();
+		}
+		build_queue_lock.unlock();
+
+
+		for (auto coord : build_queue_buffer)
+		{
+			if (chunk_buffer.count(coord))
+			{
+				if (chunk_buffer.at(coord) != nullptr) continue;
+				auto chunk_ptr = std::make_shared<MapChunk>(sf::Vector2i(coord.first, coord.second), gl::CHUNK_SIZE);
+				chunk_buffer_lock.lock();
+				chunk_buffer.at(coord) = chunk_ptr;
+				chunk_buffer_lock.unlock();
+			}
+			else
+			{
+				auto chunk_ptr = std::make_shared<MapChunk>(sf::Vector2i(coord.first, coord.second), gl::CHUNK_SIZE);
+				chunk_buffer_lock.lock();
+				chunk_buffer.insert({ coord, chunk_ptr });
+				chunk_buffer_lock.unlock();
+			}
+			std::cout << "Built chunk (" << coord.first << ", " << coord.second << ")\n";
+		}
 	}
-	
 }
 
 void MapSystem::printLoadedChunkGrid()
