@@ -37,6 +37,7 @@ GameState::~GameState()
 
 void GameState::endState()
 {
+	world.cleanUp();
 	std::cout << "Ending Game State." << "\n";
 }
 

@@ -13,6 +13,12 @@ void MapSystem::init()
 	buildInitialMap(starting_position);
 }
 
+void MapSystem::cleanUp()
+{
+	close_buffer_thread = true;
+	fill_buffer_thread.join();
+}
+
 void MapSystem::update(const float dt)
 {
 	if (world_position != world->worldPosition)
@@ -22,6 +28,7 @@ void MapSystem::update(const float dt)
 		updateLoadedChunks();
 	}
 }
+
 
 void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 {
@@ -142,7 +149,7 @@ void MapSystem::updateChunkBuildQ(sf::Vector2i old_center, sf::Vector2i new_cent
 
 void MapSystem::fillChunkBuffer()
 {
-	while (1)
+	while (!close_buffer_thread)
 	{
 		build_queue_lock.lock();
 		while (!build_queue.empty())
@@ -151,7 +158,6 @@ void MapSystem::fillChunkBuffer()
 			build_queue.pop_front();
 		}
 		build_queue_lock.unlock();
-
 
 		for (auto coord : build_queue_buffer)
 		{

@@ -14,6 +14,7 @@ public:
 	ComponentMask signature;
 
 	virtual void init();
+	virtual void cleanUp();
 	virtual void update(const float dt);
 	virtual void render(sf::RenderTarget* target);
 	virtual void registerSystem(World* newWorld);

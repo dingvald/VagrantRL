@@ -9,17 +9,20 @@ class MapSystem : public System
 {
 public:
 	void init() override;
+	void cleanUp() override;
 	void update(const float dt) override;
 
 private:
 	std::unique_ptr<Map> map;
 	sf::Vector2i num_of_loaded_chunks = { 3,3 };
-	sf::Vector2i starting_position = { 1000,1000 };
+	sf::Vector2i starting_position = { 50,50 };
 	std::map<std::pair<int, int>, std::shared_ptr<MapChunk>> chunk_buffer;
 	std::list<std::pair<int, int>> active_chunk_coords;
 	sf::Vector2i world_position = { 0,0 };
 	sf::Vector2i old_world_position = { 0,0 };
+	bool close_buffer_thread = false;
 	std::thread fill_buffer_thread;
+	std::mutex thread_control_lock;
 	std::mutex chunk_buffer_lock;
 	std::mutex build_queue_lock;
 	std::deque<std::pair<int, int>> build_queue;

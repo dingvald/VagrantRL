@@ -13,6 +13,14 @@ void World::init()
 	}
 }
 
+void World::cleanUp()
+{
+	for (auto& system : systems)
+	{
+		system->cleanUp();
+	}
+}
+
 Entity* World::registerEntity(std::unique_ptr<Entity> entity)
 {
 	entity->id = next_entity_id;

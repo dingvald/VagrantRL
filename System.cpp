@@ -8,6 +8,10 @@ void System::init()
 {
 }
 
+void System::cleanUp()
+{
+}
+
 void System::update(const float dt)
 {
 }

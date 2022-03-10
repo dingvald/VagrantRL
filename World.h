@@ -26,6 +26,7 @@ public:
 	sf::Vector2f viewportOrigin;
 
 	void init();
+	void cleanUp();
 
 	// Dealing with entities
 
