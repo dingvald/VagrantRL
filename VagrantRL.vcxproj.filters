@@ -118,8 +118,11 @@
     <Filter Include="Helper Classes">
       <UniqueIdentifier>{8c7eef8e-57f9-473d-a476-a8ac4ae8abca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ECS\System\Mapping System">
+    <Filter Include="ECS\System\Map System">
       <UniqueIdentifier>{6d2eb08d-c8ee-4eca-bd16-c51e3c7c7979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Map System\MapBuilder">
+      <UniqueIdentifier>{005dc391-4de5-4c68-bcef-7ec1a7390765}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +193,7 @@
       <Filter>ECS\System\Collision System</Filter>
     </ClCompile>
     <ClCompile Include="MapSystem.cpp">
-      <Filter>ECS\System\Mapping System</Filter>
+      <Filter>ECS\System\Map System</Filter>
     </ClCompile>
     <ClCompile Include="ViewportSystem.cpp">
       <Filter>ECS\System\Viewport System</Filter>
@@ -203,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="MapChunk.cpp">
       <Filter>ECS\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBuilder.cpp">
+      <Filter>ECS\System\Map System\MapBuilder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -282,7 +288,7 @@
       <Filter>ECS\System\Collision System</Filter>
     </ClInclude>
     <ClInclude Include="MapSystem.h">
-      <Filter>ECS\System\Mapping System</Filter>
+      <Filter>ECS\System\Map System</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Render Helpers\Tile</Filter>
@@ -301,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="MapChunk.h">
       <Filter>ECS\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBuilder.h">
+      <Filter>ECS\System\Map System\MapBuilder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

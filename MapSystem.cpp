@@ -9,12 +9,13 @@ void MapSystem::init()
 
 	world->map = map.get();
 
-	fill_buffer_thread = std::thread{ &MapSystem::fillChunkBuffer, this };
 	buildInitialMap(starting_position);
+	fill_buffer_thread = std::thread{ &MapSystem::fillChunkBuffer, this };
 }
 
 void MapSystem::cleanUp()
 {
+	// Wait for thread to close
 	close_buffer_thread = true;
 	fill_buffer_thread.join();
 }
@@ -29,7 +30,6 @@ void MapSystem::update(const float dt)
 	}
 }
 
-
 void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 {
 	world->worldPosition = starting_pos;
@@ -43,9 +43,9 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	auto starting_coords = getCoordsAboutCenter(starting_pos, num_of_loaded_chunks.x);
 	for (auto coord : starting_coords)
 	{
-		auto chunk = std::make_shared<MapChunk>(sf::Vector2i(coord.first, coord.second), gl::CHUNK_SIZE);
+		auto chunk = mapBuilder.build({ coord.first, coord.second });
 		chunk_buffer.insert({ coord, chunk });
-		world->map->addChunkToGrid(chunk.get(), { coord.first - starting_pos.x + 1, coord.second - starting_pos.y + 1});
+		map->addChunkToGrid(chunk.get(), { coord.first - starting_pos.x + 1, coord.second - starting_pos.y + 1});
 	}
 	std::cout << "Chunks complete.\n";
 
@@ -72,10 +72,12 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 		sf::Color(17, 69, 38)
 	};
 
+	std::cout << "Populating starting map...\n";
+
 	for (int i = 0; i < 10000; ++i)
 	{
-		int x_rand = (rand() % world->map->getWidth()) - gl::CHUNK_SIZE;
-		int y_rand = (rand() % world->map->getHeight()) - gl::CHUNK_SIZE;
+		int x_rand = (rand() % map->getWidth()) - gl::CHUNK_SIZE;
+		int y_rand = (rand() % map->getHeight()) - gl::CHUNK_SIZE;
 		int col_rand = rand() % 3;
 
 		auto tree = std::make_unique<Entity>("Tree");
@@ -126,8 +128,6 @@ void MapSystem::updateChunkBuildQ(sf::Vector2i old_center, sf::Vector2i new_cent
 {
 	auto active_coords = getCoordsAboutCenter(new_center, num_of_loaded_chunks.x);
 	auto fuzzy_load_coords = getCoordsAboutCenter(new_center, num_of_loaded_chunks.x + 2);
-	
-	active_chunk_coords = active_coords;
 
 	for (auto fuzzy : fuzzy_load_coords)
 	{
@@ -136,7 +136,7 @@ void MapSystem::updateChunkBuildQ(sf::Vector2i old_center, sf::Vector2i new_cent
 			chunk_buffer_lock.lock();
 			auto chunk = chunk_buffer.at(coord);
 			chunk_buffer_lock.unlock();
-			world->map->addChunkToGrid(chunk.get(), { coord.first - new_center.x + 1, coord.second - new_center.y + 1 });
+			map->addChunkToGrid(chunk.get(), { coord.first - new_center.x + 1, coord.second - new_center.y + 1 });
 
 			if (fuzzy == coord) continue;
 
@@ -164,14 +164,14 @@ void MapSystem::fillChunkBuffer()
 			if (chunk_buffer.count(coord))
 			{
 				if (chunk_buffer.at(coord) != nullptr) continue;
-				auto chunk_ptr = std::make_shared<MapChunk>(sf::Vector2i(coord.first, coord.second), gl::CHUNK_SIZE);
+				auto chunk_ptr = mapBuilder.build({ coord.first, coord.second });
 				chunk_buffer_lock.lock();
 				chunk_buffer.at(coord) = chunk_ptr;
 				chunk_buffer_lock.unlock();
 			}
 			else
 			{
-				auto chunk_ptr = std::make_shared<MapChunk>(sf::Vector2i(coord.first, coord.second), gl::CHUNK_SIZE);
+				auto chunk_ptr = mapBuilder.build({ coord.first, coord.second });
 				chunk_buffer_lock.lock();
 				chunk_buffer.insert({ coord, chunk_ptr });
 				chunk_buffer_lock.unlock();
@@ -184,8 +184,6 @@ void MapSystem::fillChunkBuffer()
 void MapSystem::printLoadedChunkGrid()
 {
 	std::cout << "Loaded chunk layout:\n\n";
-
-	auto map = world->map;
 
 	for (int y = 0; y < num_of_loaded_chunks.y; ++y)
 	{
