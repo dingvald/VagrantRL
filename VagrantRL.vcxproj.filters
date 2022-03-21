@@ -124,6 +124,9 @@
     <Filter Include="ECS\System\Map System\MapBuilder">
       <UniqueIdentifier>{005dc391-4de5-4c68-bcef-7ec1a7390765}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OverWorldMap">
+      <UniqueIdentifier>{c1c11df6-2e5f-4766-ac85-582ede160fb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -209,6 +212,12 @@
     </ClCompile>
     <ClCompile Include="MapBuilder.cpp">
       <Filter>ECS\System\Map System\MapBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="OverWorldMap.cpp">
+      <Filter>OverWorldMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Zone.cpp">
+      <Filter>OverWorldMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -310,6 +319,12 @@
     </ClInclude>
     <ClInclude Include="MapBuilder.h">
       <Filter>ECS\System\Map System\MapBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="OverWorldMap.h">
+      <Filter>OverWorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Zone.h">
+      <Filter>OverWorldMap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
