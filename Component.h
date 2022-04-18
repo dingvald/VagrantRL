@@ -4,7 +4,6 @@
 
 // Forward declarations
 class Entity;
-class EventBus;
 
 //
 
@@ -22,26 +21,24 @@ public:
 	friend class cereal::access;
 
 	virtual ~Component() {};
-	virtual void init() = 0;
 	virtual unsigned int getID() = 0;
+	virtual Component* clone() = 0;
 	void setOwnerTo(Entity* entity);
 
 protected:
 
 	Entity* owner;
-	EventBus* eventBus;
 };
 
 template<class C>
 struct ComponentID : public Component
 {
-	virtual void init() {};
-
 	virtual unsigned int getID()
 	{
 		static unsigned int thisid = counter();
 		return thisid;
 	}
+	Component* clone() override;
 };
 
 template <class C>
@@ -49,4 +46,10 @@ static unsigned int getComponentID()
 {
 	ComponentID<C> temp;
 	return temp.getID();
+}
+
+template<class C>
+inline Component* ComponentID<C>::clone()
+{
+	return nullptr;
 }

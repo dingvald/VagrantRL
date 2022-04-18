@@ -1,0 +1,73 @@
+{
+	"Entities": 
+	[
+		{
+			"Name": "PhysicalObject",
+			"Components": [
+				{
+					"Name": "Position",
+					"Data": {
+						"x": 0,
+						"y": 0,
+						"Layer": 2
+					}
+				},
+
+				{
+					"Name": "Render",
+					"Data": {
+						"Sprite": 0,
+						"Color": "FFFFFFFF"
+					}
+				},
+
+				{
+					"Name": "Physics",
+					"Data": {
+						"Weight": 10,
+						"Blocks": true
+					}
+				},
+
+				{
+					"Name": "Health",
+					"Data": {
+						"HP": 10
+					}
+				}
+			]
+		},
+
+		{
+			"Name": "Tree",
+			"Inherits": [
+				"PhysicalObject"
+			],
+			"Components": [
+				{
+					"Name": "Render",
+					"Data": {
+						"Sprite": 5,
+						"Color": "1B491BFF"
+					}
+				}
+			]
+		},
+
+		{
+			"Name": "Cedar",
+			"Inherits": [
+				"Tree"
+			],
+			"Components": [
+				{
+					"Name": "Render",
+					"Data": {
+						"Sprite": 5,
+						"Color": "07703BFF"
+					}
+				}
+			]
+		}
+	]
+}

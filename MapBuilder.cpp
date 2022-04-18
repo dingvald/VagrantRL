@@ -10,9 +10,21 @@ std::shared_ptr<MapChunk> MapBuilder::build(sf::Vector2i coordinate)
     // Chunk is built and populated based off the zone's properties
 
     // get Zone properties
-
+    
 
 
 
     return chunk_ptr;
+}
+
+void MapBuilder::init()
+{
+    // add all build policies
+}
+
+void MapBuilder::addBuildPolicy(std::string zone_type, BuildPolicy& policy)
+{
+    if (build_policies_.count(zone_type)) return;
+
+    build_policies_.insert({ zone_type, policy });
 }

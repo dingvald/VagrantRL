@@ -1,149 +1,105 @@
 #pragma once
 #include "Globals.h"
-#include "EventBus.h"
 #include "Component.h"
-#include "Entity.h"
-#include "SFMLSerialization.h"
+#include "Parameters.h"
 
-
-
-class TestComponent : public ComponentID<TestComponent>
-{
-private:
-	void init() override;
-
-public:
-
-	TestComponent() {}
-
-	// Event handlers
-	void onTestEvent(TestEvent* ev);
-
-	template<class Archive>
-	void save(Archive& ar) const
-	{
-		ar(owner->id);
-	}
-	template<class Archive>
-	void load(Archive& ar)
-	{
-		ar(owner->id);
-	}
-};
 
 class TimeComponent : public ComponentID<TimeComponent>
 {
-private:
-	void init() override;
-
 public:
 	int speed;
 	int built_up_speed;
-	TimeComponent(int speed = 100);
-
-	template<class Archive>
-	void save(Archive& ar) const
+	TimeComponent(int speed) : speed(speed), built_up_speed(0) {}
+	TimeComponent(Parameters& params)
 	{
-		ar(owner->id, speed, built_up_speed);
+		speed = params.get<int>();
+		built_up_speed = 0;
 	}
-	template<class Archive>
-	void load(Archive& ar)
+	Component* clone() override
 	{
-		ar(owner->id, speed, built_up_speed);
+		return new TimeComponent(speed);
 	}
 };
 
 class PositionComponent : public ComponentID<PositionComponent>
 {
-private:
-	void init() override;
-
 public:
-	// Data
 	sf::Vector2i position;
 	gl::Layer layer;
-	//
-	PositionComponent(sf::Vector2i position = {0,0}, gl::Layer layer = gl::Layer::Tile);
-
-	template<class Archive>
-	void save(Archive& ar) const
+	
+	PositionComponent(sf::Vector2i pos, gl::Layer layer) : position(pos), layer(layer) 
 	{
-		ar(owner->id, position, layer);
+		position.x *= gl::TILE_SIZE;
+		position.y *= gl::TILE_SIZE;
 	}
-	template<class Archive>
-	void load(Archive& ar)
+	PositionComponent(Parameters& params)
 	{
-		ar(owner->id, position, layer);
+		position.x = params.get<int>() * gl::TILE_SIZE;
+		position.y = params.get<int>() * gl::TILE_SIZE;
+		layer = static_cast<gl::Layer>(params.get<int>());
 	}
-
-	// Event Handlers
-
-	void onTestEvent(TestEvent* ev);
+	Component* clone() override
+	{
+		return new PositionComponent(position, layer);
+	}
 };
 
 class RenderComponent : public ComponentID<RenderComponent>
 {
-private:
-	void init() override;
-
 public:
 	unsigned int sprite_id;
 	sf::Color color;
 
-	RenderComponent(unsigned int sprite_id = 0, sf::Color color = sf::Color::White);
+	RenderComponent(unsigned int sprite_id, sf::Color color) : sprite_id(sprite_id), color(color) {}
+	RenderComponent(Parameters& params)
+	{
+		sprite_id = params.get<int>();
+		auto s = params.get<std::string>();
+		std::stringstream ss;
+		unsigned int col;
+		ss << std::hex << s;
+		ss >> col;
 
-	template<class Archive>
-	void save(Archive& ar) const
-	{
-		ar(owner->id, sprite_id, color);
+		color = sf::Color(col);
 	}
-	template<class Archive>
-	void load(Archive& ar)
+	Component* clone() override
 	{
-		ar(owner->id, sprite_id, color);
+		return new RenderComponent(sprite_id, color);
 	}
 };
 
 class HealthComponent : public ComponentID<HealthComponent>
 {
-private:
-	void init() override;
-
 public:
-	HealthComponent(int health = 5);
 	int health;
 	int max_health;
 
-	template<class Archive>
-	void save(Archive& ar) const
+	HealthComponent(int health) : health(health), max_health(health) {}
+	HealthComponent(Parameters& params)
 	{
-		ar(owner->id, health, max_health);
+		health = params.get<int>();
+		max_health = health;
 	}
-	template<class Archive>
-	void load(Archive& ar)
+	Component* clone() override
 	{
-		ar(owner->id, health, max_health);
+		return new HealthComponent(health);
 	}
 };
 
 class PhysicsComponent : public ComponentID<PhysicsComponent>
 {
-private:
-	void init() override;
-
 public:
+	int weight;
 	bool isBlocking;
-	PhysicsComponent(bool isBlocking = false);
-
-	template<class Archive>
-	void save(Archive& ar) const
+	PhysicsComponent(int weight, bool isBlocking) : weight(weight), isBlocking(isBlocking) {}
+	PhysicsComponent(Parameters& params)
 	{
-		ar(owner->id, isBlocking);
+		weight = params.get<int>();
+		isBlocking = params.get<bool>();
 	}
-	template<class Archive>
-	void load(Archive& ar)
+	Component* clone() override
 	{
-		ar(owner->id, isBlocking);
+		return new PhysicsComponent(weight, isBlocking);
 	}
 };
 
@@ -151,16 +107,9 @@ class MyTurnComponent : public ComponentID<MyTurnComponent>
 {
 public:
 	MyTurnComponent() {}
-
-	template<class Archive>
-	void save(Archive& ar) const
+	Component* clone() override
 	{
-		ar(owner->id);
-	}
-	template<class Archive>
-	void load(Archive& ar)
-	{
-		ar(owner->id);
+		return new MyTurnComponent();
 	}
 };
 
@@ -168,16 +117,10 @@ class PlayerAIComponent : public ComponentID<PlayerAIComponent>
 {
 public:
 	PlayerAIComponent() {}
-
-	template<class Archive>
-	void save(Archive& ar) const
+	PlayerAIComponent(Parameters& params) {}
+	Component* clone() override
 	{
-		ar(owner->id);
-	}
-	template<class Archive>
-	void load(Archive& ar)
-	{
-		ar(owner->id);
+		return new PlayerAIComponent();
 	}
 };
 
@@ -185,16 +128,10 @@ class AIComponent : public ComponentID<AIComponent>
 {
 public:
 	AIComponent() {}
-
-	template<class Archive>
-	void save(Archive& ar) const
+	AIComponent(Parameters& params) {}
+	Component* clone() override
 	{
-		ar(owner->id);
-	}
-	template<class Archive>
-	void load(Archive& ar)
-	{
-		ar(owner->id);
+		return new AIComponent();
 	}
 };
 
@@ -208,41 +145,24 @@ enum class Faction
 
 class FactionComponent : public ComponentID<FactionComponent>
 {
-private:
-	void init() override;
-
 public:
-	FactionComponent(Faction faction = Faction::neutral);
+	FactionComponent(Faction faction) : faction(faction) {}
+	FactionComponent(Parameters& params) {}
+	Component* clone() override
+	{
+		return new FactionComponent(faction);
+	}
 
 	Faction faction;
-
-	template<class Archive>
-	void save(Archive& ar) const
-	{
-		int fac = (int)faction;
-		ar(owner->id, fac);
-	}
-	template<class Archive>
-	void load(Archive& ar)
-	{
-		ar(owner->id, (int)faction);
-	}
 };
 
 class ViewportFocusComponent : public ComponentID<ViewportFocusComponent>
 {
 public:
 	ViewportFocusComponent() {}
-
-	template<class Archive>
-	void save(Archive& ar) const
+	Component* clone() override
 	{
-		ar(owner->id);
-	}
-	template<class Archive>
-	void load(Archive& ar)
-	{
-		ar(owner->id);
+		return new ViewportFocusComponent();
 	}
 };
 
@@ -250,20 +170,13 @@ class OnScreenComponent : public ComponentID<OnScreenComponent>
 {
 public:
 	OnScreenComponent() {}
-
-	template<class Archive>
-	void save(Archive& ar) const
+	Component* clone() override
 	{
-		ar(owner->id);
-	}
-	template<class Archive>
-	void load(Archive& ar)
-	{
-		ar(owner->id);
+		return new OnScreenComponent();
 	}
 };
 
-
+/*
 CEREAL_REGISTER_TYPE(TestComponent)
 CEREAL_REGISTER_TYPE(TimeComponent)
 CEREAL_REGISTER_TYPE(PositionComponent)
@@ -289,3 +202,4 @@ CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, AIComponent)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, FactionComponent)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, ViewportFocusComponent)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, OnScreenComponent)
+*/

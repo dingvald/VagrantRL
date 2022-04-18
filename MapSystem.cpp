@@ -62,29 +62,20 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	
 	world->setAsPlayer(player.get());
 	world->registerEntity(std::move(player));
-	
 
 	std::cout << "Player complete.\n";
 
-	sf::Color col_array[3] = {
-		sf::Color(8, 84, 34),
-		sf::Color(20, 105, 21),
-		sf::Color(17, 69, 38)
-	};
-
 	std::cout << "Populating starting map...\n";
+
+	int rand_x, rand_y;
 
 	for (int i = 0; i < 10000; ++i)
 	{
-		int x_rand = (rand() % map->getWidth()) - gl::CHUNK_SIZE;
-		int y_rand = (rand() % map->getHeight()) - gl::CHUNK_SIZE;
-		int col_rand = rand() % 3;
+		rand_x = rand() % (gl::CHUNK_SIZE*gl::ZONE_SIZE);
+		rand_y = rand() % (gl::CHUNK_SIZE*gl::ZONE_SIZE);
 
-		auto tree = std::make_unique<Entity>("Tree");
-		tree->addComponent(new PositionComponent({ starting_pos.x * gl::CHUNK_SIZE + x_rand, starting_pos.y * gl::CHUNK_SIZE + y_rand }, gl::Layer::Actor));
-		tree->addComponent(new RenderComponent(5, col_array[col_rand]));
-
-		world->registerEntity(std::move(tree));
+		auto t = world->entityFactory.build("Tree", {(starting_pos.x-1)*gl::CHUNK_SIZE + rand_x, (starting_pos.y-1)*gl::CHUNK_SIZE + rand_y});
+		world->registerEntity(std::move(t));
 	}
 	//
 	std::cout << "Map complete." << "\n";

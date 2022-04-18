@@ -127,6 +127,15 @@
     <Filter Include="OverWorldMap">
       <UniqueIdentifier>{c1c11df6-2e5f-4766-ac85-582ede160fb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ECS\System\Map System\Build Policy">
+      <UniqueIdentifier>{b82a4b3f-2b2d-4b22-ba18-e50652631db0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Entity\Entity Factory">
+      <UniqueIdentifier>{b967b9ee-7ef9-42f7-b3ae-90cfcb8d6fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\Component\Component Factory">
+      <UniqueIdentifier>{1bda40bd-e8ac-4b49-a20a-47bcdc1a32d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -204,9 +213,6 @@
     <ClCompile Include="GUISystem.cpp">
       <Filter>ECS\System\GUI System</Filter>
     </ClCompile>
-    <ClCompile Include="Grid.cpp">
-      <Filter>Helper Classes</Filter>
-    </ClCompile>
     <ClCompile Include="MapChunk.cpp">
       <Filter>ECS\Map</Filter>
     </ClCompile>
@@ -218,6 +224,18 @@
     </ClCompile>
     <ClCompile Include="Zone.cpp">
       <Filter>OverWorldMap</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityFactory.cpp">
+      <Filter>ECS\Entity\Entity Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildPolicy.cpp">
+      <Filter>ECS\System\Map System\Build Policy</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentFactory.cpp">
+      <Filter>ECS\Component\Component Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Parameters.cpp">
+      <Filter>Helper Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,9 +329,6 @@
     <ClInclude Include="GUISystem.h">
       <Filter>ECS\System\GUI System</Filter>
     </ClInclude>
-    <ClInclude Include="Grid.h">
-      <Filter>Helper Classes</Filter>
-    </ClInclude>
     <ClInclude Include="MapChunk.h">
       <Filter>ECS\Map</Filter>
     </ClInclude>
@@ -325,6 +340,18 @@
     </ClInclude>
     <ClInclude Include="Zone.h">
       <Filter>OverWorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityFactory.h">
+      <Filter>ECS\Entity\Entity Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildPolicy.h">
+      <Filter>ECS\System\Map System\Build Policy</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentFactory.h">
+      <Filter>ECS\Component\Component Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Parameters.h">
+      <Filter>Helper Classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

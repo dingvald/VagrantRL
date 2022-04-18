@@ -22,11 +22,11 @@ void RenderSystem::update(const float dt)
 {
 	viewport_origin = world->viewportOrigin;
 	dt_count += dt;
-	if (dt_count >= 1.000f / updaterate)
+	if (dt_count >= 1.000 / updaterate)
 	{
 		updateTilemap();
 		updateEntities();
-		dt_count = 0;
+		dt_count = 0.0000;
 	}
 }
 

@@ -20,8 +20,8 @@ private:
 	std::vector< std::unique_ptr<GlyphLayer> > glyphLayers;
 	TileMap tilemap;
 	sf::Vector2f viewport_origin;
-	float updaterate = 30.0;
-	float dt_count = 0.0;
+	double updaterate = 30.0;
+	double dt_count = 0.0;
 	
 
 	void createGlyph(Entity* entity);

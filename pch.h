@@ -37,10 +37,11 @@
 #include <SFML/Window.hpp>
 
 // Cereal
+/*
 #include "cereal/types/map.hpp"
 #include "cereal/types/memory.hpp"
 #include "cereal/types/common.hpp"
 #include "cereal/types/polymorphic.hpp"
 #include "cereal/archives/json.hpp"
-
+*/
 

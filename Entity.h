@@ -1,32 +1,32 @@
 #pragma once
-#include "World.h"
 #include "EventBus.h"
+#include "World.h"
 #include "ComponentMask.h"
-#include "cereal/access.hpp"
 
 class Entity
 {
-public:
-	unsigned int id;
-
 private:
 	friend World;
 	friend Component;
-	friend class cereal::access;
 
-	// Data
+	unsigned int id;
 	std::string name;
-	std::map<unsigned int, std::unique_ptr<Component> > components;
-	EventBus eventBus;
-	World* world;
+	World* world = nullptr;
 	ComponentMask signature;
+	std::map<unsigned int, std::unique_ptr<Component> > components;
+	
 	
 public:
 	Entity(std::string name);
+	Entity(const Entity& e);
+
+	void operator = (const Entity& e);
+
+	unsigned int getID() const;
 	
 	std::string getName();
 	
-	void addComponent(Component * component);
+	void addComponent(Component* component);
 
 	template <class C>
 	void removeComponent()
@@ -35,7 +35,6 @@ public:
 		if (components.count(_id))
 		{
 			world->removeComponent(this, _id);
-			eventBus.unsubscribe(components.at(_id).get());
 			components.erase(_id);
 		}
 	}
@@ -52,23 +51,5 @@ public:
 		}
 
 		return nullptr;
-	}
-
-	template<typename EventType>
-	void fireEvent(std::shared_ptr<EventType> ev)
-	{
-		eventBus.publish(ev.get());
-	}
-
-	template<class Archive>
-	void save(Archive& ar) const
-	{
-		ar(name, id, components);
-	}
-
-	template<class Archive>
-	void load(Archive& ar)
-	{
-		ar(name, id, components);
 	}
 };

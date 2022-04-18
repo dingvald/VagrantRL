@@ -29,8 +29,6 @@ private:
 	unsigned int height; // in tiles
 	int chunk_size;
 	int chunk_load_width;
-	int column_index = 0;
-	int row_index = 0;
 
 	std::vector< std::vector< MapChunk* > > map_chunk; // [world_position.x][world_position.y]->at(layer,x,y)
 };

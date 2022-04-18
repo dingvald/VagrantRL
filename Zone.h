@@ -3,6 +3,6 @@ class Zone
 {
 public:
 	std::string name;
-	std::string biome;
+	std::string type;
 };
 

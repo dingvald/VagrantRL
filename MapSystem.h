@@ -2,6 +2,7 @@
 #include "System.h"
 #include "Map.h"
 #include "MapBuilder.h"
+#include "OverWorldMap.h"
 
 class MapChunk;
 
@@ -15,6 +16,7 @@ public:
 
 private:
 	std::unique_ptr<Map> map;
+	OverWorldMap overworldMap;
 	MapBuilder mapBuilder;
 	sf::Vector2i num_of_loaded_chunks = { 3,3 };
 	sf::Vector2i starting_position = { 50,50 };

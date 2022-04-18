@@ -1,7 +1,6 @@
 #include "pch.h"
-#include "Entity.h"
 #include "Map.h"
-
+#include "Entity.h"
 
 
 Map::Map(unsigned int num_of_layers, int chunk_size, int chunk_load_width, World* world) 
@@ -152,7 +151,7 @@ unsigned int Map::getHeight()
 
 sf::Rect<int> Map::boundary()
 {
-	int xL, xR, yT, yB;
+	int xL, yT;
 
 	auto top_left_chunk = getChunk({ 0,0 });
 

@@ -12,9 +12,9 @@ public:
 private:
 
 	std::deque<Entity*> turn_queue;
-	Entity* current_actor;
+	Entity* current_actor = nullptr;
 	Entity* last_actor = nullptr;
-	Entity* time_keeper;
+	Entity* time_keeper = nullptr;
 
 	void clearTurnQueue(std::deque<Entity*>& q);
 	void refreshTurnQueue();

@@ -1,8 +1,9 @@
 #include "pch.h"
+#include "TimeSystem.h"
 #include "Event.h"
 #include "Entity.h"
 #include "Components.h"
-#include "TimeSystem.h"
+
 
 void TimeSystem::init()
 {
@@ -44,8 +45,6 @@ void TimeSystem::update(const float dt)
 	if (current_actor != last_actor)
 	{
 		last_actor = current_actor;
-		current_actor->fireEvent(std::make_shared<StartTurnEvent>());
-		
 	}
 
 	if (time_comp->built_up_speed <= 0)

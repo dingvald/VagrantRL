@@ -32,6 +32,9 @@ public:
 		m_vertices.setPrimitiveType(sf::Quads);
 		m_vertices.resize(width * height * 4);
 
+		auto tile_size_x = static_cast<float>(tileSize.x);
+		auto tile_size_y = static_cast<float>(tileSize.y);
+
 		// Populate the vertex array
 
 		for (unsigned int i = 0; i < width; ++i)
@@ -46,15 +49,15 @@ public:
 
 				sf::Vertex* quad = &m_vertices[(i + j * width) * 4];
 
-				quad[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
-				quad[1].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y);
-				quad[2].position = sf::Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y);
-				quad[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
+				quad[0].position = sf::Vector2f(i * tile_size_x, j * tile_size_y);
+				quad[1].position = sf::Vector2f((i + 1) * tile_size_x, j * tile_size_y);
+				quad[2].position = sf::Vector2f((i + 1) * tile_size_x, (j + 1) * tile_size_y);
+				quad[3].position = sf::Vector2f(i * tile_size_x, (j + 1) * tile_size_y);
 
-				quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
-				quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
-				quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
-				quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
+				quad[0].texCoords = sf::Vector2f(tu * tile_size_x, tv * tile_size_y);
+				quad[1].texCoords = sf::Vector2f((tu + 1) * tile_size_x, tv * tile_size_y);
+				quad[2].texCoords = sf::Vector2f((tu + 1) * tile_size_x, (tv + 1) * tile_size_y);
+				quad[3].texCoords = sf::Vector2f(tu * tile_size_x, (tv + 1) * tile_size_y);
 
 				quad[0].color = col;
 				quad[1].color = col;
