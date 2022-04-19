@@ -25,7 +25,7 @@ public:
 	EntityFactory entityFactory;
 	Player player{ 0,nullptr };
 	sf::Vector2i worldPosition;
-	sf::Vector2f viewportOrigin;
+	sf::Vector2f cameraOrigin;
 
 	void init();
 	void cleanUp();

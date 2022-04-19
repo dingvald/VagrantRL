@@ -54,7 +54,7 @@ void GUISystem::setDebugInfo()
 	ss.str(""); // clear string stream
 
 	// player position on active map
-	auto pos = world->player.ptr->getComponent<PositionComponent>()->position;
+	auto pos = world->player.ptr->getComponent<PositionComponent>()->position / gl::TILE_SIZE;
 
 	ss << "Player position: [" << pos.x << ", " << pos.y << "]";
 	debug_info.push_back(ss.str());

@@ -44,6 +44,18 @@ public:
 	}
 };
 
+class MotionComponent : public ComponentID<MotionComponent>
+{
+public:
+	sf::Vector2i direction;
+
+	MotionComponent(sf::Vector2i dir) : direction(dir) {}
+	Component* clone() override
+	{
+		return new MotionComponent(direction);
+	}
+};
+
 class RenderComponent : public ComponentID<RenderComponent>
 {
 public:
@@ -156,13 +168,13 @@ public:
 	Faction faction;
 };
 
-class ViewportFocusComponent : public ComponentID<ViewportFocusComponent>
+class CameraFocusComponent : public ComponentID<CameraFocusComponent>
 {
 public:
-	ViewportFocusComponent() {}
+	CameraFocusComponent() {}
 	Component* clone() override
 	{
-		return new ViewportFocusComponent();
+		return new CameraFocusComponent();
 	}
 };
 

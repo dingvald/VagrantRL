@@ -15,12 +15,13 @@ void RenderSystem::init()
 	
 
 	signature.addComponentByType<RenderComponent>();
+	signature.addComponentByType<OnScreenComponent>();
 	signature.addComponentByType<PositionComponent>();
 }
 
 void RenderSystem::update(const float dt)
 {
-	viewport_origin = world->viewportOrigin;
+	viewport_origin = world->cameraOrigin;
 	dt_count += dt;
 	if (dt_count >= 1.000 / updaterate)
 	{
@@ -73,12 +74,10 @@ void RenderSystem::updateEntities()
 		glyphs[i].clear();
 	}
 
-	org.x = static_cast<int>(std::floorf(viewport_origin.x));
-	org.y = static_cast<int>(std::floorf(viewport_origin.y));
-
-	auto fun = std::bind(&RenderSystem::changeGlyph, this, std::placeholders::_1);
-
-	world->map->applyFuncToEntitiesInRect(org.x, org.y, gl::VIEWPORT_WIDTH + 1, gl::VIEWPORT_HEIGHT + 1, fun);
+	for (auto& entity : registeredEntities)
+	{
+		changeGlyph(entity);
+	}
 }
 
 void RenderSystem::updateTilemap()

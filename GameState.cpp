@@ -7,12 +7,13 @@ void GameState::init()
 	// add all systems before world init()
 
 	world.addSystem(new TimeSystem);
-	world.addSystem(new CoordinateSystem);
-	world.addSystem(new MovementSystem);
-	world.addSystem(new ViewportSystem);
-	world.addSystem(new RenderSystem);
 	world.addSystem(new PlayerInputSystem);
 	world.addSystem(new NPCInputSystem);
+	world.addSystem(new CoordinateSystem);
+	world.addSystem(new MovementSystem);
+	world.addSystem(new CameraSystem);
+	world.addSystem(new ViewportSystem);
+	world.addSystem(new RenderSystem);
 	world.addSystem(new CollisionSystem);
 	world.addSystem(new GUISystem);
 	// Add map system last

@@ -4,9 +4,29 @@
 void MovementSystem::init()
 {
 	signature.addComponentByType<PositionComponent>();
+	signature.addComponentByType<MotionComponent>();
 
-	eventBus->subscribe(this, &MovementSystem::onMoveEvent);
 	eventBus->subscribe(this, &MovementSystem::onSwapPlacesEvent);
+}
+
+void MovementSystem::update(const float dt)
+{
+	std::vector<Entity*> finished_entities;
+
+	for (auto entity : registeredEntities)
+	{
+		if (entity)
+		{
+			auto dir = entity->getComponent<MotionComponent>()->direction;
+			move(entity, dir);
+			finished_entities.push_back(entity);
+		}
+	}
+
+	for (auto f_e : finished_entities)
+	{
+		f_e->removeComponent<MotionComponent>();
+	}
 }
 
 void MovementSystem::move(Entity* entity, sf::Vector2i dir)
@@ -58,11 +78,6 @@ Entity* MovementSystem::checkForCollisionAt(sf::Vector2i coordinate)
 	{
 		return nullptr;
 	}
-}
-
-void MovementSystem::onMoveEvent(MoveEvent* ev)
-{
-	move(ev->entity, ev->dir);
 }
 
 void MovementSystem::onSwapPlacesEvent(SwapPlacesEvent* ev)

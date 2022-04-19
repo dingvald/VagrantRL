@@ -103,9 +103,6 @@
     <Filter Include="ECS\System\Collision System">
       <UniqueIdentifier>{4d565cc9-c0b9-42ba-919f-dcd9dcfb9058}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ECS\System\Viewport System">
-      <UniqueIdentifier>{2fc70299-e086-4d61-9b33-f4da11473fdd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Render Helpers\Tile">
       <UniqueIdentifier>{88479350-971f-498e-be4b-be7231a79bb5}</UniqueIdentifier>
     </Filter>
@@ -135,6 +132,15 @@
     </Filter>
     <Filter Include="ECS\Component\Component Factory">
       <UniqueIdentifier>{1bda40bd-e8ac-4b49-a20a-47bcdc1a32d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Camera System">
+      <UniqueIdentifier>{2fc70299-e086-4d61-9b33-f4da11473fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\Viewport System">
+      <UniqueIdentifier>{50d087a0-1ff7-468b-a17f-2d1857596cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS\System\GUI System\Message Log">
+      <UniqueIdentifier>{4de6809e-ef52-4f7c-8c41-22c48e32eb74}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -207,8 +213,8 @@
     <ClCompile Include="MapSystem.cpp">
       <Filter>ECS\System\Map System</Filter>
     </ClCompile>
-    <ClCompile Include="ViewportSystem.cpp">
-      <Filter>ECS\System\Viewport System</Filter>
+    <ClCompile Include="CameraSystem.cpp">
+      <Filter>ECS\System\Camera System</Filter>
     </ClCompile>
     <ClCompile Include="GUISystem.cpp">
       <Filter>ECS\System\GUI System</Filter>
@@ -236,6 +242,12 @@
     </ClCompile>
     <ClCompile Include="Parameters.cpp">
       <Filter>Helper Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewportSystem.cpp">
+      <Filter>ECS\System\Viewport System</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageLog.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -320,8 +332,8 @@
     <ClInclude Include="Tile.h">
       <Filter>Render Helpers\Tile</Filter>
     </ClInclude>
-    <ClInclude Include="ViewportSystem.h">
-      <Filter>ECS\System\Viewport System</Filter>
+    <ClInclude Include="CameraSystem.h">
+      <Filter>ECS\System\Camera System</Filter>
     </ClInclude>
     <ClInclude Include="SFMLSerialization.h">
       <Filter>SFML serialization</Filter>
@@ -352,6 +364,12 @@
     </ClInclude>
     <ClInclude Include="Parameters.h">
       <Filter>Helper Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewportSystem.h">
+      <Filter>ECS\System\Viewport System</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageLog.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

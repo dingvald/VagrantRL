@@ -186,6 +186,7 @@
     <ClCompile Include="MapBuilder.cpp" />
     <ClCompile Include="MapChunk.cpp" />
     <ClCompile Include="MapSystem.cpp" />
+    <ClCompile Include="MessageLog.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="NPCInputSystem.cpp" />
     <ClCompile Include="OverWorldMap.cpp" />
@@ -196,11 +197,12 @@
     </ClCompile>
     <ClCompile Include="PlayerInputSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="ViewportSystem.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="TimeSystem.cpp" />
     <ClCompile Include="VagrantRL.cpp" />
-    <ClCompile Include="ViewportSystem.cpp" />
+    <ClCompile Include="CameraSystem.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Zone.cpp" />
   </ItemGroup>
@@ -227,6 +229,7 @@
     <ClInclude Include="MapBuilder.h" />
     <ClInclude Include="MapChunk.h" />
     <ClInclude Include="MapSystem.h" />
+    <ClInclude Include="MessageLog.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="NPCInputSystem.h" />
     <ClInclude Include="OverWorldMap.h" />
@@ -234,13 +237,14 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerInputSystem.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="ViewportSystem.h" />
     <ClInclude Include="SFMLSerialization.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="TimeSystem.h" />
-    <ClInclude Include="ViewportSystem.h" />
+    <ClInclude Include="CameraSystem.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="Zone.h" />
   </ItemGroup>

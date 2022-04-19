@@ -90,6 +90,7 @@ void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 	else
 	{
 		list_ptr->push_back(entity);
+		world->eventBus.publish(std::make_unique<EntityPlacedEvent>(entity).get());
 	}
 }
 
@@ -103,6 +104,7 @@ void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i position
 	else
 	{
 		list_ptr->remove(entity);
+		world->eventBus.publish(std::make_unique<EntityRemovedEvent>(entity).get());
 	}
 }
 

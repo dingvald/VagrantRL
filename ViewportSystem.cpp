@@ -3,114 +3,163 @@
 
 void ViewportSystem::init()
 {
-	signature.addComponentByType<ViewportFocusComponent>();
+	signature.addComponentByType<OnScreenComponent>();
+	signature.addComponentByType<PositionComponent>();
 
-	height = gl::VIEWPORT_HEIGHT;
-	width = gl::VIEWPORT_WIDTH;
+	eventBus->subscribe(this, &ViewportSystem::onEntityPlacedEvent);
+	eventBus->subscribe(this, &ViewportSystem::onEntityRemovedEvent);
+
+	updateViewRect();
 }
 
 void ViewportSystem::update(const float dt)
 {
-	if (registeredEntities.size() == 1)
+	updateViewRect();
+
+	if (!update_init)
 	{
-		following = registeredEntities.front();
-		focusViewport();
+		takeOnScreenSnapshot();
+		update_init = true;
 	}
 
-	if (registeredEntities.size() > 1)
+	std::vector<Entity*> to_remove;
+	for (auto entity : registeredEntities)
 	{
-		std::cout << "Error: too many entities for viewport to focus on!!!\n";
+		if (!entityInViewport(entity)) to_remove.push_back(entity);
+	}
+	for (auto ent : to_remove)
+	{
+		ent->removeComponent<OnScreenComponent>();
 	}
 
-	updateWorldPosition();
-}
-
-void ViewportSystem::focusViewport()
-{
-	if (following)
+	if (viewportMoved())
 	{
-		if (!is_origin_init)
-		{
-			origin.x = (float)following->getComponent<PositionComponent>()->position.x - ((width / 2) * gl::TILE_SIZE);
-			origin.y = (float)following->getComponent<PositionComponent>()->position.y - ((height / 2) * gl::TILE_SIZE);
-			world->viewportOrigin = origin;
-			old_origin = origin;
-			eventBus->publish(std::make_unique<ViewportMoveEvent>(origin, old_origin).get());
-
-			is_origin_init = true;
-		}
-		else
-		{
-			old_origin = origin;
-
-			auto follow_pos = following->getComponent<PositionComponent>()->position;
-
-			int tempx = follow_pos.x - ((width / 2) * gl::TILE_SIZE);
-			int tempy = follow_pos.y - ((height / 2) * gl::TILE_SIZE);
-
-			// clamp viewport origin to map edges
-			if (tempx < 0) tempx = 0;
-			if (tempy < 0) tempy = 0;
-			//if (tempx > (world->map->getWidth() - width) * gl::TILE_SIZE) tempx = (world->map->getWidth() - width) * gl::TILE_SIZE;
-			//if (tempy > (world->map->getHeight() - height) * gl::TILE_SIZE) tempy = (world->map->getHeight() - height) * gl::TILE_SIZE;
-
-			sf::Vector2f target = { static_cast<float>(tempx), static_cast<float>(tempy) };
-
-			origin = lerpToTarget(origin, target);
-			world->viewportOrigin = origin;
-
-			if (viewportMoved())
-			{
-				eventBus->publish(std::make_unique<ViewportMoveEvent>(origin, old_origin).get());
-			}
-		}
+		updateBoundaryEntities(getMovementDirection());
 	}
 }
 
-void ViewportSystem::updateWorldPosition()
+void ViewportSystem::updateViewRect()
 {
-	sf::Vector2i view_center;
-	view_center.x = ((static_cast<int>(std::floorf(origin.x)) / gl::TILE_SIZE) + width / 2) / gl::CHUNK_SIZE;
-	view_center.y = ((static_cast<int>(std::floorf(origin.y)) / gl::TILE_SIZE) + height / 2) / gl::CHUNK_SIZE;
+	old_origin = { static_cast<int>(viewport_rectangle.left), static_cast<int>(viewport_rectangle.top) };
 
-	world->worldPosition = view_center;
+	viewport_rectangle.left = world->cameraOrigin.x - viewport_buffer*gl::TILE_SIZE;
+	viewport_rectangle.top = world->cameraOrigin.y - viewport_buffer*gl::TILE_SIZE;
 }
 
 bool ViewportSystem::viewportMoved()
 {
-	if (old_origin.x != origin.x || old_origin.y != origin.y)
+	if (old_origin != sf::Vector2i{ static_cast<int>(viewport_rectangle.left), static_cast<int>(viewport_rectangle.top) })
 	{
 		return true;
 	}
-
 	return false;
 }
 
-bool ViewportSystem::inViewport(sf::Vector2i pos)
+sf::Vector2i ViewportSystem::getMovementDirection()
 {
-	if (pos.x < origin.x || pos.y < origin.y || pos.x > origin.x + (width - 1)*gl::TILE_SIZE || pos.y > origin.y + (height - 1)*gl::TILE_SIZE)
+	sf::Vector2i current_origin{ static_cast<int>(viewport_rectangle.left), static_cast<int>(viewport_rectangle.top) };
+	sf::Vector2i dir;
+
+	// X
+	if ((old_origin.x - current_origin.x) == 0)
 	{
-		return false;
+		dir.x = 0;
 	}
-	return true;
+	else if (old_origin.x - current_origin.x > 0)
+	{
+		dir.x = -1;
+	}
+	else
+	{
+		dir.x = 1;
+	}
+
+	// Y
+	if ((old_origin.y - current_origin.y) == 0)
+	{
+		dir.y = 0;
+	}
+	else if (old_origin.y - current_origin.y > 0)
+	{
+		dir.y = -1;
+	}
+	else
+	{
+		dir.y = 1;
+	}
+	
+	return dir;
 }
 
-sf::Vector2f ViewportSystem::lerpToTarget(sf::Vector2f pos, const sf::Vector2f target_pos)
+void ViewportSystem::updateOnScreenStatus(Entity* entity)
 {
-	sf::Vector2f delta = (pos - target_pos) * speed;
+	auto onScreen_comp = entity->getComponent<OnScreenComponent>();
 
-	if (std::fabs(delta.x) < speed)
+	if (entityInViewport(entity) && !onScreen_comp)
 	{
-		delta.x = 0;
-		pos.x = target_pos.x;
+		entity->addComponent(new OnScreenComponent());
 	}
-	if (std::fabs(delta.y) < speed)
+	else if (!entityInViewport(entity) && onScreen_comp)
 	{
-		delta.y = 0;
-		pos.y = target_pos.y;
+		entity->removeComponent<OnScreenComponent>();
 	}
-
-	return pos - delta;
 }
 
+void ViewportSystem::updateBoundaryEntities(sf::Vector2i direction)
+{
+	if (direction.x == 0 && direction.y == 0) return;
 
+	auto fun = std::bind(&ViewportSystem::updateOnScreenStatus, this, std::placeholders::_1);
+
+	// X
+	if (direction.x == 1)
+	{
+		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left + viewport_rectangle.width,
+			viewport_rectangle.top, 2, gl::VIEWPORT_HEIGHT, fun);
+	}
+	else if (direction.x == -1)
+	{
+		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left,
+			viewport_rectangle.top, 2, gl::VIEWPORT_HEIGHT, fun);
+	}
+
+	// Y
+	if (direction.y == -1)
+	{
+		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left,
+			viewport_rectangle.top, gl::VIEWPORT_WIDTH, 2, fun);
+	}
+	else if (direction.y == 1)
+	{
+		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left,
+			viewport_rectangle.top + viewport_rectangle.height, gl::VIEWPORT_WIDTH, 2, fun);
+	}
+}
+
+bool ViewportSystem::entityInViewport(Entity* entity)
+{
+	auto pos_comp = entity->getComponent<PositionComponent>();
+	if (!pos_comp) return false;
+
+	sf::Vector2f fpos{ static_cast<float>(pos_comp->position.x), static_cast<float>(pos_comp->position.y) };
+
+	return viewport_rectangle.contains(fpos);
+}
+
+void ViewportSystem::takeOnScreenSnapshot()
+{
+	auto fun = std::bind(&ViewportSystem::updateOnScreenStatus, this, std::placeholders::_1);
+
+	world->map->applyFuncToEntitiesInRect(static_cast<unsigned int>(viewport_rectangle.left), static_cast<unsigned int>(viewport_rectangle.top),
+		gl::VIEWPORT_WIDTH, gl::VIEWPORT_HEIGHT, fun);
+}
+
+void ViewportSystem::onEntityPlacedEvent(EntityPlacedEvent* ev)
+{
+	updateOnScreenStatus(ev->entity);
+}
+
+void ViewportSystem::onEntityRemovedEvent(EntityRemovedEvent* ev)
+{
+	updateOnScreenStatus(ev->entity);
+}

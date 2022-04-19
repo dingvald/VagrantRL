@@ -58,7 +58,7 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	player->addComponent(new RenderComponent(0, sf::Color(100, 100, 100)));
 	player->addComponent(new TimeComponent(100));
 	player->addComponent(new PlayerAIComponent());
-	player->addComponent(new ViewportFocusComponent()); 
+	player->addComponent(new CameraFocusComponent()); 
 	
 	world->setAsPlayer(player.get());
 	world->registerEntity(std::move(player));
@@ -69,7 +69,7 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 
 	int rand_x, rand_y;
 
-	for (int i = 0; i < 10000; ++i)
+	for (int i = 0; i < 2500; ++i)
 	{
 		rand_x = rand() % (gl::CHUNK_SIZE*gl::ZONE_SIZE);
 		rand_y = rand() % (gl::CHUNK_SIZE*gl::ZONE_SIZE);

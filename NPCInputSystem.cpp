@@ -16,5 +16,5 @@ void NPCInputSystem::update(const float dt)
 	rand_x = (rand() % 3) - 1;
 	rand_y = (rand() % 3) - 1;
 
-	eventBus->publish(std::make_unique<MoveEvent>(registeredEntities.front(), sf::Vector2i(rand_x, rand_y)).get());
+	registeredEntities.front()->addComponent(new MotionComponent({ rand_x, rand_y }));
 }

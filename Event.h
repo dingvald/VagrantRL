@@ -12,13 +12,6 @@ struct TestEvent : public Event
 	std::string message;
 };
 
-struct MoveEvent : public Event
-{
-	MoveEvent(Entity* entity, sf::Vector2i dir) : entity(entity), dir(dir) {}
-	Entity* entity;
-	sf::Vector2i dir;
-};
-
 struct StartTurnEvent : public Event
 {
 
@@ -46,11 +39,17 @@ struct SwapPlacesEvent : public Event
 	Entity* e2;
 };
 
-struct ViewportMoveEvent : public Event
+struct EntityPlacedEvent : public Event
 {
-	ViewportMoveEvent(sf::Vector2f origin, sf::Vector2f oldOrigin) : newOrigin(origin), oldOrigin(oldOrigin) {}
+	EntityPlacedEvent(Entity* entity) : entity(entity) {}
 
-	sf::Vector2f newOrigin;
-	sf::Vector2f oldOrigin;
+	Entity* entity;
+};
+
+struct EntityRemovedEvent : public Event
+{
+	EntityRemovedEvent(Entity* entity) : entity(entity) {}
+
+	Entity* entity;
 };
 

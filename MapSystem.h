@@ -19,7 +19,7 @@ private:
 	OverWorldMap overworldMap;
 	MapBuilder mapBuilder;
 	sf::Vector2i num_of_loaded_chunks = { 3,3 };
-	sf::Vector2i starting_position = { 50,50 };
+	sf::Vector2i starting_position = gl::STARTING_COORDINATES;
 	std::map<std::pair<int, int>, std::shared_ptr<MapChunk>> chunk_buffer;
 	sf::Vector2i world_position = { 0,0 };
 	sf::Vector2i old_world_position = { 0,0 };

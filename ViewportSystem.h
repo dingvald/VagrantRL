@@ -7,20 +7,25 @@ public:
 	void update(const float dt) override;
 
 private:
-	Entity* following;
-	unsigned int threshold = { 8 };
-	unsigned int height;
-	unsigned int width;
-	bool is_origin_init = false;
-	sf::Vector2f origin = { 1.00f, 1.00f };
-	sf::Vector2f old_origin;
-	float speed = 0.01;
 
-	void focusViewport();
-	void updateWorldPosition();
+	void updateViewRect();
+
 	bool viewportMoved();
-	bool inViewport(sf::Vector2i pos);
-	sf::Vector2f lerpToTarget(sf::Vector2f pos, const sf::Vector2f target_pos);
-	
+	sf::Vector2i getMovementDirection();
+
+	void updateOnScreenStatus(Entity* entity);
+	void updateBoundaryEntities(sf::Vector2i direction);
+	bool entityInViewport(Entity* entity);
+
+	void takeOnScreenSnapshot();
+
+	void onEntityPlacedEvent(EntityPlacedEvent* ev);
+	void onEntityRemovedEvent(EntityRemovedEvent* ev);
+
+	int viewport_buffer = 1;
+	sf::Rect<float> viewport_rectangle{ 0-(viewport_buffer*gl::TILE_SIZE),0-(viewport_buffer*gl::TILE_SIZE), (gl::VIEWPORT_WIDTH+viewport_buffer)*gl::TILE_SIZE, 
+		(gl::VIEWPORT_HEIGHT+viewport_buffer) * gl::TILE_SIZE };
+	bool update_init = false;
+	sf::Vector2i old_origin;
 };
 

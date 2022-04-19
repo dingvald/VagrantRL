@@ -11,5 +11,6 @@
 #include "NPCInputSystem.h"
 #include "CollisionSystem.h"
 #include "MapSystem.h"
+#include "CameraSystem.h"
 #include "ViewportSystem.h"
 #include "GUISystem.h"
