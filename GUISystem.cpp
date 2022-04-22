@@ -9,8 +9,12 @@ void GUISystem::init()
 	}
 	else
 	{
+		fps.setFont(font);
+		fps.setCharacterSize(12);
+		fps.setFillColor(sf::Color::Yellow);
 		debug_text.setFont(font);
 		debug_text.setCharacterSize(12);
+		debug_text.setFillColor(sf::Color::Yellow);
 	}
 	
 
@@ -20,12 +24,14 @@ void GUISystem::init()
 void GUISystem::update(const float dt)
 {
 	setDebugInfo();
+	getFPS(dt);
 }
 
 void GUISystem::render(sf::RenderTarget* target)
 {
 	drawBackground(target);
 	drawDebugInfo(target);
+	drawFPS(target);
 }
 
 void GUISystem::setBackground(sf::Color col)
@@ -40,6 +46,21 @@ void GUISystem::setBackground(sf::Color col)
 void GUISystem::drawBackground(sf::RenderTarget* target)
 {
 	target->draw(background);
+}
+
+void GUISystem::getFPS(const float dt)
+{
+	int f = 1 / dt;
+	std::stringstream ss;
+	ss << "FPS: " << f;
+	fps.setString(ss.str());
+}
+
+void GUISystem::drawFPS(sf::RenderTarget* target)
+{
+	fps.setPosition({ ((float)origin.x + 32) * gl::TILE_SIZE, ((float)origin.y) * gl::TILE_SIZE });
+
+	target->draw(fps);
 }
 
 void GUISystem::setDebugInfo()
@@ -58,6 +79,8 @@ void GUISystem::setDebugInfo()
 
 	ss << "Player position: [" << pos.x << ", " << pos.y << "]";
 	debug_info.push_back(ss.str());
+
+	//
 }
 
 void GUISystem::drawDebugInfo(sf::RenderTarget* target)
@@ -67,7 +90,6 @@ void GUISystem::drawDebugInfo(sf::RenderTarget* target)
 	{
 		debug_text.setString(d + "\n");
 		debug_text.setPosition({ ((float)origin.x + 40) * gl::TILE_SIZE, ((float)origin.y + count) * gl::TILE_SIZE });
-		debug_text.setFillColor(sf::Color::Yellow);
 
 		target->draw(debug_text);
 

@@ -17,10 +17,13 @@ private:
 	sf::Font font;
 	sf::Text debug_text;
 	std::list<std::string> debug_info;
+	sf::Text fps;
 
 	void setBackground(sf::Color col);
 	void drawBackground(sf::RenderTarget* target);
 
+	void getFPS(const float dt);
+	void drawFPS(sf::RenderTarget* target);
 	void setDebugInfo();
 	void drawDebugInfo(sf::RenderTarget* target);
 
