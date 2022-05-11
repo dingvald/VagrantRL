@@ -115,24 +115,24 @@ void ViewportSystem::updateBoundaryEntities(sf::Vector2i direction)
 	if (direction.x == 1)
 	{
 		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left + viewport_rectangle.width,
-			viewport_rectangle.top, 2, gl::VIEWPORT_HEIGHT, fun);
+			viewport_rectangle.top - gl::TILE_SIZE, 2, gl::VIEWPORT_HEIGHT + 2, fun);
 	}
 	else if (direction.x == -1)
 	{
 		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left,
-			viewport_rectangle.top, 2, gl::VIEWPORT_HEIGHT, fun);
+			viewport_rectangle.top - gl::TILE_SIZE, 2, gl::VIEWPORT_HEIGHT + 2, fun);
 	}
 
 	// Y
 	if (direction.y == -1)
 	{
-		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left,
-			viewport_rectangle.top, gl::VIEWPORT_WIDTH, 2, fun);
+		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left - gl::TILE_SIZE,
+			viewport_rectangle.top, gl::VIEWPORT_WIDTH + 2, 2, fun);
 	}
 	else if (direction.y == 1)
 	{
-		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left,
-			viewport_rectangle.top + viewport_rectangle.height, gl::VIEWPORT_WIDTH, 2, fun);
+		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left - gl::TILE_SIZE,
+			viewport_rectangle.top + viewport_rectangle.height, gl::VIEWPORT_WIDTH + 2, 2, fun);
 	}
 }
 

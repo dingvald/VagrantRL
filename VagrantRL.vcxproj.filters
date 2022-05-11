@@ -112,9 +112,6 @@
     <Filter Include="ECS\System\GUI System">
       <UniqueIdentifier>{689b60a5-7a29-4d41-b9bf-dc8e8684e401}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helper Classes">
-      <UniqueIdentifier>{8c7eef8e-57f9-473d-a476-a8ac4ae8abca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\System\Map System">
       <UniqueIdentifier>{6d2eb08d-c8ee-4eca-bd16-c51e3c7c7979}</UniqueIdentifier>
     </Filter>
@@ -141,6 +138,9 @@
     </Filter>
     <Filter Include="ECS\System\GUI System\Message Log">
       <UniqueIdentifier>{4de6809e-ef52-4f7c-8c41-22c48e32eb74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{8c7eef8e-57f9-473d-a476-a8ac4ae8abca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -241,13 +241,16 @@
       <Filter>ECS\Component\Component Factory</Filter>
     </ClCompile>
     <ClCompile Include="Parameters.cpp">
-      <Filter>Helper Classes</Filter>
+      <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="ViewportSystem.cpp">
       <Filter>ECS\System\Viewport System</Filter>
     </ClCompile>
     <ClCompile Include="MessageLog.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpatialConversions.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,13 +366,16 @@
       <Filter>ECS\Component\Component Factory</Filter>
     </ClInclude>
     <ClInclude Include="Parameters.h">
-      <Filter>Helper Classes</Filter>
+      <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="ViewportSystem.h">
       <Filter>ECS\System\Viewport System</Filter>
     </ClInclude>
     <ClInclude Include="MessageLog.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpatialConversions.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

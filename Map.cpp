@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Map.h"
 #include "Entity.h"
+#include "SpatialConversions.h"
 
 
 Map::Map(unsigned int num_of_layers, int chunk_size, int chunk_load_width, World* world) 
@@ -20,25 +21,24 @@ Map::Map(unsigned int num_of_layers, int chunk_size, int chunk_load_width, World
 	}
 }
 
-std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position)
+std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i absolute_position)
 {
-	if (position.x < 0 || position.y < 0)
+	if (absolute_position.x < 0 || absolute_position.y < 0)
 	{
 		return nullptr;
 	}
 
 	// index into world map
-	int worldmap_index_x = position.x / chunk_size / gl::TILE_SIZE;
-	int worldmap_index_y = position.y / chunk_size / gl::TILE_SIZE;
+	auto world_position = toWorldPosition(absolute_position);
+
 	// index into tiles
-	int tile_index_x = (position.x / gl::TILE_SIZE) - worldmap_index_x*chunk_size;
-	int tile_index_y = (position.y / gl::TILE_SIZE) - worldmap_index_y*chunk_size;
+	auto local_tile_position = toLocalTilePosition(absolute_position);
 
 	// index into chunks in memory
 
-	int chunk_index_x = (worldmap_index_x - world->worldPosition.x) + 1;
+	int chunk_index_x = (world_position.x - world->worldPosition.x) + 1;
 	if (world->worldPosition.x == 0) chunk_index_x -= 1;
-	int chunk_index_y = (worldmap_index_y - world->worldPosition.y) + 1;
+	int chunk_index_y = (world_position.y - world->worldPosition.y) + 1;
 	if (world->worldPosition.y == 0) chunk_index_y -= 1;
 	
 
@@ -50,7 +50,7 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i position
 	auto chunk_ptr = getChunk({ chunk_index_x, chunk_index_y });
 	
 
-	return chunk_ptr->at(layer, { tile_index_x, tile_index_y });
+	return chunk_ptr->at(layer, local_tile_position);
 }
 
 void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height,
@@ -80,9 +80,9 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 	}
 }
 
-void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
+void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i absolute_position)
 {
-	auto list_ptr = getEntitiesAt(layer, position);
+	auto list_ptr = getEntitiesAt(layer, absolute_position);
 	if (!list_ptr)
 	{
 		std::cout << "Cannot place entity--List does not exist...!\n";
@@ -94,9 +94,9 @@ void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
 	}
 }
 
-void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i position)
+void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i absolute_position)
 {
-	auto list_ptr = getEntitiesAt(layer, position);
+	auto list_ptr = getEntitiesAt(layer, absolute_position);
 	if (!list_ptr)
 	{
 		std::cout << "Cannot remove entity--List does not exist...!\n";

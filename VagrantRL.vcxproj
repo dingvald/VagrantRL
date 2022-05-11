@@ -197,6 +197,7 @@
     </ClCompile>
     <ClCompile Include="PlayerInputSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="SpatialConversions.cpp" />
     <ClCompile Include="ViewportSystem.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="System.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerInputSystem.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="SpatialConversions.h" />
     <ClInclude Include="ViewportSystem.h" />
     <ClInclude Include="SFMLSerialization.h" />
     <ClInclude Include="State.h" />

@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "Component.h"
 #include "Parameters.h"
+#include "SpatialConversions.h"
 
 
 class TimeComponent : public ComponentID<TimeComponent>
@@ -29,13 +30,11 @@ public:
 	
 	PositionComponent(sf::Vector2i pos, gl::Layer layer) : position(pos), layer(layer) 
 	{
-		position.x *= gl::TILE_SIZE;
-		position.y *= gl::TILE_SIZE;
+		position = toAbsolutePosition(position);
 	}
 	PositionComponent(Parameters& params)
 	{
-		position.x = params.get<int>() * gl::TILE_SIZE;
-		position.y = params.get<int>() * gl::TILE_SIZE;
+		position = toAbsolutePosition({ params.get<int>(), params.get<int>() });
 		layer = static_cast<gl::Layer>(params.get<int>());
 	}
 	Component* clone() override

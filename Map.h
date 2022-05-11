@@ -10,10 +10,10 @@ class Map
 public:
 	Map(unsigned int num_of_layers, int chunk_size, int chunk_load_width, World *world);
 
-	std::list<Entity*>* getEntitiesAt(unsigned int layer, sf::Vector2i world_position);
+	std::list<Entity*>* getEntitiesAt(unsigned int layer, sf::Vector2i absolute_position);
 	void applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height, std::function<void(Entity*)> fun);
-	void placeEntity(Entity* entity, unsigned int layer, sf::Vector2i world_position);
-	void removeEntity(Entity* entity, unsigned int layer, sf::Vector2i world_position);
+	void placeEntity(Entity* entity, unsigned int layer, sf::Vector2i absolute_position);
+	void removeEntity(Entity* entity, unsigned int layer, sf::Vector2i absolute_position);
 
 	void addChunkToGrid(MapChunk* chunk, sf::Vector2i grid_pos);
 	MapChunk* getChunk(sf::Vector2i grid_pos);
