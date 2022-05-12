@@ -15,8 +15,9 @@ void RenderSystem::init()
 	
 
 	signature.addComponentByType<RenderComponent>();
-	signature.addComponentByType<OnScreenComponent>();
 	signature.addComponentByType<PositionComponent>();
+	signature.addComponentByType<OnScreenComponent>();
+	
 }
 
 void RenderSystem::update(const float dt)
@@ -25,7 +26,7 @@ void RenderSystem::update(const float dt)
 	dt_count += dt;
 	if (dt_count >= 1.000 / updaterate)
 	{
-		updateTilemap();
+		updateTilemap(); // inefficient
 		updateEntities();
 		dt_count = 0.0000;
 	}
@@ -89,14 +90,7 @@ void RenderSystem::updateTilemap()
 		{
 			sf::Vector2f coordinate_position = { x * gl::TILE_SIZE - viewport_origin.x, y * gl::TILE_SIZE - viewport_origin.y };
 
-			if (x % gl::CHUNK_SIZE && y % gl::CHUNK_SIZE)
-			{
-				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color(100, 100, 100), coordinate_position));
-			}
-			else
-			{
-				glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color::Yellow, coordinate_position));
-			}
+			glyphs[(int)gl::Layer::Tile].push_back(std::make_unique<Glyph>(2, sf::Color(100, 100, 100), coordinate_position));
 		}
 	}
 }

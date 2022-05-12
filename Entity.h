@@ -13,7 +13,7 @@ private:
 	std::string name;
 	World* world = nullptr;
 	ComponentMask signature;
-	std::map<unsigned int, std::unique_ptr<Component> > components;
+	std::unordered_map<unsigned int, std::unique_ptr<Component> > components;
 	
 	
 public:
@@ -43,9 +43,11 @@ public:
 	C* getComponent()
 	{
 		unsigned int _id = ::getComponentID<C>();
-		if (components.count(_id))
+		auto it = components.find(_id);
+
+		if (it != components.end())
 		{
-			auto ptr = components.at(_id).get();
+			auto ptr = it->second.get();
 
 			return static_cast<C*>(ptr);
 		}

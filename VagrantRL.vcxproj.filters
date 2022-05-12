@@ -246,11 +246,11 @@
     <ClCompile Include="ViewportSystem.cpp">
       <Filter>ECS\System\Viewport System</Filter>
     </ClCompile>
-    <ClCompile Include="MessageLog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SpatialConversions.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageLog.cpp">
+      <Filter>ECS\System\GUI System\Message Log</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,11 +371,11 @@
     <ClInclude Include="ViewportSystem.h">
       <Filter>ECS\System\Viewport System</Filter>
     </ClInclude>
-    <ClInclude Include="MessageLog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SpatialConversions.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageLog.h">
+      <Filter>ECS\System\GUI System\Message Log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

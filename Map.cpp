@@ -57,14 +57,13 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 	std::function<void(Entity*)> fun)
 {
 
-	int x_start_tile = (int)x_start / gl::TILE_SIZE;
-	int y_start_tile = (int)y_start / gl::TILE_SIZE;
+	auto start_tile = toTilePosition({ static_cast<int>(x_start), static_cast<int>(y_start) });
 
 	for (unsigned int layer = 0; layer < (unsigned int)gl::Layer::Total; ++layer)
 	{
-		for (int x = x_start_tile; x < x_start_tile + (int)rect_width; ++x)
+		for (int x = start_tile.x; x <= start_tile.x + (int)rect_width; ++x)
 		{
-			for (int y = y_start_tile; y < y_start_tile + (int)rect_height; ++y)
+			for (int y = start_tile.y; y <= start_tile.y + (int)rect_height; ++y)
 			{
 				//if (x > width || y > height) break;
 				auto list = getEntitiesAt(layer, { x*gl::TILE_SIZE, y*gl::TILE_SIZE });
