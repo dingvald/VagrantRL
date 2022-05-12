@@ -179,7 +179,7 @@
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventBus.cpp" />
     <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="GlyphLayer.cpp" />
+    <ClCompile Include="SpriteLayer.cpp" />
     <ClCompile Include="CoordinateSystem.cpp" />
     <ClCompile Include="GUISystem.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -222,8 +222,8 @@
     <ClInclude Include="EventBus.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="Glyph.h" />
-    <ClInclude Include="GlyphLayer.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteLayer.h" />
     <ClInclude Include="CoordinateSystem.h" />
     <ClInclude Include="GUISystem.h" />
     <ClInclude Include="Map.h" />

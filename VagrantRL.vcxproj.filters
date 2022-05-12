@@ -61,12 +61,6 @@
     <Filter Include="Render Helpers\Tile Map">
       <UniqueIdentifier>{74692a7a-9cc2-41ab-b371-1d9709c943ed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render Helpers\Glyph Layer">
-      <UniqueIdentifier>{6226ab89-0222-4f0f-9afa-1543d096bd90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render Helpers\Glyph">
-      <UniqueIdentifier>{6df16998-93a8-4a34-81e8-3900b65e6589}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\Component\Component Implementations">
       <UniqueIdentifier>{4a8a9514-4e74-4e49-b86c-908ce9c7faac}</UniqueIdentifier>
     </Filter>
@@ -142,6 +136,12 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{8c7eef8e-57f9-473d-a476-a8ac4ae8abca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render Helpers\Sprite">
+      <UniqueIdentifier>{6df16998-93a8-4a34-81e8-3900b65e6589}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Helpers\Sprite Layer">
+      <UniqueIdentifier>{6226ab89-0222-4f0f-9afa-1543d096bd90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -177,8 +177,8 @@
     <ClCompile Include="Components.cpp">
       <Filter>ECS\Component\Component Implementations</Filter>
     </ClCompile>
-    <ClCompile Include="GlyphLayer.cpp">
-      <Filter>Render Helpers\Glyph Layer</Filter>
+    <ClCompile Include="SpriteLayer.cpp">
+      <Filter>Render Helpers\Sprite Layer</Filter>
     </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
       <Filter>ECS\System\Render System</Filter>
@@ -246,11 +246,11 @@
     <ClCompile Include="ViewportSystem.cpp">
       <Filter>ECS\System\Viewport System</Filter>
     </ClCompile>
+    <ClCompile Include="MessageLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="SpatialConversions.cpp">
       <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="MessageLog.cpp">
-      <Filter>ECS\System\GUI System\Message Log</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -293,14 +293,14 @@
     <ClInclude Include="Components.h">
       <Filter>ECS\Component\Component Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="GlyphLayer.h">
-      <Filter>Render Helpers\Glyph Layer</Filter>
+    <ClInclude Include="SpriteLayer.h">
+      <Filter>Render Helpers\Sprite Layer</Filter>
     </ClInclude>
     <ClInclude Include="RenderSystem.h">
       <Filter>ECS\System\Render System</Filter>
     </ClInclude>
-    <ClInclude Include="Glyph.h">
-      <Filter>Render Helpers\Glyph</Filter>
+    <ClInclude Include="Sprite.h">
+      <Filter>Render Helpers\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="CoordinateSystem.h">
       <Filter>ECS\System\Coordinate System</Filter>
@@ -371,11 +371,11 @@
     <ClInclude Include="ViewportSystem.h">
       <Filter>ECS\System\Viewport System</Filter>
     </ClInclude>
+    <ClInclude Include="MessageLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="SpatialConversions.h">
       <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="MessageLog.h">
-      <Filter>ECS\System\GUI System\Message Log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

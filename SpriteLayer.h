@@ -1,8 +1,9 @@
 #pragma once
 
-struct Glyph;
+class Entity;
+struct Sprite;
 
-class GlyphLayer : public sf::Drawable, public sf::Transformable
+class SpriteLayer : public sf::Drawable, public sf::Transformable
 {
 private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -11,8 +12,11 @@ private:
 	sf::Texture m_tileset;
 
 public:
-	bool load(sf::Vector2u tileSize, std::vector<std::unique_ptr<Glyph> > *glyphs);
+	SpriteLayer();
+
+	bool loadSprite(const int tileSize, const Sprite& sprite);
 	bool loadTexture(const std::string& spriteSheet);
+	void clear();
 
 };
 

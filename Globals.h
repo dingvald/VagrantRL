@@ -2,8 +2,8 @@
 
 namespace gl
 {
-	const int WINDOW_WIDTH = 64; // width in tiles ***originally: 64
-	const int WINDOW_HEIGHT = 40; // height in tiles ***originaly: 40
+	const int WINDOW_WIDTH = 64; // width in tiles ***originally: 64; 128
+	const int WINDOW_HEIGHT = 40; // height in tiles ***originaly: 40; 72 is also an option
 	const int VIEWPORT_WIDTH = WINDOW_WIDTH;
 	const int VIEWPORT_HEIGHT = WINDOW_HEIGHT - 8; // 8 is for GUI window
 	const int TILE_SIZE = 16;
