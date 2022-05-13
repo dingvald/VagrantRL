@@ -16,7 +16,6 @@ void GUISystem::init()
 		debug_text.setCharacterSize(12);
 		debug_text.setFillColor(sf::Color::Yellow);
 	}
-	
 
 	setBackground(sf::Color(10, 10, 10));
 }
@@ -51,9 +50,21 @@ void GUISystem::drawBackground(sf::RenderTarget* target)
 void GUISystem::getFPS(const float dt)
 {
 	int f = 1 / dt;
-	std::stringstream ss;
-	ss << "FPS: " << f;
-	fps.setString(ss.str());
+	fps_buffer.push_back(f);
+	if (fps_buffer.size() > 100)
+	{
+		fps_buffer.pop_front();
+	}
+
+	int fps_average = 0;
+	for (auto i : fps_buffer)
+	{
+		fps_average += i;
+	}
+	fps_average /= fps_buffer.size();
+
+	fps.setString("Average FPS: " + std::to_string(fps_average));
+	
 }
 
 void GUISystem::drawFPS(sf::RenderTarget* target)
@@ -86,7 +97,7 @@ void GUISystem::setDebugInfo()
 void GUISystem::drawDebugInfo(sf::RenderTarget* target)
 {
 	int count = 0;
-	for (auto d : debug_info)
+	for (auto &d : debug_info)
 	{
 		debug_text.setString(d + "\n");
 		debug_text.setPosition({ ((float)origin.x + 40) * gl::TILE_SIZE, ((float)origin.y + count) * gl::TILE_SIZE });

@@ -27,7 +27,7 @@ public:
 
 protected:
 
-	Entity* owner;
+	Entity* owner = nullptr;
 };
 
 template<class C>

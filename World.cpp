@@ -16,7 +16,6 @@ void World::init()
 
 void World::cleanUp()
 {
-
 	for (auto& system : systems)
 	{
 		system->cleanUp();

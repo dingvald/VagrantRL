@@ -18,6 +18,7 @@ private:
 	sf::Text debug_text;
 	std::list<std::string> debug_info;
 	sf::Text fps;
+	std::deque<int> fps_buffer;
 
 	void setBackground(sf::Color col);
 	void drawBackground(sf::RenderTarget* target);
@@ -26,6 +27,5 @@ private:
 	void drawFPS(sf::RenderTarget* target);
 	void setDebugInfo();
 	void drawDebugInfo(sf::RenderTarget* target);
-
 };
 

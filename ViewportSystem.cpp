@@ -104,25 +104,37 @@ void ViewportSystem::updateBoundaryEntities(sf::Vector2i direction)
 	// X
 	if (direction.x == 1)
 	{
-		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left + viewport_rectangle.width,
-			viewport_rectangle.top - gl::TILE_SIZE, 1, gl::VIEWPORT_HEIGHT + 2, fun);
+		world->map->applyFuncToEntitiesInRect(	static_cast<unsigned int>(viewport_rectangle.left + viewport_rectangle.width),
+												static_cast<unsigned int>(viewport_rectangle.top - gl::TILE_SIZE), 
+												viewport_buffer, 
+												gl::VIEWPORT_HEIGHT + 2,
+												fun );
 	}
 	else if (direction.x == -1)
 	{
-		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left,
-			viewport_rectangle.top - gl::TILE_SIZE, 1, gl::VIEWPORT_HEIGHT + 2, fun);
+		world->map->applyFuncToEntitiesInRect(	static_cast<unsigned int>(viewport_rectangle.left),
+												static_cast<unsigned int>(viewport_rectangle.top - gl::TILE_SIZE), 
+												viewport_buffer, 
+												gl::VIEWPORT_HEIGHT + 2, 
+												fun );
 	}
 
 	// Y
 	if (direction.y == -1)
 	{
-		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left - gl::TILE_SIZE,
-			viewport_rectangle.top, gl::VIEWPORT_WIDTH + 2, 1, fun);
+		world->map->applyFuncToEntitiesInRect(	static_cast<unsigned int>(viewport_rectangle.left - gl::TILE_SIZE),
+												static_cast<unsigned int>(viewport_rectangle.top), 
+												gl::VIEWPORT_WIDTH + 2, 
+												viewport_buffer, 
+												fun );
 	}
 	else if (direction.y == 1)
 	{
-		world->map->applyFuncToEntitiesInRect(viewport_rectangle.left - gl::TILE_SIZE,
-			viewport_rectangle.top + viewport_rectangle.height, gl::VIEWPORT_WIDTH + 2, 1, fun);
+		world->map->applyFuncToEntitiesInRect(	static_cast<unsigned int>(viewport_rectangle.left - gl::TILE_SIZE),
+												static_cast<unsigned int>(viewport_rectangle.top + viewport_rectangle.height), 
+												gl::VIEWPORT_WIDTH + 2, 
+												viewport_buffer, 
+												fun );
 	}
 }
 
@@ -140,8 +152,11 @@ void ViewportSystem::takeOnScreenSnapshot()
 {
 	auto fun = std::bind(&ViewportSystem::updateOnScreenStatus, this, std::placeholders::_1);
 
-	world->map->applyFuncToEntitiesInRect(static_cast<unsigned int>(viewport_rectangle.left), static_cast<unsigned int>(viewport_rectangle.top),
-		gl::VIEWPORT_WIDTH, gl::VIEWPORT_HEIGHT, fun);
+	world->map->applyFuncToEntitiesInRect(	static_cast<unsigned int>(viewport_rectangle.left), 
+											static_cast<unsigned int>(viewport_rectangle.top),
+											gl::VIEWPORT_WIDTH, 
+											gl::VIEWPORT_HEIGHT, 
+											fun );
 }
 
 void ViewportSystem::onEntityPlacedEvent(EntityPlacedEvent* ev)

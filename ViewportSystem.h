@@ -23,8 +23,10 @@ private:
 	void onEntityRemovedEvent(EntityRemovedEvent* ev);
 
 	int viewport_buffer = 1;
-	sf::Rect<float> viewport_rectangle{ 0-(viewport_buffer*gl::TILE_SIZE),0-(viewport_buffer*gl::TILE_SIZE), (gl::VIEWPORT_WIDTH+viewport_buffer)*gl::TILE_SIZE, 
-		(gl::VIEWPORT_HEIGHT+viewport_buffer) * gl::TILE_SIZE };
+	sf::Rect<float> viewport_rectangle{ static_cast<float>(0-(viewport_buffer*gl::TILE_SIZE)),
+										static_cast<float>(0-(viewport_buffer*gl::TILE_SIZE)), 
+										static_cast<float>((gl::VIEWPORT_WIDTH+viewport_buffer)*gl::TILE_SIZE), 
+										static_cast<float>((gl::VIEWPORT_HEIGHT+viewport_buffer) * gl::TILE_SIZE) };
 	bool update_init = false;
 	sf::Vector2i old_origin;
 };

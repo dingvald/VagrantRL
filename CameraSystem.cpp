@@ -8,8 +8,8 @@ void CameraSystem::init()
 	height = gl::VIEWPORT_HEIGHT;
 	width = gl::VIEWPORT_WIDTH;
 
-	origin.x = gl::STARTING_COORDINATES.x * gl::CHUNK_SIZE * gl::TILE_SIZE;
-	origin.y = gl::STARTING_COORDINATES.y * gl::CHUNK_SIZE * gl::TILE_SIZE;
+	origin.x = static_cast<float>(gl::STARTING_COORDINATES.x * gl::CHUNK_SIZE * gl::TILE_SIZE);
+	origin.y = static_cast<float>(gl::STARTING_COORDINATES.y * gl::CHUNK_SIZE * gl::TILE_SIZE);
 }
 
 void CameraSystem::update(const float dt)
@@ -33,8 +33,8 @@ void CameraSystem::focusCamera(const float dt)
 	{
 		if (!is_origin_init)
 		{
-			origin.x = (float)following->getComponent<PositionComponent>()->position.x - ((width / 2) * gl::TILE_SIZE);
-			origin.y = (float)following->getComponent<PositionComponent>()->position.y - ((height / 2) * gl::TILE_SIZE);
+			origin.x = static_cast<float>(following->getComponent<PositionComponent>()->position.x) - ((static_cast<float>(width) / 2) * gl::TILE_SIZE);
+			origin.y = static_cast<float>(following->getComponent<PositionComponent>()->position.y) - ((static_cast<float>(height) / 2) * gl::TILE_SIZE);
 			world->cameraOrigin = origin;
 			old_origin = origin;
 			is_origin_init = true;
