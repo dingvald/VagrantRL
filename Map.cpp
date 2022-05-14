@@ -54,9 +54,8 @@ std::list<Entity*>* Map::getEntitiesAt(unsigned int layer, sf::Vector2i absolute
 }
 
 void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, unsigned int rect_width, unsigned int rect_height,
-	std::function<void(Entity*)> fun)
+									std::function<void(Entity*)> fun)
 {
-
 	auto start_tile = toTilePosition({ static_cast<int>(x_start), static_cast<int>(y_start) });
 
 	for (unsigned int layer = 0; layer < (unsigned int)gl::Layer::Total; ++layer)
@@ -65,14 +64,14 @@ void Map::applyFuncToEntitiesInRect(unsigned int x_start, unsigned int y_start, 
 		{
 			for (int y = start_tile.y; y <= start_tile.y + (int)rect_height; ++y)
 			{
-				//if (x > width || y > height) break;
-				auto list = getEntitiesAt(layer, { x*gl::TILE_SIZE, y*gl::TILE_SIZE });
-				if (!list) break;
-				if (list->empty()) continue;
+				auto entity_list = getEntitiesAt(layer, { x*gl::TILE_SIZE, y*gl::TILE_SIZE });
+				if (!entity_list) continue;
+				if (entity_list->empty()) continue;
 
-				for (auto e : *list)
+				for (auto entity : *entity_list)
 				{
-					fun(e);
+					//apply the function
+					fun(entity);
 				}
 			}
 		}

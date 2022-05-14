@@ -79,17 +79,11 @@ void GUISystem::setDebugInfo()
 	debug_info.clear();
 	debug_info.push_back("Debug Info:");
 	// world map position
-	std::stringstream ss;
-	ss << "Position in World: [" << world->worldPosition.x << ", " << world->worldPosition.y << "]";
-	debug_info.push_back(ss.str());
-
-	ss.str(""); // clear string stream
+	debug_info.push_back("Position in world: [" + std::to_string(world->worldPosition.x) + ", " + std::to_string(world->worldPosition.y) + "]");
 
 	// player position on active map
 	auto pos = world->player.ptr->getComponent<PositionComponent>()->position / gl::TILE_SIZE;
-
-	ss << "Player position: [" << pos.x << ", " << pos.y << "]";
-	debug_info.push_back(ss.str());
+	debug_info.push_back("Player position: [" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + "]");
 
 	//
 }
