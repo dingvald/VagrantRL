@@ -1,6 +1,9 @@
 #pragma once
 #include "cereal/access.hpp"
 #include "cereal/types/unordered_map.hpp"
+#include "cereal/types/memory.hpp"
+#include "cereal/types/string.hpp"
+#include "Serialization_Component.h"
 #include "EventBus.h"
 #include "World.h"
 #include "ComponentMask.h"

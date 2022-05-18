@@ -19,7 +19,7 @@ class Component
 {
 public:
 	friend class cereal::access;
-
+	Component() = default;
 	virtual ~Component() {};
 	virtual unsigned int getID() = 0;
 	virtual Component* clone() = 0;
@@ -33,6 +33,7 @@ protected:
 template<class C>
 struct ComponentID : public Component
 {
+	ComponentID() = default;
 	virtual unsigned int getID()
 	{
 		static unsigned int thisid = counter();

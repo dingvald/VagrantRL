@@ -1,31 +1,8 @@
 #include "pch.h"
+
 #include "Components.h"
-#include "cereal/archives/binary.hpp"
-#include "cereal/types/polymorphic.hpp"
 
 
-CEREAL_REGISTER_TYPE(TimeComponent)
-CEREAL_REGISTER_TYPE(PositionComponent)
-CEREAL_REGISTER_TYPE(RenderComponent)
-CEREAL_REGISTER_TYPE(HealthComponent)
-CEREAL_REGISTER_TYPE(PhysicsComponent)
-CEREAL_REGISTER_TYPE(MyTurnComponent)
-CEREAL_REGISTER_TYPE(PlayerAIComponent)
-CEREAL_REGISTER_TYPE(AIComponent)
-CEREAL_REGISTER_TYPE(FactionComponent)
-CEREAL_REGISTER_TYPE(CameraFocusComponent)
-CEREAL_REGISTER_TYPE(OnScreenComponent)
 
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, TimeComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PositionComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, RenderComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, HealthComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PhysicsComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MyTurnComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PlayerAIComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, AIComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, FactionComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, CameraFocusComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, OnScreenComponent)
 
-CEREAL_REGISTER_DYNAMIC_INIT(components)
+//CEREAL_REGISTER_DYNAMIC_INIT(Components)

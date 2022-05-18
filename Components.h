@@ -1,4 +1,6 @@
 #pragma once
+#include "cereal/archives/binary.hpp"
+#include "cereal/types/polymorphic.hpp"
 #include "Globals.h"
 #include "Component.h"
 #include "Parameters.h"
@@ -194,6 +196,3 @@ public:
 		return new OnScreenComponent();
 	}
 };
-
-#include "cereal/types/polymorphic.hpp"
-CEREAL_FORCE_DYNAMIC_INIT(components)
