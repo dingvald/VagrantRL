@@ -142,6 +142,9 @@
     <Filter Include="Render Helpers\Sprite Layer">
       <UniqueIdentifier>{6226ab89-0222-4f0f-9afa-1543d096bd90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ECS\Serialization">
+      <UniqueIdentifier>{f8d155ed-cf3f-4934-8b49-2a1f0a8f59e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="MessageLog.h">
       <Filter>ECS\System\GUI System\Message Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization_Component.h">
+      <Filter>ECS\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

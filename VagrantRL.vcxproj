@@ -222,6 +222,7 @@
     <ClInclude Include="EventBus.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Serialization_Component.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteLayer.h" />
     <ClInclude Include="CoordinateSystem.h" />

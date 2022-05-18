@@ -1,4 +1,6 @@
 #pragma once
+#include "cereal/access.hpp"
+#include "cereal/types/unordered_map.hpp"
 #include "EventBus.h"
 #include "World.h"
 #include "ComponentMask.h"
@@ -8,6 +10,7 @@ class Entity
 private:
 	friend World;
 	friend Component;
+	friend class cereal::access;
 
 	unsigned int id;
 	std::string name;
@@ -17,6 +20,7 @@ private:
 	
 	
 public:
+	Entity() = default;
 	Entity(std::string name);
 	Entity(const Entity& e);
 
@@ -53,5 +57,24 @@ public:
 		}
 
 		return nullptr;
+	}
+
+	template<class Archive>
+	void save(Archive& archive) const
+	{
+		archive(name, id, components);
+	}
+
+	template<class Archive>
+	void load(Archive& archive)
+	{
+		int num_comps = 0;
+		std::vector<std::unique_ptr<Component>> comp_ptrs;
+
+		archive(name, id, components);
+		for (auto &c : components)
+		{
+			this->addComponent(c.second.get());
+		}
 	}
 };

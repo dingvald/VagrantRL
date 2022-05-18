@@ -10,6 +10,7 @@ class TimeComponent : public ComponentID<TimeComponent>
 public:
 	int speed;
 	int built_up_speed;
+	TimeComponent() = default;
 	TimeComponent(int speed) : speed(speed), built_up_speed(0) {}
 	TimeComponent(Parameters& params)
 	{
@@ -28,6 +29,7 @@ public:
 	sf::Vector2i position;
 	gl::Layer layer;
 	
+	PositionComponent() = default;
 	PositionComponent(sf::Vector2i pos, gl::Layer layer) : position(pos), layer(layer) 
 	{
 		position = toAbsolutePosition(position);
@@ -48,6 +50,7 @@ class MotionComponent : public ComponentID<MotionComponent>
 public:
 	sf::Vector2i direction;
 
+	MotionComponent() = default;
 	MotionComponent(sf::Vector2i dir) : direction(dir) {}
 	Component* clone() override
 	{
@@ -61,6 +64,7 @@ public:
 	unsigned int sprite_id;
 	sf::Color color;
 
+	RenderComponent() = default;
 	RenderComponent(unsigned int sprite_id, sf::Color color) : sprite_id(sprite_id), color(color) {}
 	RenderComponent(Parameters& params)
 	{
@@ -85,6 +89,7 @@ public:
 	int health;
 	int max_health;
 
+	HealthComponent() = default;
 	HealthComponent(int health) : health(health), max_health(health) {}
 	HealthComponent(Parameters& params)
 	{
@@ -102,6 +107,8 @@ class PhysicsComponent : public ComponentID<PhysicsComponent>
 public:
 	int weight;
 	bool isBlocking;
+
+	PhysicsComponent() = default;
 	PhysicsComponent(int weight, bool isBlocking) : weight(weight), isBlocking(isBlocking) {}
 	PhysicsComponent(Parameters& params)
 	{
@@ -117,7 +124,7 @@ public:
 class MyTurnComponent : public ComponentID<MyTurnComponent>
 {
 public:
-	MyTurnComponent() {}
+	MyTurnComponent() = default;
 	Component* clone() override
 	{
 		return new MyTurnComponent();
@@ -127,7 +134,7 @@ public:
 class PlayerAIComponent : public ComponentID<PlayerAIComponent>
 {
 public:
-	PlayerAIComponent() {}
+	PlayerAIComponent() = default;
 	PlayerAIComponent(Parameters& params) {}
 	Component* clone() override
 	{
@@ -138,7 +145,7 @@ public:
 class AIComponent : public ComponentID<AIComponent>
 {
 public:
-	AIComponent() {}
+	AIComponent() = default;
 	AIComponent(Parameters& params) {}
 	Component* clone() override
 	{
@@ -157,6 +164,7 @@ enum class Faction
 class FactionComponent : public ComponentID<FactionComponent>
 {
 public:
+	FactionComponent() = default;
 	FactionComponent(Faction faction) : faction(faction) {}
 	FactionComponent(Parameters& params) {}
 	Component* clone() override
@@ -170,7 +178,7 @@ public:
 class CameraFocusComponent : public ComponentID<CameraFocusComponent>
 {
 public:
-	CameraFocusComponent() {}
+	CameraFocusComponent() = default;
 	Component* clone() override
 	{
 		return new CameraFocusComponent();
@@ -180,37 +188,12 @@ public:
 class OnScreenComponent : public ComponentID<OnScreenComponent>
 {
 public:
-	OnScreenComponent() {}
+	OnScreenComponent() = default;
 	Component* clone() override
 	{
 		return new OnScreenComponent();
 	}
 };
 
-/*
-CEREAL_REGISTER_TYPE(TestComponent)
-CEREAL_REGISTER_TYPE(TimeComponent)
-CEREAL_REGISTER_TYPE(PositionComponent)
-CEREAL_REGISTER_TYPE(RenderComponent)
-CEREAL_REGISTER_TYPE(HealthComponent)
-CEREAL_REGISTER_TYPE(PhysicsComponent)
-CEREAL_REGISTER_TYPE(MyTurnComponent)
-CEREAL_REGISTER_TYPE(PlayerAIComponent)
-CEREAL_REGISTER_TYPE(AIComponent)
-CEREAL_REGISTER_TYPE(FactionComponent)
-CEREAL_REGISTER_TYPE(ViewportFocusComponent)
-CEREAL_REGISTER_TYPE(OnScreenComponent)
-
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, TestComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, TimeComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PositionComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, RenderComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, HealthComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PhysicsComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MyTurnComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PlayerAIComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, AIComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, FactionComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, ViewportFocusComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, OnScreenComponent)
-*/
+#include "cereal/types/polymorphic.hpp"
+CEREAL_FORCE_DYNAMIC_INIT(components)

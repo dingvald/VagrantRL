@@ -49,9 +49,13 @@ void PlayerInputSystem::update(const float dt)
 	{
 		registeredEntities.front()->addComponent(new MotionComponent({ 0,0 }));
 	}
-	else if (keyPressed(sf::Keyboard::Space))
+	else if (keyPressed(sf::Keyboard::S))
 	{
 		world->save_player();
+	}
+	else if (keyPressed(sf::Keyboard::L))
+	{
+		world->load_player();
 	}
 }
 

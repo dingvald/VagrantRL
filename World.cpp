@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "cereal/archives/binary.hpp"
 #include "World.h"
 #include "System.h"
 #include "Entity.h"
@@ -57,7 +58,7 @@ void World::removeEntity(Entity* entity)
 void World::setAsPlayer(Entity* entity)
 {
 	player.id = entity->getID();
-	player.ptr = entity;
+	player.ptr = std::shared_ptr<Entity>(entity);
 }
 
 void World::addComponent(Entity* entity, unsigned int id)
@@ -126,11 +127,18 @@ std::list<Entity*> World::load_entities(std::list<unsigned int> list_of_ids)
 
 void World::save_player()
 {
+	std::ofstream os("playerData.dat");
+	cereal::BinaryOutputArchive archive(os);
 
+	archive(this->player.ptr);
 }
 
 void World::load_player()
 {
+	std::ifstream is("playerData.dat");
+	cereal::BinaryInputArchive archive(is);
+
+	archive(this->player.ptr);
 }
 
 void World::save_game()
