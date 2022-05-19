@@ -65,7 +65,6 @@ public:
 	template<class Archive>
 	void save(Archive& archive) const
 	{
-
 		archive(name, id, components);
 	}
 
@@ -73,7 +72,7 @@ public:
 	void load(Archive& archive)
 	{
 		archive(name, id, components);
-		for (auto &c : components)
+		for (auto& c : components)
 		{
 			this->addComponent(c.second.get());
 		}

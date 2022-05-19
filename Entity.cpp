@@ -37,25 +37,22 @@ std::string Entity::getName()
 
 void Entity::addComponent(Component* component)
 {
-	auto c = std::unique_ptr<Component>(component);
-	auto _id = c->getID();
+	auto _id = component->getID();
 
-	if (components.count(_id))
+	component->setOwnerTo(this);
+
+	if (!components.count(_id))
 	{
-		std::cout << this->getName() << " already has Component" << _id << "!\n";
-		return;
+		auto c = std::unique_ptr<Component>(component);
+		components.insert({ _id, std::move(c) });
+	}
+		
+	if (world)
+	{
+		world->addComponent(this, _id);
 	}
 	else
 	{
-		c->setOwnerTo(this);
-		components.insert({ _id, std::move(c) });
-		if (world)
-		{
-			world->addComponent(this, _id);
-		}
-		else
-		{
-			signature.addComponentByID(_id);
-		}
+		signature.addComponentByID(_id);
 	}
 }

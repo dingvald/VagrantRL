@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "cereal/archives/XML.hpp"
+#include "cereal/archives/binary.hpp"
 #include "cereal/types/memory.hpp"
 #include "World.h"
 #include "System.h"
@@ -132,8 +132,8 @@ std::list<Entity*> World::load_entities(std::list<unsigned int> list_of_ids)
 
 void World::save_player()
 {
-	std::ofstream os("data/playerData.xml");
-	cereal::XMLOutputArchive archive(os);
+	std::ofstream os("data/playerData.dat");
+	cereal::BinaryOutputArchive archive(os);
 
 	auto p = std::move(entities.at(player.id));
 
@@ -145,8 +145,8 @@ void World::save_player()
 
 void World::load_player()
 {
-	std::ifstream is("data/playerData.xml");
-	cereal::XMLInputArchive archive(is);
+	std::ifstream is("data/playerData.dat");
+	cereal::BinaryInputArchive archive(is);
 	auto p = std::make_unique<Entity>("Player");
 
 	archive(p);

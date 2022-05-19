@@ -4,7 +4,7 @@
 #include "Component.h"
 #include "Parameters.h"
 #include "SpatialConversions.h"
-#include "cereal/archives/XML.hpp"
+#include "cereal/archives/binary.hpp"
 #include "cereal/types/polymorphic.hpp"
 
 
