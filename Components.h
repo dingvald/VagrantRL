@@ -1,13 +1,65 @@
 #pragma once
 
 #include "Globals.h"
-#include "Component.h"
 #include "Parameters.h"
 #include "SpatialConversions.h"
-#include "cereal/archives/binary.hpp"
 #include "cereal/types/polymorphic.hpp"
+#include "cereal/archives/binary.hpp"
 
+// Forward declarations
+class Entity;
 
+//
+
+// Component Base Class //////////////////////////////////////////////////////////////////////////////////////
+
+inline unsigned int counter()
+{
+	static unsigned int count = 0;
+	return ++count;
+}
+
+class Component
+{
+public:
+	friend class cereal::access;
+	Component() = default;
+	virtual ~Component() {};
+	virtual unsigned int getID() = 0;
+	virtual Component* clone() = 0;
+	void setOwnerTo(Entity* entity);
+
+protected:
+
+	Entity* owner = nullptr;
+};
+
+template<class C>
+struct ComponentID : public Component
+{
+	ComponentID() = default;
+	virtual unsigned int getID()
+	{
+		static unsigned int thisid = counter();
+		return thisid;
+	}
+	Component* clone() override;
+};
+
+template <class C>
+static unsigned int getComponentID()
+{
+	ComponentID<C> temp;
+	return temp.getID();
+}
+
+template<class C>
+inline Component* ComponentID<C>::clone()
+{
+	return nullptr;
+}
+
+// Component Implementations //////////////////////////////////////////////////////////////////////////////////
 
 class TimeComponent : public ComponentID<TimeComponent>
 {
@@ -200,31 +252,4 @@ public:
 };
 
 
-
-CEREAL_REGISTER_TYPE(TimeComponent)
-CEREAL_REGISTER_TYPE(PositionComponent)
-CEREAL_REGISTER_TYPE(MotionComponent)
-CEREAL_REGISTER_TYPE(RenderComponent)
-CEREAL_REGISTER_TYPE(HealthComponent)
-CEREAL_REGISTER_TYPE(PhysicsComponent)
-CEREAL_REGISTER_TYPE(MyTurnComponent)
-CEREAL_REGISTER_TYPE(PlayerAIComponent)
-CEREAL_REGISTER_TYPE(AIComponent)
-CEREAL_REGISTER_TYPE(FactionComponent)
-CEREAL_REGISTER_TYPE(CameraFocusComponent)
-CEREAL_REGISTER_TYPE(OnScreenComponent)
-
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, TimeComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PositionComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MotionComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, RenderComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, HealthComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PhysicsComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, MyTurnComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, PlayerAIComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, AIComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, FactionComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, CameraFocusComponent)
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, OnScreenComponent)
-
-//CEREAL_FORCE_DYNAMIC_INIT(Components)
+CEREAL_FORCE_DYNAMIC_INIT(Components)

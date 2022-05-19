@@ -1,6 +1,6 @@
 #pragma once
 #include "Globals.h"
-#include "Component.h"
+#include "Components.h"
 
 class ComponentMask
 {

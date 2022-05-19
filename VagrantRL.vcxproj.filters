@@ -79,9 +79,6 @@
     <Filter Include="ECS\System\z - System">
       <UniqueIdentifier>{fa1dbf9a-7954-4a0b-9d87-9c8ec5645192}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ECS\Component\z - Component">
-      <UniqueIdentifier>{41f37149-da2b-44cb-9585-3baeb6a9338d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ECS\Event\EventBus">
       <UniqueIdentifier>{35dce765-4624-4213-bc96-cf71acdfff2b}</UniqueIdentifier>
     </Filter>
@@ -173,9 +170,6 @@
     </ClCompile>
     <ClCompile Include="ComponentMask.cpp">
       <Filter>ECS\ComponentMask</Filter>
-    </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>ECS\Component\z - Component</Filter>
     </ClCompile>
     <ClCompile Include="Components.cpp">
       <Filter>ECS\Component\Component Implementations</Filter>
@@ -289,9 +283,6 @@
     </ClInclude>
     <ClInclude Include="ECS.h">
       <Filter>ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>ECS\Component\z - Component</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
       <Filter>ECS\Component\Component Implementations</Filter>

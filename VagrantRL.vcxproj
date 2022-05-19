@@ -169,7 +169,6 @@
   <ItemGroup>
     <ClCompile Include="BuildPolicy.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
-    <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentFactory.cpp" />
     <ClCompile Include="ComponentMask.cpp" />
     <ClCompile Include="Components.cpp" />
@@ -210,7 +209,6 @@
   <ItemGroup>
     <ClInclude Include="BuildPolicy.h" />
     <ClInclude Include="CollisionSystem.h" />
-    <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="ComponentMask.h" />
     <ClInclude Include="Components.h" />
