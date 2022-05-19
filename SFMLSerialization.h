@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 
-namespace cereal
+namespace sf
 {
 	template<class Archive>
 	void serialize(Archive& ar, sf::Vector2i vec)

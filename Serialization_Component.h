@@ -18,6 +18,7 @@ namespace cereal
 		archive(comp.layer, comp.position);
 	}
 
+
 	template<class Archive>
 	void serialize(Archive& archive, MotionComponent& comp)
 	{

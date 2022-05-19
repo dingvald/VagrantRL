@@ -65,15 +65,13 @@ public:
 	template<class Archive>
 	void save(Archive& archive) const
 	{
+
 		archive(name, id, components);
 	}
 
 	template<class Archive>
 	void load(Archive& archive)
 	{
-		int num_comps = 0;
-		std::vector<std::unique_ptr<Component>> comp_ptrs;
-
 		archive(name, id, components);
 		for (auto &c : components)
 		{
