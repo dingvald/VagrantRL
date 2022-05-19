@@ -60,8 +60,9 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	player->addComponent(new PlayerAIComponent());
 	player->addComponent(new CameraFocusComponent()); 
 	
-	world->setAsPlayer(player.get());
-	world->registerEntity(std::move(player));
+	auto player_ptr = world->registerEntity(std::move(player));
+	world->setAsPlayer(player_ptr);
+	
 
 	std::cout << "Player complete.\n";
 

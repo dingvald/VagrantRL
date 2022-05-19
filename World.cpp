@@ -1,5 +1,6 @@
 #include "pch.h"
-#include "cereal/archives/binary.hpp"
+#include "cereal/archives/XML.hpp"
+#include "cereal/types/memory.hpp"
 #include "World.h"
 #include "System.h"
 #include "Entity.h"
@@ -58,7 +59,7 @@ void World::removeEntity(Entity* entity)
 void World::setAsPlayer(Entity* entity)
 {
 	player.id = entity->getID();
-	player.ptr = std::shared_ptr<Entity>(entity);
+	player.ptr = entity;
 }
 
 void World::addComponent(Entity* entity, unsigned int id)
@@ -114,6 +115,10 @@ void World::render(sf::RenderTarget* target)
 	{
 		sys->render(target);
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::L))
+	{
+		load_player();
+	}
 }
 
 void World::save_entities(std::list<unsigned int> list_of_ids)
@@ -127,18 +132,27 @@ std::list<Entity*> World::load_entities(std::list<unsigned int> list_of_ids)
 
 void World::save_player()
 {
-	std::ofstream os("playerData.dat");
-	cereal::BinaryOutputArchive archive(os);
+	std::ofstream os("data/playerData.xml");
+	cereal::XMLOutputArchive archive(os);
 
-	archive(this->player.ptr);
+	auto p = std::move(entities.at(player.id));
+
+	archive(p);
+
+	removeEntity(p.get());
+	player.ptr = nullptr;
 }
 
 void World::load_player()
 {
-	std::ifstream is("playerData.dat");
-	cereal::BinaryInputArchive archive(is);
+	std::ifstream is("data/playerData.xml");
+	cereal::XMLInputArchive archive(is);
+	auto p = std::make_unique<Entity>("Player");
 
-	archive(this->player.ptr);
+	archive(p);
+
+	auto player_ptr = registerEntity(std::move(p));
+	setAsPlayer(player_ptr);
 }
 
 void World::save_game()

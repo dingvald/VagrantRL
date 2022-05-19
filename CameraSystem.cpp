@@ -23,6 +23,10 @@ void CameraSystem::update(const float dt)
 	{
 		std::cout << "Error: too many entities for Camera to focus on!!!\n";
 	}
+	else
+	{
+		following = nullptr;
+	}
 
 	updateWorldPosition();
 }

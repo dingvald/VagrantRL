@@ -8,7 +8,7 @@
 struct Player
 {
 	unsigned int id;
-	std::shared_ptr<Entity> ptr;
+	Entity* ptr;
 };
 
 

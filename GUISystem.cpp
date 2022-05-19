@@ -82,8 +82,16 @@ void GUISystem::setDebugInfo()
 	debug_info.push_back("Position in world: [" + std::to_string(world->worldPosition.x) + ", " + std::to_string(world->worldPosition.y) + "]");
 
 	// player position on active map
-	auto pos = world->player.ptr->getComponent<PositionComponent>()->position / gl::TILE_SIZE;
-	debug_info.push_back("Player position: [" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + "]");
+	if (world->player.ptr)
+	{
+		auto pos = world->player.ptr->getComponent<PositionComponent>()->position / gl::TILE_SIZE;
+		debug_info.push_back("Player position: [" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + "]");
+	}
+	else
+	{
+		debug_info.push_back("Player position: [NO,PLAYER]");
+	}
+	
 
 	//
 }
