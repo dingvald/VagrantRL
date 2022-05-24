@@ -121,15 +121,6 @@ void World::render(sf::RenderTarget* target)
 	}
 }
 
-void World::save_entities(std::list<unsigned int> list_of_ids)
-{
-}
-
-std::list<Entity*> World::load_entities(std::list<unsigned int> list_of_ids)
-{
-	return std::list<Entity*>();
-}
-
 void World::save_player()
 {
 	std::ofstream os("data/playerData.dat");
@@ -153,15 +144,6 @@ void World::load_player()
 
 	auto player_ptr = registerEntity(std::move(p));
 	setAsPlayer(player_ptr);
-}
-
-void World::save_game()
-{
-	
-}
-
-void World::load_game()
-{
 }
 
 

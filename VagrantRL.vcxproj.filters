@@ -142,6 +142,9 @@
     <Filter Include="ECS\Serialization">
       <UniqueIdentifier>{f8d155ed-cf3f-4934-8b49-2a1f0a8f59e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ECS\Entity\Entity Manager">
+      <UniqueIdentifier>{f12cfa08-41fe-4cae-aa52-930885088307}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -248,6 +251,9 @@
     </ClCompile>
     <ClCompile Include="MessageLog.cpp">
       <Filter>ECS\System\GUI System\Message Log</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>ECS\Entity\Entity Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -373,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="Serialization_Component.h">
       <Filter>ECS\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>ECS\Entity\Entity Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

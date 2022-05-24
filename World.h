@@ -38,14 +38,8 @@ public:
 	void update(const float dt);
 	void render(sf::RenderTarget* target);
 
-	void save_entities(std::list<unsigned int> list_of_ids);
-	std::list<Entity*> load_entities(std::list<unsigned int> list_of_ids);
-
 	void save_player();
 	void load_player();
-
-	void save_game();
-	void load_game();
 	
 
 private:
