@@ -52,17 +52,16 @@ Entity* World::registerEntity(std::unique_ptr<Entity> entity)
 
 std::unique_ptr<Entity> World::unregisterEntity(Entity* entity)
 {
-	for (auto& s : systems)
+	for (auto& system : systems)
 	{
-		s->unregisterEntity(entity);
+		system->unregisterEntity(entity);
 	}
 
 	auto _id = entity->getID();
-
 	auto unregistered_entity = std::move(entities.at(_id));
 	entities.erase(_id);
 
-	return std::move(unregistered_entity);
+	return unregistered_entity;
 }
 
 void World::setAsPlayer(Entity* entity)
@@ -132,27 +131,32 @@ void World::render(sf::RenderTarget* target)
 
 void World::save_player()
 {
-	std::ofstream os("data/playerData.dat");
-	cereal::BinaryOutputArchive archive(os);
+	if (player.ptr)
+	{
+		std::ofstream os("data/playerData.dat");
+		cereal::BinaryOutputArchive archive(os);
 
-	auto p = std::move(entities.at(player.id));
+		auto p = unregisterEntity(entities.at(player.id).get());
 
-	archive(p);
+		archive(p);
 
-	unregisterEntity(p.get());
-	player.ptr = nullptr;
+		player.ptr = nullptr;
+	}
 }
 
 void World::load_player()
 {
-	std::ifstream is("data/playerData.dat");
-	cereal::BinaryInputArchive archive(is);
-	auto p = std::make_unique<Entity>("Player");
+	if (!player.ptr)
+	{
+		std::ifstream is("data/playerData.dat");
+		cereal::BinaryInputArchive archive(is);
+		auto p = std::make_unique<Entity>("Player");
 
-	archive(p);
+		archive(p);
 
-	auto player_ptr = registerEntity(std::move(p));
-	setAsPlayer(player_ptr);
+		auto player_ptr = registerEntity(std::move(p));
+		setAsPlayer(player_ptr);
+	}
 }
 
 

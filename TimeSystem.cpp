@@ -23,6 +23,11 @@ void TimeSystem::init()
 
 void TimeSystem::update(const float dt)
 {
+	if (!current_actor)
+	{
+		refreshTurnQueue();
+	}
+
 	if (registeredEntities.size() != turn_queue.size())
 	{
 		refreshTurnQueue();

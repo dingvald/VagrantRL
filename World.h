@@ -45,7 +45,7 @@ public:
 private:
 	friend Entity;
 
-	unsigned int next_entity_id = { 1 };
+	unsigned int next_entity_id = { 0 };
 	std::vector< std::unique_ptr<System> > systems;
 	std::map<unsigned int, std::unique_ptr<Entity> > entities;
 
