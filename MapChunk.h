@@ -10,6 +10,7 @@ public:
 	int size;
 
 	std::list<Entity*>* at(int layer, sf::Vector2i tile_position);
+
 private:
 	std::vector< std::vector<std::vector< std::list<Entity*> > > > entities; // layer, x , y
 };

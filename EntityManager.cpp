@@ -8,10 +8,8 @@ void EntityManager::init(World* world)
 	_world = world;
 }
 
-Entity* EntityManager::createEntity(std::string type)
+Entity* EntityManager::addEntity(std::unique_ptr<Entity> entity)
 {
-	auto entity = _entity_factory.build(type);
-	entity->world = this->_world;
 
 
 	return nullptr;

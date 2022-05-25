@@ -26,34 +26,43 @@ void World::cleanUp()
 
 Entity* World::registerEntity(std::unique_ptr<Entity> entity)
 {
-	entity->id = next_entity_id;
+	if (entity->getID() == 0)
+	{
+		entity->id = ++next_entity_id;
+	}
+
+	unsigned int entity_id = entity->getID();
+	
 	entity->world = this;
-	auto ent = entity.get();
-	entities.insert({ next_entity_id, std::move(entity) });
 
 	auto blank_mask = ComponentMask();
 
 	for (auto& system : systems)
 	{
-		if (ent->signature.isNewMatch(blank_mask, system->signature))
+		if (entity->signature.isNewMatch(blank_mask, system->signature))
 		{
-			system->registerEntity(ent);
+			system->registerEntity(entity.get());
 		}
 	}
 
-	return entities.at(next_entity_id++).get();
+	entities.insert({ entity_id, std::move(entity) });
+
+	return entities.at(entity_id).get();
 }
 
-void World::removeEntity(Entity* entity)
+std::unique_ptr<Entity> World::unregisterEntity(Entity* entity)
 {
-	for (auto& c : entity->components)
+	for (auto& s : systems)
 	{
-		removeComponent(entity, c.first);
+		s->unregisterEntity(entity);
 	}
 
 	auto _id = entity->getID();
 
+	auto unregistered_entity = std::move(entities.at(_id));
 	entities.erase(_id);
+
+	return std::move(unregistered_entity);
 }
 
 void World::setAsPlayer(Entity* entity)
@@ -130,7 +139,7 @@ void World::save_player()
 
 	archive(p);
 
-	removeEntity(p.get());
+	unregisterEntity(p.get());
 	player.ptr = nullptr;
 }
 
@@ -145,6 +154,7 @@ void World::load_player()
 	auto player_ptr = registerEntity(std::move(p));
 	setAsPlayer(player_ptr);
 }
+
 
 
 

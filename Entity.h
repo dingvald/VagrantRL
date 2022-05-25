@@ -12,7 +12,6 @@ class Entity
 {
 private:
 	friend World;
-	friend EntityManager;
 	friend Component;
 	friend class cereal::access;
 

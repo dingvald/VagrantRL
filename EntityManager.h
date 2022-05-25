@@ -1,12 +1,13 @@
 #pragma once
 #include "EntityFactory.h"
 
+class World;
 
 class EntityManager
 {
 public:
 	void init(World* world);
-	Entity* createEntity(std::string type); // builds with entity factory
+	Entity* addEntity(std::unique_ptr<Entity> entity);
 	void removeEntity(unsigned int entity_id);
 	Entity* getEntity(unsigned int entity_id);
 

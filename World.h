@@ -31,6 +31,7 @@ public:
 	void cleanUp();
 
 	Entity* registerEntity(std::unique_ptr<Entity> entity);
+	std::unique_ptr<Entity> unregisterEntity(Entity* entity);
 	void setAsPlayer(Entity* entity);
 
 	void addSystem(System* system);
@@ -40,19 +41,16 @@ public:
 
 	void save_player();
 	void load_player();
-	
 
 private:
 	friend Entity;
 
-	unsigned int next_entity_id = { 0 };
+	unsigned int next_entity_id = { 1 };
 	std::vector< std::unique_ptr<System> > systems;
 	std::map<unsigned int, std::unique_ptr<Entity> > entities;
 
 	void addComponent(Entity* entity, unsigned int id);
 	void removeComponent(Entity* entity, unsigned int id);
-
-	void removeEntity(Entity* entity);
 	
 };
 

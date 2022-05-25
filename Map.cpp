@@ -83,7 +83,7 @@ void Map::placeEntity(Entity* entity, unsigned int layer, sf::Vector2i absolute_
 	auto list_ptr = getEntitiesAt(layer, absolute_position);
 	if (!list_ptr)
 	{
-		std::cout << "Cannot place entity--List does not exist...!\n";
+		std::cout << "Cannot place entity--List does not exist!\n";
 	}
 	else
 	{

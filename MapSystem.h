@@ -23,6 +23,7 @@ private:
 	std::map<std::pair<int, int>, std::shared_ptr<MapChunk>> chunk_buffer;
 	sf::Vector2i world_position = { 0,0 };
 	sf::Vector2i old_world_position = { 0,0 };
+
 	bool close_buffer_thread = false;
 	std::thread fill_buffer_thread;
 	std::mutex chunk_buffer_lock;
