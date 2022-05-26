@@ -41,10 +41,6 @@ private:
 
 	void fillChunkBuffer();
 
-	void printLoadedChunkGrid();
-
-	void printChunkBuffer();
-
 	
 };
 

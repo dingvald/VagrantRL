@@ -2,9 +2,9 @@
 #include "Globals.h"
 #include "MapBuilder.h"
 
-std::shared_ptr<MapChunk> MapBuilder::build(sf::Vector2i coordinate)
+std::unique_ptr<MapChunk> MapBuilder::build(sf::Vector2i coordinate)
 {
-    auto chunk_ptr = std::make_shared<MapChunk>(coordinate, gl::CHUNK_SIZE);
+    auto chunk_ptr = std::make_unique<MapChunk>(coordinate, gl::CHUNK_SIZE);
 
     // Need to populate chunk with entities
     // Chunk is built and populated based off the zone's properties
@@ -14,7 +14,7 @@ std::shared_ptr<MapChunk> MapBuilder::build(sf::Vector2i coordinate)
 
 
 
-    return chunk_ptr;
+    return std::move(chunk_ptr);
 }
 
 void MapBuilder::init()
@@ -24,7 +24,7 @@ void MapBuilder::init()
 
 void MapBuilder::addBuildPolicy(std::string zone_type, BuildPolicy& policy)
 {
-    if (build_policies_.count(zone_type)) return;
+    if (_build_policies.count(zone_type)) return;
 
-    build_policies_.insert({ zone_type, policy });
+    _build_policies.insert({ zone_type, policy });
 }

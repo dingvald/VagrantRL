@@ -62,25 +62,6 @@ void MapSystem::buildInitialMap(sf::Vector2i starting_pos)
 	
 	auto player_ptr = world->registerEntity(std::move(player));
 	world->setAsPlayer(player_ptr);
-	
-
-	std::cout << "Player complete.\n";
-
-	std::cout << "Populating starting map...\n";
-
-	int rand_x, rand_y;
-
-	for (int i = 0; i < 2500; ++i)
-	{
-		rand_x = rand() % (gl::CHUNK_SIZE*gl::ZONE_SIZE);
-		rand_y = rand() % (gl::CHUNK_SIZE*gl::ZONE_SIZE);
-
-		auto t = world->entityFactory.build("Tree", {(starting_pos.x-1)*gl::CHUNK_SIZE + rand_x, (starting_pos.y-1)*gl::CHUNK_SIZE + rand_y});
-		world->registerEntity(std::move(t));
-	}
-	//
-	std::cout << "Map complete." << "\n";
-	//
 }
 
 void MapSystem::updateLoadedChunks()
@@ -171,32 +152,4 @@ void MapSystem::fillChunkBuffer()
 			std::cout << "Built chunk (" << coord.first << ", " << coord.second << ")\n";
 		}
 	}
-}
-
-void MapSystem::printLoadedChunkGrid()
-{
-	std::cout << "Loaded chunk layout:\n\n";
-
-	for (int y = 0; y < num_of_loaded_chunks.y; ++y)
-	{
-		for (int x = 0; x < num_of_loaded_chunks.x; ++x)
-		{
-			auto chunk = map->getChunk({ x,y });
-			std::cout << "(" << chunk->world_coordinate.x << ", " << chunk->world_coordinate.y << ")\t\t";
-		}
-		std::cout << "\n";
-	}
-}
-
-void MapSystem::printChunkBuffer()
-{
-	std::cout << "Chunk Buffer:\n\n";
-	for(auto chunk : chunk_buffer)
-	{
-		std::cout << "Coordinates: (" << chunk.first.first << ", " << chunk.first.second << ")\n";
-		std::cout << "Confirmed Coordinates: (" << chunk.second->world_coordinate.x << ", " << chunk.second->world_coordinate.y << ")\n";
-
-		std::cout << "\n";
-	}
-	std::cout << "\n\n";
 }
