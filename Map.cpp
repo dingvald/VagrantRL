@@ -106,9 +106,13 @@ void Map::removeEntity(Entity* entity, unsigned int layer, sf::Vector2i absolute
 	}
 }
 
-void Map::addChunkToGrid(MapChunk* chunk, sf::Vector2i grid_pos)
+void Map::addChunkToGrid(MapChunk* chunk)
 {
 	if (!chunk) return;
+
+	sf::Vector2i grid_pos;
+	grid_pos.x = chunk->world_coordinate.x - world->worldPosition.x + 1;
+	grid_pos.y = chunk->world_coordinate.y - world->worldPosition.y + 1;
 
 	if (grid_pos.x < 0 || grid_pos.y < 0)
 	{
@@ -122,7 +126,6 @@ void Map::addChunkToGrid(MapChunk* chunk, sf::Vector2i grid_pos)
 	}
 
 	map_chunk[grid_pos.x][grid_pos.y] = chunk;
-	
 }
 
 MapChunk* Map::getChunk(sf::Vector2i grid_pos)
