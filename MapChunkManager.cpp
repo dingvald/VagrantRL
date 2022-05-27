@@ -43,7 +43,6 @@ void MapChunkManager::activateChunk(MapChunk* map_chunk)
 
 MapChunk* MapChunkManager::buildChunk(sf::Vector2i world_position)
 {
-	// Need to build it fresh
 	auto chunk_ptr = _map_builder.build(world_position);
 	auto coord = std::make_pair(world_position.x, world_position.y);
 
@@ -105,20 +104,39 @@ std::list<std::pair<int, int>> MapChunkManager::getCoordsAboutCenter(sf::Vector2
 
 void MapChunkManager::updateBuildQueue(sf::Vector2i world_position)
 {
+	auto active_coords = getCoordsAboutCenter(world_position, 3);
 	auto fuzzy_coords = getCoordsAboutCenter(world_position, 3 + 2);
 
 	for (auto& fuzzy_coord : fuzzy_coords)
 	{
+		// Skip active coordinates--they are active
+		bool is_active = false;
+		for (auto& active_coord : active_coords)
+		{
+			if (fuzzy_coord == active_coord) is_active = true;
+		}
+		if (is_active) continue;
+
+		// Check if status is "active", but not actually active
+		if (_chunk_status.count(fuzzy_coord))
+		{
+			if (_chunk_status.at(fuzzy_coord) == ChunkStatus::ACTIVE)
+			{
+				_chunk_status.at(fuzzy_coord) = ChunkStatus::LOADED;
+				continue;
+			}
+		}
+
 		_build_queue_mutex.lock();
 		_build_queue.push_back(fuzzy_coord);
 		_build_queue_mutex.unlock();
 
-		if (_chunk_status.count(fuzzy_coord)) continue;
+		
 
 		_chunk_status_mutex.lock();
-		_chunk_status[fuzzy_coord] = ChunkStatus::FUZZY_IN;
+		_chunk_status[fuzzy_coord] = ChunkStatus::TO_BUILD;
 		_chunk_status_mutex.unlock();
-	}	
+	}
 }
 
 void MapChunkManager::fillChunkMap()
@@ -149,11 +167,20 @@ void MapChunkManager::fillChunkMap()
 	}
 }
 
-void MapChunkManager::printChunkStatus()
+void MapChunkManager::printChunkStatus(sf::Vector2i world_position)
 {
-	std::cout << "\nCHUNK STATUS:\n\n";
-	for (auto& status : _chunk_status)
+	auto coords = getCoordsAboutCenter(world_position, 3 + 2);
+	int count = 0;
+	int columns = 5;
+	for (auto& coord : coords)
 	{
-		std::cout << "Chunk (" << status.first.first << ", " << status.first.second << ") Status: " << status_enum_translator.at(status.second) << "\n";
+		std::cout << "[" << status_enum_translator.at(_chunk_status.at(coord)) << "]\t";
+		++count;
+		if (count >= columns)
+		{
+			std::cout << "\n";
+			count = 0;
+		}
 	}
+	
 }

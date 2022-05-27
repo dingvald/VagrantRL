@@ -8,10 +8,11 @@ class MapChunk;
 enum class ChunkStatus
 {
 	NONE,
+	TO_BUILD,
+	TO_SAVE,
 	SAVED,
-	FUZZY_IN,
+	TO_LOAD,
 	LOADED,
-	FUZZY_OUT,
 	ACTIVE
 };
 
@@ -22,7 +23,7 @@ public:
 	void init(World* world, sf::Vector2i world_position);
 	void update(sf::Vector2i world_position);
 	void cleanUp();
-	void printChunkStatus();
+	void printChunkStatus(sf::Vector2i world_position);
 
 private:
 	World* _world;
@@ -50,10 +51,11 @@ private:
 	{
 		{ChunkStatus::NONE, "None"},
 		{ChunkStatus::SAVED, "Saved"},
-		{ChunkStatus::FUZZY_IN, "Fuzzy-in"},
+		{ChunkStatus::TO_BUILD, "To Build"},
 		{ChunkStatus::LOADED, "Loaded"},
-		{ChunkStatus::FUZZY_OUT, "Fuzzy-out"},
-		{ChunkStatus::ACTIVE, "Active"}
+		{ChunkStatus::TO_SAVE, "To Save"},
+		{ChunkStatus::ACTIVE, "Active"},
+		{ChunkStatus::TO_LOAD, "To Load"}
 	};
 };
 
