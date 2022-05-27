@@ -41,6 +41,33 @@ void MapChunkManager::activateChunk(MapChunk* map_chunk)
 	_chunk_status_mutex.unlock();
 }
 
+MapChunk* MapChunkManager::buildChunk(sf::Vector2i world_position)
+{
+	// Need to build it fresh
+	auto chunk_ptr = _map_builder.build(world_position);
+	auto coord = std::make_pair(world_position.x, world_position.y);
+
+	_chunk_map_mutex.lock();
+	_chunk_map.insert({coord, std::move(chunk_ptr) });
+	_chunk_map_mutex.unlock();
+
+	_chunk_status_mutex.lock();
+	_chunk_status[coord] = ChunkStatus::LOADED;
+	_chunk_status_mutex.unlock();
+
+	return _chunk_map.at(coord).get();
+}
+
+MapChunk* MapChunkManager::loadChunk(sf::Vector2i world_position)
+{
+	return nullptr;
+}
+
+void MapChunkManager::saveChunk(sf::Vector2i world_position)
+{
+
+}
+
 void MapChunkManager::setActiveChunks(sf::Vector2i world_position)
 {
 	auto active_coords = getCoordsAboutCenter(world_position, 3);
@@ -78,16 +105,15 @@ std::list<std::pair<int, int>> MapChunkManager::getCoordsAboutCenter(sf::Vector2
 
 void MapChunkManager::updateBuildQueue(sf::Vector2i world_position)
 {
-	
 	auto fuzzy_coords = getCoordsAboutCenter(world_position, 3 + 2);
 
 	for (auto& fuzzy_coord : fuzzy_coords)
 	{
-		if (_chunk_status.count(fuzzy_coord)) continue;
-
 		_build_queue_mutex.lock();
 		_build_queue.push_back(fuzzy_coord);
 		_build_queue_mutex.unlock();
+
+		if (_chunk_status.count(fuzzy_coord)) continue;
 
 		_chunk_status_mutex.lock();
 		_chunk_status[fuzzy_coord] = ChunkStatus::FUZZY_IN;
@@ -109,28 +135,23 @@ void MapChunkManager::fillChunkMap()
 
 		for (auto& coord : _build_queue_buffer)
 		{
-			if (_chunk_status.count(coord))
+			if (_chunk_status.count(coord)) // check if it even has a status
 			{
-				
+				// Need to build fresh
+				buildChunk({ coord.first, coord.second });
 			}
-			else
+			else // if not, hasn't been built yet
 			{
-				// Need to build it fresh
-				auto chunk_ptr = _map_builder.build({ coord.first, coord.second });
-				_chunk_map_mutex.lock();
-				_chunk_map.insert({ coord, std::move(chunk_ptr) });
-				_chunk_map_mutex.unlock();
-
-				_chunk_status_mutex.lock();
-				_chunk_status[coord] = ChunkStatus::LOADED;
-				_chunk_status_mutex.unlock();
+				buildChunk({ coord.first, coord.second });
 			}
 		}
+		_build_queue_buffer.clear();
 	}
 }
 
 void MapChunkManager::printChunkStatus()
 {
+	std::cout << "\nCHUNK STATUS:\n\n";
 	for (auto& status : _chunk_status)
 	{
 		std::cout << "Chunk (" << status.first.first << ", " << status.first.second << ") Status: " << status_enum_translator.at(status.second) << "\n";
