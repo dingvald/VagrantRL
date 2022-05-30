@@ -12,17 +12,18 @@ void MapChunkManager::init(World* world, sf::Vector2i world_position)
 		auto chunk_ptr = _map_builder.build({coord.first, coord.second});
 		activateChunk(chunk_ptr.get());
 		_chunk_map.insert({ coord, std::move(chunk_ptr) });
-		_chunk_status.insert({ coord, ChunkStatus::ACTIVE });
+		_chunk_status.insert({ coord, ChunkState::ACTIVE });
 	}
 
-	updateBuildQueue(world_position);
 	_th_fill_chunk_map = std::thread{ &MapChunkManager::fillChunkMap, this };
 }
 
 void MapChunkManager::update(sf::Vector2i world_position)
 {
+	updateChunkStates(world_position);
 	setActiveChunks(world_position);
-	updateBuildQueue(world_position);
+	updateInQueue(world_position);
+	updateOutQueue(world_position);
 }
 
 void MapChunkManager::cleanUp()
@@ -35,10 +36,6 @@ void MapChunkManager::activateChunk(MapChunk* map_chunk)
 {
 	auto coord = std::make_pair(map_chunk->world_coordinate.x, map_chunk->world_coordinate.y);
 	_world->map->addChunkToGrid(map_chunk);
-
-	_chunk_status_mutex.lock();
-	_chunk_status[coord] = ChunkStatus::ACTIVE;
-	_chunk_status_mutex.unlock();
 }
 
 MapChunk* MapChunkManager::buildChunk(sf::Vector2i world_position)
@@ -51,7 +48,7 @@ MapChunk* MapChunkManager::buildChunk(sf::Vector2i world_position)
 	_chunk_map_mutex.unlock();
 
 	_chunk_status_mutex.lock();
-	_chunk_status[coord] = ChunkStatus::LOADED;
+	_chunk_status[coord] = ChunkState::LOADED;
 	_chunk_status_mutex.unlock();
 
 	return _chunk_map.at(coord).get();
@@ -102,41 +99,62 @@ std::list<std::pair<int, int>> MapChunkManager::getCoordsAboutCenter(sf::Vector2
 	return coord_list;
 }
 
-void MapChunkManager::updateBuildQueue(sf::Vector2i world_position)
+void MapChunkManager::updateInQueue(sf::Vector2i world_position)
 {
-	auto active_coords = getCoordsAboutCenter(world_position, 3);
+}
+
+void MapChunkManager::updateOutQueue(sf::Vector2i world_position)
+{
+	
+}
+
+void MapChunkManager::updateChunkStates(sf::Vector2i world_position)
+{
 	auto fuzzy_coords = getCoordsAboutCenter(world_position, 3 + 2);
-
-	for (auto& fuzzy_coord : fuzzy_coords)
+	auto active_coords = getCoordsAboutCenter(world_position, 3);
+	//set active coords and remove active from fuzzy
+	for (auto& active : active_coords)
 	{
-		// Skip active coordinates--they are active
-		bool is_active = false;
-		for (auto& active_coord : active_coords)
+		_chunk_status.at(active) = ChunkState::ACTIVE;
+		for (auto& fuzzy : fuzzy_coords)
 		{
-			if (fuzzy_coord == active_coord) is_active = true;
-		}
-		if (is_active) continue;
-
-		// Check if status is "active", but not actually active
-		if (_chunk_status.count(fuzzy_coord))
-		{
-			if (_chunk_status.at(fuzzy_coord) == ChunkStatus::ACTIVE)
+			if (active == fuzzy)
 			{
-				_chunk_status.at(fuzzy_coord) = ChunkStatus::LOADED;
-				continue;
+				fuzzy_coords.remove(fuzzy);
+				break;
 			}
 		}
-
-		_build_queue_mutex.lock();
-		_build_queue.push_back(fuzzy_coord);
-		_build_queue_mutex.unlock();
-
-		
-
-		_chunk_status_mutex.lock();
-		_chunk_status[fuzzy_coord] = ChunkStatus::TO_BUILD;
-		_chunk_status_mutex.unlock();
 	}
+	for (auto& fuzzy : fuzzy_coords)
+	{
+		auto state = getState(fuzzy);
+		
+		switch (state)
+		{
+			case ChunkState::LOADED:
+			{
+				setState(fuzzy, ChunkState::LOADED);
+			}
+			break;
+			case ChunkState::SAVED:
+			{
+				setState(fuzzy, ChunkState::TO_LOAD);
+			}
+			break;
+			case ChunkState::ACTIVE:
+			{
+				setState(fuzzy, ChunkState::LOADED);
+			}
+			break;
+			case ChunkState::NONE:
+			{
+				setState(fuzzy, ChunkState::TO_BUILD);
+			}
+			break;
+		}
+	}
+
+
 }
 
 void MapChunkManager::fillChunkMap()
@@ -165,6 +183,34 @@ void MapChunkManager::fillChunkMap()
 		}
 		_build_queue_buffer.clear();
 	}
+}
+
+ChunkState MapChunkManager::getState(std::pair<int, int> coord)
+{
+	ChunkState ret_state;
+
+	_chunk_status_mutex.lock();
+	if (_chunk_status.count(coord))
+	{
+		ret_state = _chunk_status.at(coord);
+	}
+	else
+	{
+		ret_state = ChunkState::NONE;
+	}
+	_chunk_status_mutex.unlock();
+
+
+	return ret_state;
+}
+
+void MapChunkManager::setState(std::pair<int, int> coord, ChunkState state)
+{
+	_chunk_status_mutex.lock();
+
+	_chunk_status[coord] = state;
+
+	_chunk_status_mutex.unlock();
 }
 
 void MapChunkManager::printChunkStatus(sf::Vector2i world_position)
