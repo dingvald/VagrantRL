@@ -31,7 +31,7 @@ void MapSystem::update(const float dt)
 		world_position = world->worldPosition;
 		
 		_map_chunk_manager.update(world_position);
-		_map_chunk_manager.printChunkStatus(world_position);
+		//_map_chunk_manager.printChunkStatus(world_position);
 	}
 }
 

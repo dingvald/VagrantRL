@@ -29,6 +29,8 @@ private:
 	World* _world;
 	MapBuilder _map_builder;
 
+	int _save_distance = 7;
+
 	std::map< std::pair<int, int>, std::unique_ptr<MapChunk> > _chunk_map;
 	std::map< std::pair<int, int>, ChunkState > _chunk_status;
 	std::map<ChunkState, std::list<std::pair<int, int>>> _chunk_state_lists;
@@ -51,14 +53,14 @@ private:
 	bool _close_threads = false;
 
 	void activateChunk(MapChunk* map_chunk);
-	MapChunk* buildChunk(sf::Vector2i world_position);
-	MapChunk* loadChunk(sf::Vector2i world_position);
-	void saveChunk(sf::Vector2i world_position);
-	void setActiveChunks(sf::Vector2i world_position);
-	std::list<std::pair<int, int>> getCoordsAboutCenter(sf::Vector2i world_position, int width);
+	MapChunk* buildChunk(const sf::Vector2i world_position);
+	MapChunk* loadChunk(const sf::Vector2i world_position);
+	void saveChunk(const sf::Vector2i world_position);
+	void setActiveChunks(const sf::Vector2i world_position);
+	std::list<std::pair<int, int>> getCoordsAboutCenter(const sf::Vector2i world_position, int width);
 	void th_buildOrLoadChunks();
 	void th_saveChunks();
-	void updateChunkStates(sf::Vector2i world_position);
+	void updateChunkStates(const sf::Vector2i world_position);
 
 	//Chunk state manipulation for threads
 	ChunkState getState(std::pair<int, int> coord); // thread safe

@@ -47,9 +47,9 @@ void MapChunkManager::activateChunk(MapChunk* map_chunk)
 	_world->map->addChunkToGrid(map_chunk);
 }
 
-MapChunk* MapChunkManager::buildChunk(sf::Vector2i world_position)
+MapChunk* MapChunkManager::buildChunk(const sf::Vector2i world_position)
 {
-	std::cout << "Building chunk...\n";
+	std::cout << "Building chunk\t\t(" << world_position.x << ", " << world_position.y << ")\n";
 	auto chunk_ptr = _map_builder.build(world_position);
 	auto coord = std::make_pair(world_position.x, world_position.y);
 
@@ -62,18 +62,36 @@ MapChunk* MapChunkManager::buildChunk(sf::Vector2i world_position)
 	return _chunk_map.at(coord).get();
 }
 
-MapChunk* MapChunkManager::loadChunk(sf::Vector2i world_position)
+MapChunk* MapChunkManager::loadChunk(const sf::Vector2i world_position)
 {
-	std::cout << "Loading chunk...\n";
+	std::cout << "Loading chunk\t\t(" << world_position.x << ", " << world_position.y << ")\n";
+	// waste some time to simulate loading...
+	for (int i = 0; i < 10000; ++i)
+	{
+		for (int j = 0; j < 10000; ++j)
+		{
+			int sum = i + j;
+		}
+	}
+	setState({ world_position.x, world_position.y }, ChunkState::LOADED);
 	return nullptr;
 }
 
-void MapChunkManager::saveChunk(sf::Vector2i world_position)
+void MapChunkManager::saveChunk(const sf::Vector2i world_position)
 {
-	std::cout << "Saving chunk...\n";
+	std::cout << "Saving chunk\t\t(" << world_position.x << ", " << world_position.y << ")\n";
+	// waste some time to simulate saving...
+	for (int i = 0; i < 10000; ++i)
+	{
+		for (int j = 0; j < 10000; ++j)
+		{
+			int sum = i + j;
+		}
+	}
+	setState({ world_position.x, world_position.y }, ChunkState::SAVED);
 }
 
-void MapChunkManager::setActiveChunks(sf::Vector2i world_position)
+void MapChunkManager::setActiveChunks(const sf::Vector2i world_position)
 {
 	auto active_coords = getCoordsAboutCenter(world_position, 3);
 	for (auto& active_coord : active_coords)
@@ -87,7 +105,7 @@ void MapChunkManager::setActiveChunks(sf::Vector2i world_position)
 	}
 }
 
-std::list<std::pair<int, int>> MapChunkManager::getCoordsAboutCenter(sf::Vector2i world_position, int width)
+std::list<std::pair<int, int>> MapChunkManager::getCoordsAboutCenter(const sf::Vector2i world_position, int width)
 {
 	std::list<std::pair<int, int>> coord_list;
 
@@ -139,7 +157,7 @@ void MapChunkManager::th_buildOrLoadChunks()
 		}
 		_load_queue_mutex.unlock();
 
-		for (auto& coord : local_build_queue)
+		for (auto& coord : local_load_queue)
 		{
 			loadChunk({ coord.first, coord.second });
 		}
@@ -150,11 +168,24 @@ void MapChunkManager::th_saveChunks()
 {
 	while (!_close_threads)
 	{
-		
+		// save Chunks
+		std::deque<std::pair<int, int>> local_save_queue;
+		_save_queue_mutex.lock();
+		while (!_save_queue.empty())
+		{
+			local_save_queue.push_back(_save_queue.front());
+			_save_queue.pop_front();
+		}
+		_save_queue_mutex.unlock();
+
+		for (auto& coord : local_save_queue)
+		{
+			saveChunk({ coord.first, coord.second });
+		}
 	}
 }
 
-void MapChunkManager::updateChunkStates(sf::Vector2i world_position)
+void MapChunkManager::updateChunkStates(const sf::Vector2i world_position)
 {
 	auto fuzzy_coords = getCoordsAboutCenter(world_position, 3 + 2);
 	auto active_coords = getCoordsAboutCenter(world_position, 3);
@@ -211,8 +242,25 @@ void MapChunkManager::updateChunkStates(sf::Vector2i world_position)
 	}
 
 
-	_fuzzy_coordinates = fuzzy_coords;
-	_active_coordinates = active_coords;
+	auto loaded_list = _chunk_state_lists.at(ChunkState::LOADED);
+	int coordx, coordy = 0;
+	for (auto& coord : loaded_list)
+	{
+		coordx = coord.first;
+		coordy = coord.second;
+		int dx = abs(coordx - world_position.x);
+		int dy = abs(coordy - world_position.y);
+
+		auto dist = static_cast<int>(std::ceil(std::sqrtf(dx * dx + dy * dy)));
+
+		if (dist > _save_distance)
+		{
+			setState(coord, ChunkState::TO_SAVE);
+			_save_queue_mutex.lock();
+			_save_queue.push_back(coord);
+			_save_queue_mutex.unlock();
+		}
+	}
 }
 
 ChunkState MapChunkManager::getState(std::pair<int, int> coord)
@@ -266,8 +314,38 @@ void MapChunkManager::setState(std::pair<int, int> coord, ChunkState state)
 void MapChunkManager::printChunkStatus(sf::Vector2i world_position)
 {
 	std::cout << "________________________________________________________________________________\n\n";
-	
-	std::cout << "WORK IN PROGRESS!\n";
+	auto coord_list = getCoordsAboutCenter(world_position, 5);
+	std::deque<std::string> status_list;
+	for (auto& coord : coord_list)
+	{
+		if (coord.first == world_position.x && coord.second == world_position.y)
+		{
+			status_list.push_back("   X   ");
+		}
+		else
+		{
+			status_list.push_back(status_enum_translator[getState(coord)]);
+		}
+	}
+	int num_columns = 5;
+	int column_counter = 0;
+	int row_counter = 0;
+	for (int i = 0; i < 25; ++i)
+	{
+		int index = row_counter + (column_counter * num_columns);
+
+		std::cout << "[" << status_list[index] << "]\t";
+
+		++column_counter;
+		if (column_counter >= num_columns)
+		{
+			column_counter = 0;
+			++row_counter;
+			std::cout << "\n";
+		}
+		
+	}
+
 	
 	std::cout << "________________________________________________________________________________\n";
 }
