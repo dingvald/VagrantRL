@@ -43,6 +43,7 @@ void MapChunkManager::cleanUp()
 
 void MapChunkManager::activateChunk(MapChunk* map_chunk)
 {
+	if (map_chunk == nullptr) std::cout << "\nCHUNK DOES NOT EXIST!\n\n";
 	auto coord = std::make_pair(map_chunk->world_coordinate.x, map_chunk->world_coordinate.y);
 	_world->map->addChunkToGrid(map_chunk);
 }

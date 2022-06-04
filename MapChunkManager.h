@@ -29,7 +29,7 @@ private:
 	World* _world;
 	MapBuilder _map_builder;
 
-	int _save_distance = 7;
+	int _save_distance = 6;
 
 	std::map< std::pair<int, int>, std::unique_ptr<MapChunk> > _chunk_map;
 	std::map< std::pair<int, int>, ChunkState > _chunk_status;
